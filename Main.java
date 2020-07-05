@@ -1,8 +1,8 @@
-package com.techupstudio;
+package com.techupstudio.utils;
 
 
-import com.techupstudio.FileUtils.FileExplorer;
-import com.techupstudio.GeneralUtils.collections.graph.*;
+import com.techupstudio.utils.io.FileExplorer;
+import com.techupstudio.utils.general.collections.graph.*;
 
 import java.io.File;
 
