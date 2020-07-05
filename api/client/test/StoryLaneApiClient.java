@@ -1,6 +1,7 @@
-package com.techupstudio.utils.api.client.sync;
+package com.techupstudio.utils.api.client.test;
 
-import com.techupstudio.utils.general.collections.JSONData;
+import com.techupstudio.utils.api.client.sync.RestApiClient;
+import com.techupstudio.utils.general.collections.JSONObject;
 
 import static com.techupstudio.utils.general.Funcs.println;
 
@@ -14,27 +15,35 @@ public class StoryLaneApiClient {
     private String responseData;
     private String responseMessage;
 
-    public StoryLaneApiClient(String homeURL){ setHomeUrl(homeURL); }
-
-    public String getResponseMessage() { return responseMessage; }
-
-    public String getResponseData() { return responseData; }
-
-    public int getResponseCode() { return responseCode; }
-
-    public JSONData getResponseDataAsJSONObject() throws JSONData.JSONException {
-        return new JSONData(getResponseData());
+    public StoryLaneApiClient(String homeURL) {
+        setHomeUrl(homeURL);
     }
 
-    public JSONData getResponseInfo() {
-        JSONData response = new JSONData();
-        response.add("code", getResponseCode());
-        response.add("message",getResponseMessage());
-        response.add("result", getResponseData());
+    public String getResponseMessage() {
+        return responseMessage;
+    }
+
+    public String getResponseData() {
+        return responseData;
+    }
+
+    public int getResponseCode() {
+        return responseCode;
+    }
+
+    public JSONObject getResponseDataAsJSONObject() throws JSONObject.JSONException {
+        return new JSONObject(getResponseData());
+    }
+
+    public JSONObject getResponseInfo() {
+        JSONObject response = new JSONObject();
+        response.set("code", getResponseCode());
+        response.set("message", getResponseMessage());
+        response.set("result", getResponseData());
         return response;
     }
 
-    private void prepareResult(RestApiClient client){
+    private void prepareResult(RestApiClient client) {
         if (client != null) {
             responseCode = client.getResponseCode();
             responseData = client.getResponseData();
@@ -42,11 +51,18 @@ public class StoryLaneApiClient {
         }
     }
 
-    protected String getUrlForRoute(String route){ return HOMEURL+route; }
+    protected String getUrlForRoute(String route) {
+        return HOMEURL + route;
+    }
 
-    private void setHomeUrl(String homeUrl){ HOMEURL = homeUrl; }
+    private void setHomeUrl(String homeUrl) {
+        HOMEURL = homeUrl;
+    }
 
-    protected void setUserDetails(String username, String password){ USERNAME = username;PASSWORD = password; }
+    protected void setUserDetails(String username, String password) {
+        USERNAME = username;
+        PASSWORD = password;
+    }
 
 
     private String authenticateUser() throws Exception {
@@ -62,13 +78,13 @@ public class StoryLaneApiClient {
         prepareResult(client);
 
         if (client.getResponseCode() == 200) {
-            JSONData auth_token = client.getApiResponseObject().getResponseAsJson();
+            JSONObject auth_token = client.getApiResponseObject().getResponseAsJson();
             return auth_token.getString("access_token");
         }
         return null;
     }
 
-    private RestApiClient getAuthenticatedClient(){
+    private RestApiClient getAuthenticatedClient() {
 
         RestApiClient client = new RestApiClient();
         try {
@@ -84,13 +100,15 @@ public class StoryLaneApiClient {
         return null;
     }
 
-    private RestApiClient getAuthenticatedClientForRoute(String route){
+    private RestApiClient getAuthenticatedClientForRoute(String route) {
         RestApiClient client = getAuthenticatedClient();
-        if (client != null) { client.setURL(getUrlForRoute(route)); }
+        if (client != null) {
+            client.setURL(getUrlForRoute(route));
+        }
         return client;
     }
 
-    protected RestApiClient sendRequestToRoute(String route, RestApiClient.RequestMethod method, JSONData... jsonData){
+    protected RestApiClient sendRequestToRoute(String route, RestApiClient.RequestMethod method, JSONObject... jsonData) {
         RestApiClient client = getAuthenticatedClientForRoute(route);
         if (client != null) {
             if (jsonData.length == 1) {
@@ -109,7 +127,7 @@ public class StoryLaneApiClient {
         return client;
     }
 
-    protected RestApiClient postJsonToRoute(String route, JSONData object){
+    protected RestApiClient postJsonToRoute(String route, JSONObject object) {
         RestApiClient client = getAuthenticatedClientForRoute(route);
         if (client != null) {
             client.addHeader(RestApiClient.HttpRequestHeaders.ACCEPT, RestApiClient.HttpRequestHeaders.JSON);
@@ -126,7 +144,7 @@ public class StoryLaneApiClient {
         return client;
     }
 
-    protected RestApiClient sendJsonToRoute(String route, JSONData object, RestApiClient.RequestMethod method){
+    protected RestApiClient sendJsonToRoute(String route, JSONObject object, RestApiClient.RequestMethod method) {
         RestApiClient client = getAuthenticatedClientForRoute(route);
         if (client != null) {
             client.addHeader(RestApiClient.HttpRequestHeaders.ACCEPT, RestApiClient.HttpRequestHeaders.JSON);
@@ -143,7 +161,7 @@ public class StoryLaneApiClient {
         return client;
     }
 
-    protected JSONData getJsonFromRoute(String route, RestApiClient.RequestMethod method){
+    protected JSONObject getJsonFromRoute(String route, RestApiClient.RequestMethod method) {
         RestApiClient client = getAuthenticatedClientForRoute(route);
         if (client != null) {
             try {
@@ -163,9 +181,9 @@ public class StoryLaneApiClient {
     }
 
 
-    protected JSONData processJsonAtProcessorRoute(JSONData object){
+    protected JSONObject processJsonAtProcessorRoute(JSONObject object) {
 
-        RestApiClient client = postJsonToRoute("/process",object);
+        RestApiClient client = postJsonToRoute("/process", object);
         if (client != null) {
             prepareResult(client);
             try {

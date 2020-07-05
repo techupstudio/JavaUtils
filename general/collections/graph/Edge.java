@@ -9,14 +9,14 @@ public class Edge<T> {
     private T startpoint, endpoint;
     private HashMap<Object, Object> properties;
 
-    public Edge(Vertice<T> startpoint, Vertice<T> endpoint){
+    public Edge(Vertice<T> startpoint, Vertice<T> endpoint) {
         this.startpoint = startpoint.getValue();
         this.endpoint = endpoint.getValue();
         this.properties = new HashMap<>();
         this.directed = false;
     }
 
-    public Edge(T startpoint, T endpoint){
+    public Edge(T startpoint, T endpoint) {
         this.startpoint = startpoint;
         this.endpoint = endpoint;
         this.properties = new HashMap<>();
@@ -31,33 +31,33 @@ public class Edge<T> {
         return endpoint;
     }
 
-    public Edge<T> setWeight(double weight){
+    public Double getWeight() {
+        return this.weight;
+    }
+
+    public Edge<T> setWeight(double weight) {
         this.weight = weight;
         return this;
     }
 
-    public Double getWeight(){
-        return this.weight;
-    }
-
-    public Edge<T> setProperty(Object key, Object value){
+    public Edge<T> setProperty(Object key, Object value) {
         this.properties.put(key, value);
         return this;
     }
 
-    public Object getProperty(Object key){
+    public Object getProperty(Object key) {
         return this.properties.get(key);
     }
 
-    public boolean hasPropertyKey(Object key){
+    public boolean hasPropertyKey(Object key) {
         return this.properties.containsKey(key);
     }
 
-    public boolean hasPropertyValue(Object value){
+    public boolean hasPropertyValue(Object value) {
         return this.properties.containsValue(value);
     }
 
-    public Edge<T> removeProperty(Object key){
+    public Edge<T> removeProperty(Object key) {
         this.properties.remove(key);
         return this;
     }
@@ -73,6 +73,6 @@ public class Edge<T> {
 
     @Override
     public String toString() {
-        return "Edge<V("+getStartPoint()+") : V("+getEndPoint()+")"+ ((getWeight() != null) ? " : [W="+getWeight()+"]" : "") +">";
+        return "Edge<V(" + getStartPoint() + ") : V(" + getEndPoint() + ")" + ((getWeight() != null) ? " : [W=" + getWeight() + "]" : "") + ">";
     }
 }

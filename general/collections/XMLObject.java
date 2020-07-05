@@ -12,50 +12,78 @@ public class XMLObject {
     private Dictionary<Object, Object> PROPERTIES = new Dictionary<>();
     private List<XMLObject> CHILDREN = new ArrayList<>();
 
-    public XMLObject() { }
+    public XMLObject() {
+    }
 
-    public XMLObject(String parentTag) { setParentTAG(parentTag); }
+    public XMLObject(String parentTag) {
+        setParentTAG(parentTag);
+    }
 
-    private boolean isString(String line){
+    private boolean isString(String line) {
         line = line.trim();
         return line.charAt(0) == '"' && line.charAt(line.length() - 1) == '"';
     }
 
-    public void setParentTAG(String parentTag){ PARENTTAG = parentTag; }
-
-    public String getParentTAG(){ return PARENTTAG; }
-
-    public XMLObject addProperty(Object propertyName, Object propertyValue){
-        PROPERTIES.add(propertyName, propertyValue); return this;
+    public String getParentTAG() {
+        return PARENTTAG;
     }
 
-    public Dictionary getProperties(){ return PROPERTIES; }
-
-    public XMLObject addChild(XMLObject child){ CHILDREN.add(child); return this; }
-
-    public XMLObject addChildren(XMLObject... children){
-        for (XMLObject child : children){ addChild(child); } return this;
+    public void setParentTAG(String parentTag) {
+        PARENTTAG = parentTag;
     }
 
-    public void setProperty(Dictionary property){ PROPERTIES = property; }
-    public void setChildren(List<XMLObject> children){ CHILDREN = children; }
+    public XMLObject addProperty(Object propertyName, Object propertyValue) {
+        PROPERTIES.set(propertyName, propertyValue);
+        return this;
+    }
 
-    public XMLObject setRawChild(String rawChild){ RAWCHILD = rawChild; return this; }
+    public Dictionary getProperties() {
+        return PROPERTIES;
+    }
 
-    public List<XMLObject> getALLChildren(){ return CHILDREN; }
+    public XMLObject addChild(XMLObject child) {
+        CHILDREN.add(child);
+        return this;
+    }
 
-    public List<XMLObject> getChildrenWithTAG(String childTagName){
+    public XMLObject addChildren(XMLObject... children) {
+        for (XMLObject child : children) {
+            addChild(child);
+        }
+        return this;
+    }
+
+    public void setProperty(Dictionary property) {
+        PROPERTIES = property;
+    }
+
+    public void setChildren(List<XMLObject> children) {
+        CHILDREN = children;
+    }
+
+    public XMLObject setRawChild(String rawChild) {
+        RAWCHILD = rawChild;
+        return this;
+    }
+
+    public List<XMLObject> getALLChildren() {
+        return CHILDREN;
+    }
+
+    public List<XMLObject> getChildrenWithTAG(String childTagName) {
         List<XMLObject> MATCHLIST = new ArrayList<>();
-        for (XMLObject child : CHILDREN){
-            if (child.getParentTAG().equals(childTagName)){ MATCHLIST.add(child); }
+        for (XMLObject child : CHILDREN) {
+            if (child.getParentTAG().equals(childTagName)) {
+                MATCHLIST.add(child);
+            }
         }
         return MATCHLIST;
     }
 
-    public List<XMLObject> getSubChildrenWithTAG(String childTagName){
+    public List<XMLObject> getSubChildrenWithTAG(String childTagName) {
         List<XMLObject> MATCHLIST = new ArrayList<>();
-        for (XMLObject child : CHILDREN){
-            if (child.getParentTAG().equals(childTagName)){
+        for (XMLObject child : CHILDREN) {
+            if (child.getParentTAG().equals(childTagName)) {
                 MATCHLIST.add(child);
             }
             List CHILDSMATCHLIST = child.getSubChildrenWithTAG(childTagName);
@@ -64,36 +92,46 @@ public class XMLObject {
         return MATCHLIST;
     }
 
-    public Object getPropertyValue(String propertyName){
+    public Object getPropertyValue(String propertyName) {
         return PROPERTIES.get(propertyName);
     }
 
-    public boolean hasProperty(String propertyName){
-        for (Object property : PROPERTIES.keys()){
-            if (property == propertyName){ return true; }
+    public boolean hasProperty(String propertyName) {
+        for (Object property : PROPERTIES.keys()) {
+            if (property == propertyName) {
+                return true;
+            }
         }
         return false;
     }
 
-    public boolean hasChild(XMLObject object){
-        for (XMLObject child : CHILDREN){
-            if (child == object){ return true; }
+    public boolean hasChild(XMLObject object) {
+        for (XMLObject child : CHILDREN) {
+            if (child == object) {
+                return true;
+            }
         }
         return false;
     }
 
-    public boolean hasChildWithTAG(String childTagName){
-        for (XMLObject child : CHILDREN){
-            if (child.getParentTAG().equals(childTagName)){ return true; }
+    public boolean hasChildWithTAG(String childTagName) {
+        for (XMLObject child : CHILDREN) {
+            if (child.getParentTAG().equals(childTagName)) {
+                return true;
+            }
         }
         return false;
     }
 
-    public boolean hasSubChildWithTAG(String childTagName){ return containsSubChild(childTagName) != null; }
+    public boolean hasSubChildWithTAG(String childTagName) {
+        return containsSubChild(childTagName) != null;
+    }
 
-    public boolean hasSubChild(XMLObject child){ return containsSubChild(child) != null; }
+    public boolean hasSubChild(XMLObject child) {
+        return containsSubChild(child) != null;
+    }
 
-    public void replaceAllChildrenWithTAG(String childTagName, String newChildTagName){
+    public void replaceAllChildrenWithTAG(String childTagName, String newChildTagName) {
         if (hasChildWithTAG(childTagName)) {
             for (XMLObject child : CHILDREN) {
                 if (child.getParentTAG().equals(childTagName)) {
@@ -106,7 +144,7 @@ public class XMLObject {
         }
     }
 
-    public void replaceAllSubChildrenWithTAG(String childTagName, String newChildTagName){
+    public void replaceAllSubChildrenWithTAG(String childTagName, String newChildTagName) {
         if (hasSubChildWithTAG(childTagName)) {
             for (XMLObject child : CHILDREN) {
                 if (child.getParentTAG().equals(childTagName)) {
@@ -120,17 +158,19 @@ public class XMLObject {
         }
     }
 
-    public void removeAllChildrenWithTAG(String childTagName){
+    public void removeAllChildrenWithTAG(String childTagName) {
         List<XMLObject> DATA = new ArrayList<>(CHILDREN);
-        for (XMLObject child : DATA){
-            if (child.getParentTAG().equals(childTagName)) { CHILDREN.remove(child); }
+        for (XMLObject child : DATA) {
+            if (child.getParentTAG().equals(childTagName)) {
+                CHILDREN.remove(child);
+            }
         }
     }
 
-    public void removeAllSubChildrenWithTAG(String childTagName){
+    public void removeAllSubChildrenWithTAG(String childTagName) {
         List<XMLObject> DATA = new ArrayList<>(CHILDREN);
 
-        for  (XMLObject child : DATA){
+        for (XMLObject child : DATA) {
             if (child.getParentTAG().equals(childTagName)) {
                 CHILDREN.remove(child);
             } else {
@@ -141,23 +181,33 @@ public class XMLObject {
         }
     }
 
-    private XMLObject containsSubChild(String childTagName){
-        for (XMLObject child : CHILDREN){
-            if (child.getParentTAG().equals(childTagName)){ return child; }
-            else{ if (child.containsSubChild(childTagName) != null){ return child; } }
+    private XMLObject containsSubChild(String childTagName) {
+        for (XMLObject child : CHILDREN) {
+            if (child.getParentTAG().equals(childTagName)) {
+                return child;
+            } else {
+                if (child.containsSubChild(childTagName) != null) {
+                    return child;
+                }
+            }
         }
         return null;
     }
 
-    private XMLObject containsSubChild(XMLObject object){
-        for (XMLObject child : CHILDREN){
-            if (child == object){ return child; }
-            else{ if (child.containsSubChild(object) != null){ return child; } }
+    private XMLObject containsSubChild(XMLObject object) {
+        for (XMLObject child : CHILDREN) {
+            if (child == object) {
+                return child;
+            } else {
+                if (child.containsSubChild(object) != null) {
+                    return child;
+                }
+            }
         }
         return null;
     }
 
-    private String getPropertyString(){
+    private String getPropertyString() {
         StringBuilder property = new StringBuilder();
 
         Enumerator<KeyValuePair<Object, Object>> enumerator = PROPERTIES.getEnumerator();
@@ -166,18 +216,20 @@ public class XMLObject {
             KeyValuePair x = enumerator.getNext();
             property.append(" ").append(x.getKey().toString()).append("=\"").append(x.getValue().toString()).append('"');
         }
-        if (property.length() > 0){ property.append(" "); }
+        if (property.length() > 0) {
+            property.append(" ");
+        }
 
         return property.toString();
     }
 
-    private String getChildrenString(){
+    private String getChildrenString() {
 
         StringBuilder children = new StringBuilder();
 
-        if (RAWCHILD != null){
+        if (RAWCHILD != null) {
             children.append("\n").append(RAWCHILD).append("\n");
-        }else {
+        } else {
             for (XMLObject x : CHILDREN) {
                 children.append("\n").append(x.toString());
             }
@@ -190,15 +242,27 @@ public class XMLObject {
         return children.toString();
     }
 
-    public boolean isEmpty(){ return PARENTTAG == null; }
+    public boolean isEmpty() {
+        return PARENTTAG == null;
+    }
 
-    public void reset(){ PARENTTAG = null;CHILDREN.clear();PROPERTIES.clear();RAWCHILD = null; }
+    public void reset() {
+        PARENTTAG = null;
+        CHILDREN.clear();
+        PROPERTIES.clear();
+        RAWCHILD = null;
+    }
 
-    public void resetChildren(){ CHILDREN.clear();RAWCHILD = null; }
+    public void resetChildren() {
+        CHILDREN.clear();
+        RAWCHILD = null;
+    }
 
-    public void resetProperties(){ PROPERTIES.clear(); }
+    public void resetProperties() {
+        PROPERTIES.clear();
+    }
 
-    public String toString(){
+    public String toString() {
         if (PARENTTAG != null) {
             return format("<<1><2>><3></<1>>", getParentTAG(), getPropertyString(), getChildrenString());
         }

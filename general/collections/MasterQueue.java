@@ -9,14 +9,21 @@ public class MasterQueue<T> implements Iterable<T> {
 
     private LinkedList<T> DATA = new LinkedList<>();
 
-    MasterQueue(){}
+    MasterQueue() {
+    }
 
-    public void add(T object){ DATA.append(object); }
+    public void add(T object) {
+        DATA.append(object);
+    }
 
-    public T getNext(){ T temp = peekNext(); DATA.remove(0); return temp; }
+    public T getNext() {
+        T temp = peekNext();
+        DATA.remove(0);
+        return temp;
+    }
 
-    public T peekNext(){
-        if (isEmpty()){
+    public T peekNext() {
+        if (isEmpty()) {
             try {
                 throw new EmptyObjectException("MasterQueue");
             } catch (EmptyObjectException e) {
@@ -26,14 +33,24 @@ public class MasterQueue<T> implements Iterable<T> {
         return DATA.get(0);
     }
 
-    public boolean hasNext(){ return !isEmpty();}
+    public boolean hasNext() {
+        return !isEmpty();
+    }
 
-    public boolean isEmpty(){ return DATA.isEmpty();}
+    public boolean isEmpty() {
+        return DATA.isEmpty();
+    }
 
-    public int size(){ return DATA.size();}
+    public int size() {
+        return DATA.size();
+    }
 
-    public String toString(){ return DATA.toString().replace("LinkedList", "MasterQueue");}
+    public String toString() {
+        return DATA.toString().replace("LinkedList", "MasterQueue");
+    }
 
     @Override
-    public Iterator<T> iterator() { return DATA.iterator(); }
+    public Iterator<T> iterator() {
+        return DATA.iterator();
+    }
 }

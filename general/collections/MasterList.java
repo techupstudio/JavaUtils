@@ -12,13 +12,20 @@ public class MasterList<T> implements Iterable<T> {
 
     private List<T> DATA = new ArrayList<>();
 
-    public MasterList(){}
+    public MasterList() {
+    }
 
-    MasterList(T[] obj){ DATA = changeToList(obj); }
+    MasterList(T[] obj) {
+        DATA = changeToList(obj);
+    }
 
-    MasterList(List<T> obj){ DATA = obj; }
+    MasterList(List<T> obj) {
+        DATA = obj;
+    }
 
-    MasterList(MasterList<T> obj){ DATA = changeToList(obj); }
+    MasterList(MasterList<T> obj) {
+        DATA = changeToList(obj);
+    }
 
     private List<T> changeToList(T[] obj) {
         List<T> n = new ArrayList<>();
@@ -26,122 +33,182 @@ public class MasterList<T> implements Iterable<T> {
         return n;
     }
 
-    private List<T> changeToList(MasterList<T> obj){
+    private List<T> changeToList(MasterList<T> obj) {
         List<T> n = new ArrayList<>();
-        for (int i : range(obj.size())){
+        for (int i : range(obj.size())) {
             n.add(obj.pop(i));
         }
         return n;
     }
 
-    public MasterList join(List<T> obj){ DATA.addAll(obj); return clone(); }
+    public MasterList join(List<T> obj) {
+        DATA.addAll(obj);
+        return clone();
+    }
 
-    public MasterList join(MasterList<T> obj){
+    public MasterList join(MasterList<T> obj) {
         Collections.addAll(DATA, obj.toArray());
-        return clone(); }
+        return clone();
+    }
 
-    public MasterList append(T... obj){
+    public MasterList append(T... obj) {
         Collections.addAll(DATA, obj);
-        return clone(); }
+        return clone();
+    }
 
-    public MasterList appendleft(T obj){ DATA.add(0,obj); return clone(); }
+    public MasterList appendleft(T obj) {
+        DATA.add(0, obj);
+        return clone();
+    }
 
-    public T pop(int index){ return DATA.get(index); }
+    public T pop(int index) {
+        return DATA.get(index);
+    }
 
-    public T popfirst(){ if (!isEmpty()) return DATA.get(0); return null;}
+    public T popfirst() {
+        if (!isEmpty()) return DATA.get(0);
+        return null;
+    }
 
-    public T poplast(){  if (!isEmpty()) return DATA.get(size()-1); return null; }
+    public T poplast() {
+        if (!isEmpty()) return DATA.get(size() - 1);
+        return null;
+    }
 
-    public void assign(List<T> obj){ DATA = obj; }
+    public void assign(List<T> obj) {
+        DATA = obj;
+    }
 
-    public void assign(MasterList<T> obj){ DATA = changeToList(obj); }
+    public void assign(MasterList<T> obj) {
+        DATA = changeToList(obj);
+    }
 
-    public void assign(T[] obj){ DATA = changeToList(obj); }
+    public void assign(T[] obj) {
+        DATA = changeToList(obj);
+    }
 
-    public MasterList insert(int index, T obj){ DATA.add(index, obj); return clone(); }
+    public MasterList insert(int index, T obj) {
+        DATA.add(index, obj);
+        return clone();
+    }
 
-    public MasterList update(int index, T obj){ DATA.set(index, obj); return clone(); }
+    public MasterList update(int index, T obj) {
+        DATA.set(index, obj);
+        return clone();
+    }
 
-    public MasterList updateAll(T old_obj, T new_obj){
-        while (DATA.contains(old_obj)){
+    public MasterList updateAll(T old_obj, T new_obj) {
+        while (DATA.contains(old_obj)) {
             update(lastIndexOf(old_obj), new_obj);
         }
         return clone();
     }
 
-    public MasterList remove (int index){ DATA.remove(index); return clone(); }
+    public MasterList remove(int index) {
+        DATA.remove(index);
+        return clone();
+    }
 
-    public MasterList removeAll (T obj){
-        while (DATA.contains(obj)){
+    public MasterList removeAll(T obj) {
+        while (DATA.contains(obj)) {
             remove(lastIndexOf(obj));
         }
         return clone();
     }
 
-    public void clear (){ DATA.clear(); }
+    public void clear() {
+        DATA.clear();
+    }
 
-    public int count(T obj){
+    public int count(T obj) {
         List<T> REMDATA = new ArrayList<>(DATA);
         int count = 0;
-        while (REMDATA.contains(obj)){
+        while (REMDATA.contains(obj)) {
             count++;
             REMDATA.remove(REMDATA.lastIndexOf(obj));
         }
         return count;
     }
 
-    public MasterList<T> reverse(){
+    public MasterList<T> reverse() {
         MasterList<T> n = new MasterList<>();
-        for (int i : range(size())){
-            n.append(pop(size()-(i+1)));
+        for (int i : range(size())) {
+            n.append(pop(size() - (i + 1)));
         }
         return n;
     }
 
-    public MasterList<T> sample(int size){ return sample(0,size); }
+    public MasterList<T> sample(int size) {
+        return sample(0, size);
+    }
 
-    public MasterList<T> sample(int begin_index, int end_index){
+    public MasterList<T> sample(int begin_index, int end_index) {
         MasterList<T> n = new MasterList<>();
-        for (int i : range(begin_index,end_index)){
+        for (int i : range(begin_index, end_index)) {
             n.append(pop(i));
         }
         return n;
     }
 
-    public MasterList<T> randsample(int size){
-        return new MasterList(Funcs.randsample(DATA.toArray(), size)); }
+    public MasterList<T> randsample(int size) {
+        return new MasterList(Funcs.randsample(DATA.toArray(), size));
+    }
 
-    public int firstIndexOf(T obj){ return DATA.indexOf(obj); }
+    public int firstIndexOf(T obj) {
+        return DATA.indexOf(obj);
+    }
 
-    public int lastIndexOf(T obj){ return DATA.lastIndexOf(obj); }
+    public int lastIndexOf(T obj) {
+        return DATA.lastIndexOf(obj);
+    }
 
-    public String toString(){ return DATA.toString(); }
+    public String toString() {
+        return DATA.toString();
+    }
 
-    public int hashCode(){ return DATA.hashCode(); }
+    public int hashCode() {
+        return DATA.hashCode();
+    }
 
-    public MasterList<T> clone(){ return new MasterList(DATA);  }
+    public MasterList<T> clone() {
+        return new MasterList(DATA);
+    }
 
-    public void forEach (Consumer<? super T> action){ DATA.forEach(action); }
+    public void forEach(Consumer<? super T> action) {
+        DATA.forEach(action);
+    }
 
-    public Iterator<T> iterator() { return DATA.iterator(); }
-    public ListIterator<T> listiterator() { return DATA.listIterator(); }
-    public Iterator<T> listiterator(int index) { return DATA.listIterator(index); }
+    public Iterator<T> iterator() {
+        return DATA.iterator();
+    }
 
-    public boolean equal (Object obj){
-        if (obj.getClass().getSimpleName().contains("List")){
+    public ListIterator<T> listiterator() {
+        return DATA.listIterator();
+    }
+
+    public Iterator<T> listiterator(int index) {
+        return DATA.listIterator(index);
+    }
+
+    public boolean equal(Object obj) {
+        if (obj.getClass().getSimpleName().contains("List")) {
             return obj.toString().equals(toString());
         }
         return false;
     }
 
-    public boolean equal (MasterList<T> obj){ return Arrays.equals(DATA.toArray(), obj.toArray()); }
+    public boolean equal(MasterList<T> obj) {
+        return Arrays.equals(DATA.toArray(), obj.toArray());
+    }
 
-    public int size (){ return DATA.size(); }
+    public int size() {
+        return DATA.size();
+    }
 
-    public boolean contains (T... obj){
-        if (obj.length > 1){
-            for (T i : obj){
-                if (!contains(i)){
+    public boolean contains(T... obj) {
+        if (obj.length > 1) {
+            for (T i : obj) {
+                if (!contains(i)) {
                     return false;
                 }
             }
@@ -150,30 +217,44 @@ public class MasterList<T> implements Iterable<T> {
         return DATA.contains(obj[0]);
     }
 
-    public boolean contains (MasterList<T> obj){
-        for (T i : obj.toArray()){
-            if (!contains(i)){
+    public boolean contains(MasterList<T> obj) {
+        for (T i : obj.toArray()) {
+            if (!contains(i)) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean contains (Collection<?> c){ return DATA.containsAll(c); }
+    public boolean contains(Collection<?> c) {
+        return DATA.containsAll(c);
+    }
 
-    public boolean isEmpty (){ return DATA.isEmpty(); }
+    public boolean isEmpty() {
+        return DATA.isEmpty();
+    }
 
-    public T[] toArray (){ return (T[]) DATA.toArray(); }
+    public T[] toArray() {
+        return (T[]) DATA.toArray();
+    }
 
-    public T[] toArray (T[] array){ return DATA.toArray(array); }
+    public T[] toArray(T[] array) {
+        return DATA.toArray(array);
+    }
 
-    public List<T> toList (){ return DATA; }
+    public List<T> toList() {
+        return DATA;
+    }
 
-    public T[] iter (){ return toArray(); }
+    public T[] iter() {
+        return toArray();
+    }
 
-    public MasterList<T> toSet (){ return new MasterList(asSet()); }
+    public MasterList<T> toSet() {
+        return new MasterList(asSet());
+    }
 
-    public List asSet(){
+    public List asSet() {
         List<T> n = new ArrayList<>();
         DATA.forEach((o) -> {
             if (!n.contains(o)) {
@@ -183,28 +264,40 @@ public class MasterList<T> implements Iterable<T> {
         return n;
     }
 
-    public MasterList<T> sort() { return changeToMyList(new Funcs.SortedNumArray(toDouble(DATA.toArray())).toDouble()); }
-
-    private MasterList<T> changeToMyList(Double[] toDouble) {
-        MasterList<T> n = new MasterList<>();for (Double i : toDouble){ n.append((T) i); }return n;
+    public MasterList<T> sort() {
+        return changeToMyList(new Funcs.SortedNumArray(toDouble(DATA.toArray())).toDouble());
     }
 
-    public boolean issupersetOf (List<T> obj){ return DATA.containsAll(obj); }
+    private MasterList<T> changeToMyList(Double[] toDouble) {
+        MasterList<T> n = new MasterList<>();
+        for (Double i : toDouble) {
+            n.append((T) i);
+        }
+        return n;
+    }
 
-    public boolean issubsetOf (List<T> obj){ return obj.containsAll(DATA); }
+    public boolean issupersetOf(List<T> obj) {
+        return DATA.containsAll(obj);
+    }
 
-    public boolean issupersetOf (MasterList<T> obj){
+    public boolean issubsetOf(List<T> obj) {
+        return obj.containsAll(DATA);
+    }
+
+    public boolean issupersetOf(MasterList<T> obj) {
         List<T> n = new ArrayList<>();
         Collections.addAll(n, obj.toArray());
         return DATA.containsAll(n);
     }
 
-    public boolean issubsetOf (MasterList<T> obj){
+    public boolean issubsetOf(MasterList<T> obj) {
         List<T> n = new ArrayList<>();
         Collections.addAll(n, obj.toArray());
         return n.containsAll(DATA);
     }
 
-    public Enumerator<T> getEnumerator(){ return new Enumerator<>(this); }
+    public Enumerator<T> getEnumerator() {
+        return new Enumerator<>(this);
+    }
 
 }

@@ -9,18 +9,31 @@ public class Deque<T> implements Iterable<T> {
 
     private LinkedList<T> DATA = new LinkedList<>();
 
-    Deque(){}
+    Deque() {
+    }
 
-    public void enqueueEnd(T object){ DATA.append(object); }
+    public void enqueueEnd(T object) {
+        DATA.append(object);
+    }
 
-    public void enqueueStart(T object){ DATA.insert(0,object); }
+    public void enqueueStart(T object) {
+        DATA.insert(0, object);
+    }
 
-    public T dequeueEnd(){ T temp = peekBack(); DATA.remove(size()-1); return temp; }
+    public T dequeueEnd() {
+        T temp = peekBack();
+        DATA.remove(size() - 1);
+        return temp;
+    }
 
-    public T dequeueStart(){ T temp = peekFront(); DATA.remove(0); return temp; }
+    public T dequeueStart() {
+        T temp = peekFront();
+        DATA.remove(0);
+        return temp;
+    }
 
-    public T peekFront(){
-        if (isEmpty()){
+    public T peekFront() {
+        if (isEmpty()) {
             try {
                 throw new EmptyObjectException("Deque");
             } catch (EmptyObjectException e) {
@@ -30,26 +43,36 @@ public class Deque<T> implements Iterable<T> {
         return DATA.get(0);
     }
 
-    public T peekBack(){
-        if (isEmpty()){
+    public T peekBack() {
+        if (isEmpty()) {
             try {
                 throw new EmptyObjectException("Deque");
             } catch (EmptyObjectException e) {
                 e.printStackTrace();
             }
         }
-        return DATA.get(size()-1);
+        return DATA.get(size() - 1);
     }
 
-    public boolean isEmpty(){ return DATA.isEmpty();}
+    public boolean isEmpty() {
+        return DATA.isEmpty();
+    }
 
-    public int size(){ return DATA.size();}
+    public int size() {
+        return DATA.size();
+    }
 
-    public String toString(){ return DATA.toString().replace("LinkedList", "Deque");}
+    public String toString() {
+        return DATA.toString().replace("LinkedList", "Deque");
+    }
 
     @Override
-    public Iterator<T> iterator() { return DATA.iterator(); }
+    public Iterator<T> iterator() {
+        return DATA.iterator();
+    }
 
     @Override
-    public void forEach(Consumer<? super T> action) { DATA.forEach(action); }
+    public void forEach(Consumer<? super T> action) {
+        DATA.forEach(action);
+    }
 }

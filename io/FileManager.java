@@ -8,21 +8,24 @@ import static com.techupstudio.utils.general.Funcs.println;
 
 public class FileManager {
 
-    private FileManager(){}
-
-    public static void createDirectory(File parent, String childName){
-        File temp = new File(parent, childName);
-        if (!temp.exists()){ temp.mkdirs(); }
+    private FileManager() {
     }
 
-    public static File getDirectory(File parent, String childName){
+    public static void createDirectory(File parent, String childName) {
+        File temp = new File(parent, childName);
+        if (!temp.exists()) {
+            temp.mkdirs();
+        }
+    }
+
+    public static File getDirectory(File parent, String childName) {
         File folder = new File(parent, childName);
         return folder;
     }
 
-    public static void createFile(File parent, String fileName){
+    public static void createFile(File parent, String fileName) {
         File temp = new File(parent, fileName);
-        if (!temp.exists()){
+        if (!temp.exists()) {
             try {
                 temp.createNewFile();
             } catch (IOException e) {
@@ -31,9 +34,9 @@ public class FileManager {
         }
     }
 
-    public static File getFile(File parent, String fileName){
+    public static File getFile(File parent, String fileName) {
         File temp = new File(parent, fileName);
-        if (temp.exists()){
+        if (temp.exists()) {
             return temp;
         }
         return null;
@@ -41,24 +44,26 @@ public class FileManager {
 
     public static void listDir(File file) {
         String[] paths;
-        try{
+        try {
             paths = file.list();
             if (paths != null)
-                for(String path : paths)
+                for (String path : paths)
                     System.out.println(path);
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void makeDir(String path){ new File(path).mkdirs(); }
+    public static void makeDir(String path) {
+        new File(path).mkdirs();
+    }
 
-    public static void write(File file, String line){
+    public static void write(File file, String line) {
 
         FileWriter WRITER = null;
 
-        if (file.canWrite()){
+        if (file.canWrite()) {
             try {
                 WRITER = new FileWriter(file);
                 WRITER.write(line);
@@ -70,14 +75,14 @@ public class FileManager {
         }
     }
 
-    public static void writeAppend(File file, String lines){
+    public static void writeAppend(File file, String lines) {
 
         FileWriter WRITER = null;
 
-        if (file.canWrite()){
+        if (file.canWrite()) {
             try {
                 WRITER = new FileWriter(file);
-                WRITER.write(read(file)+"\n"+lines);
+                WRITER.write(read(file) + "\n" + lines);
                 WRITER.flush();
                 WRITER.close();
             } catch (IOException e) {
@@ -91,15 +96,16 @@ public class FileManager {
 
         FileReader READER = null;
 
-        if (file.canRead()){
+        if (file.canRead()) {
             try {
                 READER = new FileReader(file);
-                while (true){
+                while (true) {
                     int c = READER.read();
-                    if (c != -1){
-                        retStr += (char)c;
+                    if (c != -1) {
+                        retStr += (char) c;
+                    } else {
+                        break;
                     }
-                    else{ break; }
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -126,25 +132,24 @@ public class FileManager {
 
         FileReader READER = null;
 
-        if (file.canRead()){
+        if (file.canRead()) {
             try {
                 READER = new FileReader(file);
                 int i = 1;
-                while (true){
+                while (true) {
                     int c = READER.read();
-                    if (c != -1){
-                        if (c == 10){
-                            if (!retStr.strip().isEmpty()){
+                    if (c != -1) {
+                        if (c == 10) {
+                            if (!retStr.trim().isEmpty()) {
                                 lines.put(i, retStr);
-                                retStr = "";i++;
+                                retStr = "";
+                                i++;
                             }
+                        } else {
+                            retStr += (char) c;
                         }
-                        else{
-                            retStr += (char)c;
-                        }
-                    }
-                    else{
-                        if (!retStr.strip().isEmpty()){
+                    } else {
+                        if (!retStr.trim().isEmpty()) {
                             lines.put(i, retStr);
                         }
                         break;
@@ -202,16 +207,21 @@ public class FileManager {
         return retStr.toString();
     }
 
-    public static void copy(File file, File newLocation){ copy(file, newLocation, ""); }
+    public static void copy(File file, File newLocation) {
+        copy(file, newLocation, "");
+    }
 
-    public static void copy(File file, File newLocation, String newName){
-        if (file.exists()){
-            if (file.isFile()){  copyFile(file, newLocation, newName); }
-            else{ copyDirectory(file, newLocation, newName); }
+    public static void copy(File file, File newLocation, String newName) {
+        if (file.exists()) {
+            if (file.isFile()) {
+                copyFile(file, newLocation, newName);
+            } else {
+                copyDirectory(file, newLocation, newName);
+            }
         }
     }
 
-    private static void copyFile(File file, File newLocation, String newName){
+    private static void copyFile(File file, File newLocation, String newName) {
         try {
             if (file.isFile()) {
                 if (newLocation.exists() && newLocation.isDirectory()) {
@@ -219,18 +229,17 @@ public class FileManager {
                     copiedFile.createNewFile();
                     FileInputStream inputStream = new FileInputStream(file);
                     FileOutputStream fileOutputStream = new FileOutputStream(copiedFile);
-                    while (inputStream.available() != 0){
+                    while (inputStream.available() != 0) {
                         fileOutputStream.write(inputStream.read());
                     }
                 }
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static void copyDirectory(File file, File newLocation, String newName){
+    private static void copyDirectory(File file, File newLocation, String newName) {
         try {
             if (file.isDirectory()) {
 
@@ -238,7 +247,9 @@ public class FileManager {
 
                     File copiedDirectory = getCopiedFile(file, newLocation, newName);
 
-                    if (!copiedDirectory.exists()) { copiedDirectory.mkdirs(); }
+                    if (!copiedDirectory.exists()) {
+                        copiedDirectory.mkdirs();
+                    }
                     File[] fileList = file.listFiles();
                     if (fileList != null) {
                         for (File subfile : fileList) {
@@ -251,22 +262,24 @@ public class FileManager {
                     }
                 }
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static String renameToCopiedFile(String name){
-        if (!name.contains(".")){ return name+"_copy"; }
-        else if (name.lastIndexOf(".") == 0){ return name+"_copy"; }
-        String nameOnly = name.substring(0,name.lastIndexOf("."));
-        String newName = nameOnly+"_copy"+name.substring(name.lastIndexOf("."));
+    public static String renameToCopiedFile(String name) {
+        if (!name.contains(".")) {
+            return name + "_copy";
+        } else if (name.lastIndexOf(".") == 0) {
+            return name + "_copy";
+        }
+        String nameOnly = name.substring(0, name.lastIndexOf("."));
+        String newName = nameOnly + "_copy" + name.substring(name.lastIndexOf("."));
         return newName;
     }
 
-    public static boolean renameFile(File file, String name){
-        if (file.exists()){
+    public static boolean renameFile(File file, String name) {
+        if (file.exists()) {
             String pathName = file.getAbsolutePath()
                     .substring(0, file.getAbsolutePath().lastIndexOf(file.getName())) + name;
             return file.renameTo(new File(pathName));
@@ -274,9 +287,12 @@ public class FileManager {
         return false;
     }
 
-    public static String getExtension(String name){
-        if (!name.contains(".")){ return ""; }
-        else if (name.lastIndexOf(".") == 0){ return ""; }
+    public static String getExtension(String name) {
+        if (!name.contains(".")) {
+            return "";
+        } else if (name.lastIndexOf(".") == 0) {
+            return "";
+        }
         return name.substring(name.lastIndexOf("."));
     }
 
@@ -284,61 +300,68 @@ public class FileManager {
 
         File copiedFile;
 
-        if (newName.strip().isEmpty()){
+        if (newName.trim().isEmpty()) {
             if (getDirectory(newLocation, file.getName()).exists()) {
                 copiedFile = getDirectory(newLocation, renameToCopiedFile(file.getName()));
-                while(copiedFile.exists()){
+                while (copiedFile.exists()) {
                     copiedFile = getDirectory(newLocation, renameToCopiedFile(copiedFile.getName()));
                 }
-            }
-            else{
+            } else {
                 copiedFile = getDirectory(newLocation, file.getName());
             }
-        }
-        else {
+        } else {
 
-            if (!getExtension(newName).equals(getExtension(file.getName()))){
-                newName+= getExtension(file.getName());
+            if (!getExtension(newName).equals(getExtension(file.getName()))) {
+                newName += getExtension(file.getName());
             }
 
             if (getDirectory(newLocation, newName).exists()) {
                 copiedFile = getDirectory(newLocation, renameToCopiedFile(file.getName()));
-            }
-            else{
+            } else {
                 copiedFile = getDirectory(newLocation, newName);
             }
         }
         return copiedFile;
     }
 
-    public static void cut(File file, File newLocation){
-        copy(file, newLocation); file.delete();
+    public static void cut(File file, File newLocation) {
+        copy(file, newLocation);
+        file.delete();
     }
 
-    public static void cut(File file, File newLocation, String newName){
-        copy(file, newLocation, newName); file.delete();
+    public static void cut(File file, File newLocation, String newName) {
+        copy(file, newLocation, newName);
+        file.delete();
     }
 
-    public static String getEnviron(String name){ return System.getenv(name); }
+    public static String getEnviron(String name) {
+        return System.getenv(name);
+    }
 
-    public static void listEnviron(){ System.getenv().forEach((k, v) -> println("KEY : "+k, "\tVALUE : "+v)); }
+    public static void listEnviron() {
+        System.getenv().forEach((k, v) -> println("KEY : " + k, "\tVALUE : " + v));
+    }
 
-    private static long sizeOfFile(File file, int pow){
+    private static long sizeOfFile(File file, int pow) {
         return (long) (file.length() / (Math.pow(1024, pow)));
     }
 
     public static long sizeInBytes(File file) {
         return sizeOfFile(file, 0);
     }
+
     public static long sizeInKiloBytes(File file) {
         return sizeOfFile(file, 1);
     }
+
     public static long sizeInMegaBytes(File file) {
         return sizeOfFile(file, 2);
     }
+
     public static long sizeInGigaBytes(File file) {
         return sizeOfFile(file, 3);
     }
+
     public static long sizeInTeraBytes(File file) {
         return sizeOfFile(file, 4);
     }

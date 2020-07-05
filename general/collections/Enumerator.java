@@ -3,7 +3,7 @@ package com.techupstudio.utils.general.collections;
 import java.util.Collection;
 import java.util.List;
 
-public class Enumerator<T>{
+public class Enumerator<T> {
 
     private int index = 0;
     private String TYPE;
@@ -14,31 +14,49 @@ public class Enumerator<T>{
     private LinkedList<T> LINKEDLIST;
     private MasterList<T> MASTERLIST;
 
-    Enumerator(T[] list){ ARRAY = list; TYPE = "array"; }
-    Enumerator(List<T> list){ LIST = list; TYPE = "list"; }
-    Enumerator(Collection<T> list){ COLLECTION = list; TYPE = "collection"; }
-    Enumerator(LinkedList<T> list){ LINKEDLIST = list; TYPE = "linkedlist"; }
-    Enumerator(MasterList<T> list){ MASTERLIST = list; TYPE = "masterlist"; }
+    Enumerator(T[] list) {
+        ARRAY = list;
+        TYPE = "array";
+    }
+
+    Enumerator(List<T> list) {
+        LIST = list;
+        TYPE = "list";
+    }
+
+    Enumerator(Collection<T> list) {
+        COLLECTION = list;
+        TYPE = "collection";
+    }
+
+    Enumerator(LinkedList<T> list) {
+        LINKEDLIST = list;
+        TYPE = "linkedlist";
+    }
+
+    Enumerator(MasterList<T> list) {
+        MASTERLIST = list;
+        TYPE = "masterlist";
+    }
 
 
-
-    public boolean hasNext(){
-        switch (TYPE){
+    public boolean hasNext() {
+        switch (TYPE) {
             case "array":
-                return ( ARRAY.length > index);
+                return (ARRAY.length > index);
             case "list":
-                return ( LIST.size() > index);
+                return (LIST.size() > index);
             case "collection":
-                return ( COLLECTION.size() > index);
+                return (COLLECTION.size() > index);
             case "linkedlist":
-                return ( LINKEDLIST.size() > index);
+                return (LINKEDLIST.size() > index);
             case "masterlist":
-                return ( MASTERLIST.size() > index);
+                return (MASTERLIST.size() > index);
         }
         return false;
     }
 
-    public T getNext(){
+    public T getNext() {
         if (hasNext()) {
             index++;
             switch (TYPE) {
@@ -58,8 +76,8 @@ public class Enumerator<T>{
         return null;
     }
 
-    public int size(){
-        switch (TYPE){
+    public int size() {
+        switch (TYPE) {
             case "array":
                 return ARRAY.length;
             case "list":
@@ -74,12 +92,20 @@ public class Enumerator<T>{
         return -1;
     }
 
-    public void reset(){ index = 0; }
+    public void reset() {
+        index = 0;
+    }
 
-    public int enumerationsRemaining(){ return size() - index; }
+    public int enumerationsRemaining() {
+        return size() - index;
+    }
 
-    public int enumerationsPassed(){ return index ; }
+    public int enumerationsPassed() {
+        return index;
+    }
 
-    public boolean isEmpty(){ return size() == 0; }
+    public boolean isEmpty() {
+        return size() == 0;
+    }
 
 }

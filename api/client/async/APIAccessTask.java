@@ -1,9 +1,8 @@
 package com.techupstudio.utils.api.client.async;
 
-import com.techupstudio.utils.general.collections.JSONData;
+import com.techupstudio.utils.general.collections.JSONObject;
 import com.techupstudio.utils.general.collections.KeyValuePair;
 
-import javax.naming.Context;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,78 +12,64 @@ import java.util.List;
 
 //extends async_task<String,Void,APIResponseObject>
 
-public class APIAccessTask  {
+public class APIAccessTask {
     private String requestUrl;
-    private Context context;
     private HttpURLConnection urlConnection;
-    private List<KeyValuePair<String,String>> headerData, paramData;
-    private JSONData postData;
+    private List<KeyValuePair<String, String>> headerData, paramData;
+    private JSONObject postData;
     private String method;
     private int responseCode = HttpURLConnection.HTTP_OK;
     private String responseMessage;
     private OnRequestCompleteListener delegate;
 
 
-    public static class APIResponseObject{
-        private int responseCode;
-        private String response;
-        private String responseMessage;
-
-        APIResponseObject(int responseCode, String responseMessage, String response){
-            this.responseMessage = responseMessage;
-            this.responseCode = responseCode;
-            this.response = response;
-        }
-        public String getResponse(){ return response; }
-        public int getResponseCode(){ return responseCode; }
-        public String getResponseMessage(){ return responseMessage; }
-    }
-
-    public interface OnRequestCompleteListener {
-        void onComplete(APIResponseObject result);
-    }
-
-    public Context getContext(){ return context; }
-
-    public APIAccessTask setRequestOnCompleteListener(OnRequestCompleteListener delegate){
-        this.delegate = delegate;
-        return this;
-    }
-
-    public APIAccessTask addParam(String key, String value){ paramData.add(new KeyValuePair<>(key,value));return this; }
-
-    public APIAccessTask addHeader(String key, String value){ headerData.add(new KeyValuePair<>(key,value)); return this; }
-
-    public APIAccessTask addPostData(String key, String value){ postData.add(key,value);return this; }
-
-    public APIAccessTask(Context context, String requestUrl, String method){
-        this.context = context;
+    public APIAccessTask(String requestUrl, String method) {
         this.method = method;
         try {
             this.requestUrl = requestUrl;
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         initializeFields();
     }
 
-    public APIAccessTask(Context context, String requestUrl, String method, OnRequestCompleteListener delegate){
-        this.context = context;
+    public APIAccessTask(String requestUrl, String method, OnRequestCompleteListener delegate) {
         this.delegate = delegate;
         this.method = method;
-        try { this.requestUrl = requestUrl; }
-        catch(Exception ex){ ex.printStackTrace(); }
+        try {
+            this.requestUrl = requestUrl;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         initializeFields();
+    }
+    
+    public APIAccessTask setRequestOnCompleteListener(OnRequestCompleteListener delegate) {
+        this.delegate = delegate;
+        return this;
+    }
+
+    public APIAccessTask addParam(String key, String value) {
+        paramData.add(new KeyValuePair<>(key, value));
+        return this;
+    }
+
+    public APIAccessTask addHeader(String key, String value) {
+        headerData.add(new KeyValuePair<>(key, value));
+        return this;
+    }
+
+    public APIAccessTask addPostData(String key, String value) {
+        postData.set(key, value);
+        return this;
     }
 
     private void initializeFields() {
-        this.requestUrl = this.requestUrl.replace(" ","%20");
-        this.postData = new JSONData();
+        this.requestUrl = this.requestUrl.replace(" ", "%20");
+        this.postData = new JSONObject();
         this.paramData = new ArrayList<>();
         this.headerData = new ArrayList<>();
     }
-
 
     protected void onPreExecute() {
 //        super.onpreExecute();
@@ -96,9 +81,9 @@ public class APIAccessTask  {
 //            prepareParamData();
 
             urlConnection = (HttpURLConnection) new URL(requestUrl).openConnection();
-            if(!headerData.isEmpty()) {
+            if (!headerData.isEmpty()) {
                 for (KeyValuePair<String, String> pair : headerData) {
-                    urlConnection.setRequestProperty(pair.getKey(),pair.getValue());
+                    urlConnection.setRequestProperty(pair.getKey(), pair.getValue());
                 }
             }
 
@@ -107,9 +92,9 @@ public class APIAccessTask  {
             urlConnection.setChunkedStreamingMode(0);
             urlConnection.setRequestMethod(method);
             urlConnection.connect();
-            StringBuilder sb = new StringBuilder();
+            StringBuilder builder = new StringBuilder();
 
-            if(!(method.equals("GET")) && !postData.isEmpty()) {
+            if (!(method.equals("GET")) && !postData.isEmpty()) {
                 OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
                 writer.write(postData.toString());
@@ -130,7 +115,8 @@ public class APIAccessTask  {
                 String line;
                 try {
                     while ((line = reader.readLine()) != null) {
-                        sb.append((line + "\n"));
+                        builder.append(line);
+                        builder.append("\n");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -142,28 +128,29 @@ public class APIAccessTask  {
                     }
                 }
             }
-            return new APIResponseObject(responseCode, responseMessage, sb.toString());
-        }
-        catch(Exception ex){
+            return new APIResponseObject(responseCode, responseMessage, builder.toString());
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return null;
     }
 
     protected void onPostExecute(APIResponseObject result) {
-        if (delegate != null){ delegate.onComplete(result); }
+        if (delegate != null) {
+            delegate.onComplete(result);
+        }
 //        super.onPostExecute(result);
     }
 
-    private String getParamsString(List<KeyValuePair<String, String>> paramData){
-        if(!paramData.isEmpty()){
+    private String getParamsString(List<KeyValuePair<String, String>> paramData) {
+        if (!paramData.isEmpty()) {
 
             StringBuilder combinedParams = new StringBuilder();
 
             combinedParams.append("?");
 
             for (KeyValuePair p : paramData) {
-                String paramString = p.getKey() + "=" +  p.getValue();
+                String paramString = p.getKey() + "=" + p.getValue();
                 if (combinedParams.length() > 1) {
                     combinedParams.append("&").append(paramString);
                 } else {
@@ -177,13 +164,13 @@ public class APIAccessTask  {
     }
 
     private void prepareParamData() {
-        if(!paramData.isEmpty()){
+        if (!paramData.isEmpty()) {
             StringBuilder combinedParams = new StringBuilder();
 
             combinedParams.append("?");
 
             for (KeyValuePair p : paramData) {
-                String paramString = p.getKey() + "=" +  p.getValue();
+                String paramString = p.getKey() + "=" + p.getValue();
                 if (combinedParams.length() > 1) {
                     combinedParams.append("&").append(paramString);
                 } else {
@@ -191,11 +178,40 @@ public class APIAccessTask  {
                 }
             }
             combinedParams = new StringBuilder(combinedParams.toString().replace(" ", "%20"));
-            this.requestUrl = requestUrl +combinedParams;
+            this.requestUrl = requestUrl + combinedParams;
         }
     }
 
-    public void execute(){
-        onPreExecute(); onPostExecute(doInBackground());
+    public void execute() {
+        onPreExecute();
+        onPostExecute(doInBackground());
+    }
+
+    public interface OnRequestCompleteListener {
+        void onComplete(APIResponseObject result);
+    }
+
+    public static class APIResponseObject {
+        private int responseCode;
+        private String response;
+        private String responseMessage;
+
+        APIResponseObject(int responseCode, String responseMessage, String response) {
+            this.responseMessage = responseMessage;
+            this.responseCode = responseCode;
+            this.response = response;
+        }
+
+        public String getResponse() {
+            return response;
+        }
+
+        public int getResponseCode() {
+            return responseCode;
+        }
+
+        public String getResponseMessage() {
+            return responseMessage;
+        }
     }
 }

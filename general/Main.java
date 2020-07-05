@@ -5,21 +5,6 @@ import com.techupstudio.utils.general.collections.Stack;
 
 public class Main {
 
-    public static class StackForPostFitExpression extends Stack {
-
-        public String pop(){
-            String top = super.list.popfirst().toString();
-            super.list.remove(0);
-
-            if (top.equals("+") || top.equals("-") || top.equals("*") || top.equals("/") || top.equals("//") || top.equals("%") || top.equals("^")){
-                return pop() + top + pop();
-            }
-            else{ return top; }
-        }
-
-    }
-
-
     public static void main(String[] args) throws Exception {
         // write your code here
 //        print(reverse("mommy"), '\n');
@@ -826,6 +811,21 @@ public class Main {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
+
+    }
+
+    public static class StackForPostFitExpression extends Stack {
+
+        public String pop() {
+            String top = super.list.popfirst().toString();
+            super.list.remove(0);
+
+            if (top.equals("+") || top.equals("-") || top.equals("*") || top.equals("/") || top.equals("//") || top.equals("%") || top.equals("^")) {
+                return pop() + top + pop();
+            } else {
+                return top;
+            }
+        }
 
     }
 

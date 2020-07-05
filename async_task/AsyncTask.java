@@ -4,7 +4,8 @@ public abstract class AsyncTask<Param, Result> {
 
     private Thread thread;
 
-    protected AsyncTask(){  }
+    protected AsyncTask() {
+    }
 
     public abstract void doBeforeTask();
 
@@ -12,7 +13,7 @@ public abstract class AsyncTask<Param, Result> {
 
     public abstract void doAfterTask(Result result);
 
-    public void execute(Param[] args){
+    public void execute(Param[] args) {
 
         doBeforeTask();
 

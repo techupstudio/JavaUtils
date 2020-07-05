@@ -9,52 +9,30 @@ public class ListGraph<T> extends Graph<T> {
 
     private Map<T, VerticeEdge> adjList;
 
-    public class VerticeEdge{
-
-        private KeyValuePair<Vertice<T>, List<Edge<T>>> data;
-
-        public VerticeEdge(Vertice<T> key, List<Edge<T>> value) {
-            data = new KeyValuePair<>(key, value);
-        }
-
-        public Vertice<T> getVertice(){
-            return data.getKey();
-        }
-
-        public List<Edge<T>> getEdges(){
-            return data.getValue();
-        }
-
-        @Override
-        public String toString() {
-            return "VerticeEdge<"+getVertice()+": "+getEdges()+">";
-        }
-    }
-
-    public ListGraph(){
+    public ListGraph() {
         super();
         adjList = new HashMap<>();
     }
 
-    public ListGraph(String graphType){
+    public ListGraph(String graphType) {
         super(graphType);
         adjList = new HashMap<>();
     }
 
     @Override
-    public void addVertice(Vertice<T> vertice){
+    public void addVertice(Vertice<T> vertice) {
         adjList.put(vertice.getValue(), new VerticeEdge(vertice, new ArrayList<>()));
     }
 
     @Override
-    public Vertice<T> getVertice(T vertice){
+    public Vertice<T> getVertice(T vertice) {
         return getVerticeEdge(vertice).getVertice();
     }
 
     @Override
     public List<Vertice<T>> getAllVertice() {
         List<Vertice<T>> vertices = new ArrayList<>();
-        for (T key : adjList.keySet()){
+        for (T key : adjList.keySet()) {
             vertices.add(getVertice(key));
         }
         return vertices;
@@ -65,17 +43,17 @@ public class ListGraph<T> extends Graph<T> {
     }
 
     private void evaluateVertice(T vertice) throws InvalidVerticeException {
-        if (!hasVertice(vertice)){
-            throw new InvalidVerticeException("The vertice with value "+vertice+" does not exist!.");
+        if (!hasVertice(vertice)) {
+            throw new InvalidVerticeException("The vertice with value " + vertice + " does not exist!.");
         }
     }
 
-    public VerticeEdge getVerticeEdge(T verticeValue){
+    public VerticeEdge getVerticeEdge(T verticeValue) {
         return adjList.get(verticeValue);
     }
 
     @Override
-    public void removeVertice(Vertice<T> vertice){
+    public void removeVertice(Vertice<T> vertice) {
         adjList.remove(vertice.getValue());
     }
 
@@ -93,19 +71,20 @@ public class ListGraph<T> extends Graph<T> {
     public void addEdge(Edge<T> edge) throws InvalidVerticeException {
         evaluateVertice(edge.getStartPoint());
         evaluateVertice(edge.getEndPoint());
-        switch (getGraphType()){
+        switch (getGraphType()) {
             case DIRECTED:
-                edge.setDirected(true); break;
+                edge.setDirected(true);
+                break;
             case UNDIRECTED:
-                edge.setDirected(false); break;
+                edge.setDirected(false);
+                break;
         }
 
         //adding edge
         if (!edge.isDirected()) {
             adjList.get(edge.getStartPoint()).getEdges().add(edge);
             adjList.get(edge.getEndPoint()).getEdges().add(edge);
-        }
-        else if (edge.isDirected()){
+        } else if (edge.isDirected()) {
             adjList.get(edge.getStartPoint()).getEdges().add(edge);
         }
     }
@@ -124,7 +103,7 @@ public class ListGraph<T> extends Graph<T> {
     @Override
     public List<Edge<T>> getAllEdges() {
         List<Edge<T>> allEdges = new ArrayList<>();
-        for (T vertice : adjList.keySet()){
+        for (T vertice : adjList.keySet()) {
             try {
                 allEdges.addAll(getEdges(vertice));
             } catch (InvalidVerticeException e) {
@@ -145,8 +124,8 @@ public class ListGraph<T> extends Graph<T> {
     public void removeEdge(T startpoint, T endpoint) throws InvalidVerticeException {
         evaluateVertice(startpoint);
         evaluateVertice(endpoint);
-        for (int i=0;i < adjList.get(startpoint).getEdges().size(); i++){
-            if (adjList.get(startpoint).getEdges().get(i).getEndPoint() == endpoint){
+        for (int i = 0; i < adjList.get(startpoint).getEdges().size(); i++) {
+            if (adjList.get(startpoint).getEdges().get(i).getEndPoint() == endpoint) {
                 adjList.get(startpoint).getEdges().remove(i);
                 break;
             }
@@ -159,11 +138,11 @@ public class ListGraph<T> extends Graph<T> {
     }
 
     @Override
-    public boolean hasEdge(T startpoint, T endpoint) throws InvalidVerticeException  {
+    public boolean hasEdge(T startpoint, T endpoint) throws InvalidVerticeException {
         evaluateVertice(startpoint);
         evaluateVertice(endpoint);
-        for (int i=0;i < adjList.get(startpoint).getEdges().size(); i++){
-            if (adjList.get(startpoint).getEdges().get(i).getEndPoint() == endpoint){
+        for (int i = 0; i < adjList.get(startpoint).getEdges().size(); i++) {
+            if (adjList.get(startpoint).getEdges().get(i).getEndPoint() == endpoint) {
                 return true;
             }
         }
@@ -171,12 +150,12 @@ public class ListGraph<T> extends Graph<T> {
     }
 
     @Override
-    public int getTotalVerticesCount(){
+    public int getTotalVerticesCount() {
         return adjList.size();
     }
 
     @Override
-    public int getTotalEdgesCount(){
+    public int getTotalEdgesCount() {
         return getAllEdges().size();
     }
 
@@ -188,9 +167,9 @@ public class ListGraph<T> extends Graph<T> {
     @Override
     public int getInDegree(T vertice) {
         int count = 0;
-        for (VerticeEdge value: adjList.values()){
-            for (Edge<T> edge : value.getEdges()){
-                if (edge.getEndPoint() == vertice){
+        for (VerticeEdge value : adjList.values()) {
+            for (Edge<T> edge : value.getEdges()) {
+                if (edge.getEndPoint() == vertice) {
                     count++;
                 }
             }
@@ -206,7 +185,7 @@ public class ListGraph<T> extends Graph<T> {
     @Override
     public long getEstimatedMaxEdge() {
         int n = adjList.size();
-        return n * (n-1);
+        return n * (n - 1);
     }
 
     @Override
@@ -218,22 +197,21 @@ public class ListGraph<T> extends Graph<T> {
     public List<Vertice<T>> getNeighbours(T vertice, int dept) throws InvalidVerticeException {
         Set<Vertice<T>> neighbours = new HashSet<>();
         List<Edge<T>> edges = null;
-        for(int i=0;i<dept;i++){
+        for (int i = 0; i < dept; i++) {
             if (i == 0) {
                 edges = getEdges(vertice);
-            }
-            else {
+            } else {
                 List<Edge<T>> temp = new ArrayList<>(edges);
                 edges = new ArrayList<>();
-                for (Edge<T> edge: temp){
+                for (Edge<T> edge : temp) {
                     edges.addAll(getEdges(edge.getEndPoint()));
                 }
             }
         }
 
         //getNeighbours
-        if (edges != null && edges.size() > 0){
-            for (Edge<T> edge : edges){
+        if (edges != null && edges.size() > 0) {
+            for (Edge<T> edge : edges) {
                 neighbours.add(getVertice(edge.getEndPoint()));
             }
         }
@@ -296,6 +274,28 @@ public class ListGraph<T> extends Graph<T> {
 
     @Override
     public String toString() {
-        return "ListGraph<V: "+getTotalVerticesCount()+", E: "+getTotalEdgesCount()+">";
+        return "ListGraph<V: " + getTotalVerticesCount() + ", E: " + getTotalEdgesCount() + ">";
+    }
+
+    public class VerticeEdge {
+
+        private KeyValuePair<Vertice<T>, List<Edge<T>>> data;
+
+        public VerticeEdge(Vertice<T> key, List<Edge<T>> value) {
+            data = new KeyValuePair<>(key, value);
+        }
+
+        public Vertice<T> getVertice() {
+            return data.getKey();
+        }
+
+        public List<Edge<T>> getEdges() {
+            return data.getValue();
+        }
+
+        @Override
+        public String toString() {
+            return "VerticeEdge<" + getVertice() + ": " + getEdges() + ">";
+        }
     }
 }

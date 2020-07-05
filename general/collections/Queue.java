@@ -9,14 +9,21 @@ public class Queue<T> implements Iterable<T> {
 
     private LinkedList<T> DATA = new LinkedList<>();
 
-    Queue(){}
+    Queue() {
+    }
 
-    public void enqueue(T object){ DATA.append(object); }
+    public void enqueue(T object) {
+        DATA.append(object);
+    }
 
-    public T dequeue(){ T temp = peekFront(); DATA.remove(0); return temp; }
+    public T dequeue() {
+        T temp = peekFront();
+        DATA.remove(0);
+        return temp;
+    }
 
-    public T peekFront(){
-        if (isEmpty()){
+    public T peekFront() {
+        if (isEmpty()) {
             try {
                 throw new EmptyObjectException("Queue");
             } catch (EmptyObjectException e) {
@@ -26,12 +33,20 @@ public class Queue<T> implements Iterable<T> {
         return DATA.get(0);
     }
 
-    public boolean isEmpty(){ return DATA.isEmpty();}
+    public boolean isEmpty() {
+        return DATA.isEmpty();
+    }
 
-    public int size(){ return DATA.size();}
+    public int size() {
+        return DATA.size();
+    }
 
-    public String toString(){ return DATA.toString().replace("LinkedList", "Queue");}
+    public String toString() {
+        return DATA.toString().replace("LinkedList", "Queue");
+    }
 
     @Override
-    public Iterator<T> iterator() { return DATA.iterator(); }
+    public Iterator<T> iterator() {
+        return DATA.iterator();
+    }
 }

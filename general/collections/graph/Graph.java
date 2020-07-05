@@ -4,36 +4,29 @@ import java.util.List;
 
 public abstract class Graph<T> {
 
-    private String graphType;
     public static final String DIRECTED = "DIRECTED";
     public static final String UNDIRECTED = "UNDIRECTED";
     public static final String DIRECTED_AND_UNDIRECTED = "DIRECTED_AND_UNDIRECTED";
-    
+    private String graphType;
 
-    public static class InvalidVerticeException extends Exception {
-        InvalidVerticeException(){
-            super("You are referencing a vertice that does not exist in the Graph!.");
-        }
-        InvalidVerticeException(String message){
-            super(message);
-        }
+
+    public Graph() {
+        setGraphType(DIRECTED_AND_UNDIRECTED);
     }
 
-    public interface VerticeOperation<T>{
-        void operate(Vertice<T> vertice);
+    public Graph(String graphType) {
+        setGraphType(graphType);
     }
 
-    public Graph(){ setGraphType(DIRECTED_AND_UNDIRECTED); }
-    
-    public Graph(String graphType){ setGraphType(graphType); }
-    
+    public final String getGraphType() {
+        return this.graphType;
+    }
+
     private void setGraphType(String graphType) {
-        if (graphType.equals(DIRECTED) || graphType.equals(UNDIRECTED) || graphType.equals(DIRECTED_AND_UNDIRECTED)){
+        if (graphType.equals(DIRECTED) || graphType.equals(UNDIRECTED) || graphType.equals(DIRECTED_AND_UNDIRECTED)) {
             this.graphType = graphType;
         }
     }
-
-    public final String getGraphType(){ return this.graphType; }
 
     public abstract void addVertice(Vertice<T> vertice);
 
@@ -87,18 +80,42 @@ public abstract class Graph<T> {
 
     public abstract List<T> getLongestPath(T startpoint, T endpoint);
 
-    public boolean isConnected(){ return false; }
+    public boolean isConnected() {
+        return false;
+    }
 
-    public boolean isStronglyConnected(){ return false; }
+    public boolean isStronglyConnected() {
+        return false;
+    }
 
-    public boolean isWeeklyConnected(){ return false; }
+    public boolean isWeeklyConnected() {
+        return false;
+    }
 
-    public boolean isSparse(){ return false; }
+    public boolean isSparse() {
+        return false;
+    }
 
-    public boolean isDense(){ return false; }
+    public boolean isDense() {
+        return false;
+    }
 
     @Override
     public String toString() {
-        return "Graph<"+getGraphType()+">";
+        return "Graph<" + getGraphType() + ">";
+    }
+
+    public interface VerticeOperation<T> {
+        void operate(Vertice<T> vertice);
+    }
+
+    public static class InvalidVerticeException extends Exception {
+        InvalidVerticeException() {
+            super("You are referencing a vertice that does not exist in the Graph!.");
+        }
+
+        InvalidVerticeException(String message) {
+            super(message);
+        }
     }
 }

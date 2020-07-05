@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.techupstudio.utils.general.Funcs.repeatStr;
+
 //interface Command{
 //    void function ();
 //}
@@ -14,59 +16,133 @@ public class Myvar implements Cloneable {
     private Object obj;
     private Object[] arrobj;
     private boolean BoolStatus = false;
-    private boolean wlooperStatus =false;
+    private boolean wlooperStatus = false;
     private int looper = 0;
     private String isRun = "";
     private Map<String, Object> varcontainer = new HashMap<>();
     private Map<String, Object[]> arrcontainer = new HashMap<>();
+    private Funcs.Printer MyPrinter = new Funcs.Printer();
 
-    public static abstract class Command {
-        public abstract void function ();
+    public Myvar() {
     }
 
-    public Myvar() { }
+    public Myvar(Object value) {
+        setValue(value);
+    }
 
-    public Myvar(Object value) { setValue(value); }
-    public Myvar(Object[] value) { setValue(value); }
-    public Myvar(ArrayList value) { setValue(value.toArray()); }
+    public Myvar(Object[] value) {
+        setValue(value);
+    }
 
-    public Myvar setValue(Object obj) { this.obj = obj;arrobj = null; return this; }
-    public Myvar setValue(Object[] obj) { this.arrobj = obj;obj = null; return this; }
-    public Myvar setValue(ArrayList obj) { this.arrobj = obj.toArray();obj = null; return this; }
+    public Myvar(ArrayList value) {
+        setValue(value.toArray());
+    }
+
+    public Myvar setValue(Object obj) {
+        this.obj = obj;
+        arrobj = null;
+        return this;
+    }
+
+    public Myvar setValue(Object[] obj) {
+        this.arrobj = obj;
+        obj = null;
+        return this;
+    }
+
+    public Myvar setValue(ArrayList obj) {
+        this.arrobj = obj.toArray();
+        obj = null;
+        return this;
+    }
 
     public String getType() {
         return (this.obj == null) ? this.arrobj.getClass().getSimpleName() : this.obj.getClass().getSimpleName();
     }
 
-    private void on(){ this.BoolStatus = true; }
+    private void on() {
+        this.BoolStatus = true;
+    }
 
-    private void off(){ this.BoolStatus = false; }
+    private void off() {
+        this.BoolStatus = false;
+    }
 
-    private boolean isOn(){ return this.BoolStatus; }
+    private boolean isOn() {
+        return this.BoolStatus;
+    }
 
-    private boolean whileOn(){ return this.wlooperStatus = true; }
+    private boolean whileOn() {
+        return this.wlooperStatus = true;
+    }
 
-    private boolean whileOff(){ return this.wlooperStatus = false; }
+    private boolean whileOff() {
+        return this.wlooperStatus = false;
+    }
 
-    private boolean iswhileOn(){ return this.wlooperStatus; }
+    private boolean iswhileOn() {
+        return this.wlooperStatus;
+    }
 
-    public Myvar format(Object... with) { return this.setValue(Funcs.format(this.toString(), with)); }
+    public Myvar format(Object... with) {
+        return this.setValue(Funcs.format(this.toString(), with));
+    }
 
-    public Object toObject() { return this.obj; }
-    public String toString() { return Funcs.toStrings(this.obj); }
-    public Float toFloat() { return Funcs.toFloat(this.obj); }
-    public Character toCharacter() { return Funcs.toCharacter(this.obj); }
-    public Integer toInteger() { return Funcs.toInteger(this.obj); }
-    public Double toDouble() { return Funcs.toDouble(this.obj); }
-    public Boolean toBoolean() { return Funcs.toBoolean(this.obj); }
+    public Object toObject() {
+        return this.obj;
+    }
 
-    public Object[] toArrObject() { return this.arrobj; }
-    public String[] toArrString() { return Funcs.toStrings(this.arrobj); }
-    public Float[] toArrFloat() { return Funcs.toFloat(this.arrobj); }
-    public Character[] toArrCharacter() { return Funcs.toCharacter(this.arrobj); }
-    public Integer[] toArrInteger() { return Funcs.toInteger(this.arrobj); }
-    public Double[] toArrDouble() { return Funcs.toDouble(this.arrobj); }
-    public Boolean[] toArrBoolean() { return Funcs.toBoolean(this.arrobj); }
+    public String toString() {
+        return Funcs.toStrings(this.obj);
+    }
+
+    public Float toFloat() {
+        return Funcs.toFloat(this.obj);
+    }
+
+    public Character toCharacter() {
+        return Funcs.toCharacter(this.obj);
+    }
+
+    public Integer toInteger() {
+        return Funcs.toInteger(this.obj);
+    }
+
+    public Double toDouble() {
+        return Funcs.toDouble(this.obj);
+    }
+
+    public Boolean toBoolean() {
+        return Funcs.toBoolean(this.obj);
+    }
+
+    public Object[] toArrObject() {
+        return this.arrobj;
+    }
+
+    public String[] toArrString() {
+        return Funcs.toStrings(this.arrobj);
+    }
+
+    public Float[] toArrFloat() {
+        return Funcs.toFloat(this.arrobj);
+    }
+
+    public Character[] toArrCharacter() {
+        return Funcs.toCharacter(this.arrobj);
+    }
+
+    public Integer[] toArrInteger() {
+        return Funcs.toInteger(this.arrobj);
+    }
+
+    public Double[] toArrDouble() {
+        return Funcs.toDouble(this.arrobj);
+    }
+
+    public Boolean[] toArrBoolean() {
+        return Funcs.toBoolean(this.arrobj);
+    }
 
     public Myvar clone() {
         try {
@@ -78,203 +154,328 @@ public class Myvar implements Cloneable {
     }
 
     public Myvar reverse() {
-        if (getType().equals("String")){
+        if (getType().equals("String")) {
             this.setValue(Funcs.reverse(this.obj.toString()));
-        }
-        else if(getType().contains("[]")){
+        } else if (getType().contains("[]")) {
             this.setValue(Funcs.reverse(this.arrobj));
         }
         return this;
     }
 
-    public Myvar split(Object obj) { return this.setValue(Funcs.split(this.obj, obj)); }
+    public Myvar split(Object obj) {
+        return this.setValue(Funcs.split(this.obj, obj));
+    }
 
-    public int hashCode() { return (this.obj == null) ? this.arrobj.hashCode() : this.obj.hashCode(); }
+    public int hashCode() {
+        return (this.obj == null) ? this.arrobj.hashCode() : this.obj.hashCode();
+    }
 
-    public boolean equals(Object obj) { return (this.obj == null) ? this.arrobj.equals(obj) : this.obj.equals(obj) ; }
+    public boolean equals(Object obj) {
+        return (this.obj == null) ? this.arrobj.equals(obj) : this.obj.equals(obj);
+    }
 
-    public int length() { return (this.obj == null) ? this.arrobj.toString().length() : this.obj.toString().length() ; }
+    public int length() {
+        return (this.obj == null) ? this.arrobj.toString().length() : this.obj.toString().length();
+    }
 
-    public Myvar endl(){ print("\n");return this; }
+    public Myvar endl() {
+        print("\n");
+        return this;
+    }
 
-    public Myvar endl(Integer obj){ print("\n".repeat(obj));return this; }
+    public Myvar endl(Integer obj) {
+        print(repeatStr("\n", obj));
+        return this;
+    }
 
-    public Myvar tab(){ print("\t");return this; }
+    public Myvar tab() {
+        print("\t");
+        return this;
+    }
 
-    public Myvar tab(Integer obj){ print("\t".repeat(obj));return this; }
+    public Myvar tab(Integer obj) {
+        print(repeatStr("\t", obj));
+        return this;
+    }
 
-    private Funcs.Printer MyPrinter = new Funcs.Printer();
-
-    public Myvar printer(String start, String sep, String end){
-        MyPrinter.start(start);MyPrinter.sep(sep);MyPrinter.end(end);
+    public Myvar printer(String start, String sep, String end) {
+        MyPrinter.start(start);
+        MyPrinter.sep(sep);
+        MyPrinter.end(end);
         return this;
     }
 
     public Myvar print() {
-        if (this.obj != null){
+        if (this.obj != null) {
             println(this);
-        }
-        else{
-            for (Object i : arrobj){
+        } else {
+            for (Object i : arrobj) {
                 println(i);
             }
         }
         return this;
     }
 
-
     public Myvar print(Object... objs) {
-        for (Object obj : objs){
-            if (obj.getClass().getSimpleName().contains("[]")){
+        for (Object obj : objs) {
+            if (obj.getClass().getSimpleName().contains("[]")) {
                 Funcs.print(obj);
-            }
-            else {
+            } else {
                 MyPrinter.print(obj);
             }
         }
         return this;
     }
 
-    public Myvar println(Object... objs){
-        for (Object obj : objs){
-            if (obj.getClass().getSimpleName().contains("[]")){
+    public Myvar println(Object... objs) {
+        for (Object obj : objs) {
+            if (obj.getClass().getSimpleName().contains("[]")) {
                 Funcs.println(obj);
-            }
-            else{
-                MyPrinter.print(obj);MyPrinter.print();
+            } else {
+                MyPrinter.print(obj);
+                MyPrinter.print();
             }
         }
         return this;
     }
 
-    
     //Object obj
-    public Myvar add(Object obj){
-        if(this.obj.getClass().getSimpleName().equals("String")){
+    public Myvar add(Object obj) {
+        if (this.obj.getClass().getSimpleName().equals("String")) {
             return this.setValue(this.obj.toString().concat(obj.toString()));
         }
         return this.setValue(this.toFloat() + Funcs.toDouble(obj));
     }
-    public Myvar subtract(Object obj){ return this.setValue(this.toDouble() - Funcs.toDouble(obj)); }
-    public Myvar divide(Object obj){ return this.setValue(this.toDouble() / Funcs.toDouble(obj)); }
-    public Myvar multiply(Object obj){
-        if(this.obj.getClass().getSimpleName().equals("String")) {
-            return this.setValue(this.obj.toString().repeat(Funcs.toInteger(obj)));
+
+    public Myvar subtract(Object obj) {
+        return this.setValue(this.toDouble() - Funcs.toDouble(obj));
+    }
+
+    public Myvar divide(Object obj) {
+        return this.setValue(this.toDouble() / Funcs.toDouble(obj));
+    }
+
+    public Myvar multiply(Object obj) {
+        if (this.obj.getClass().getSimpleName().equals("String")) {
+            return this.setValue(repeatStr(this.obj.toString(), Funcs.toInteger(obj)));
         }
         return this.setValue(this.toDouble() * Funcs.toDouble(obj));
     }
-    public Myvar mod(Object obj){ return this.setValue(this.toFloat() % Funcs.toDouble(obj)); }
-    public Myvar pow(Object obj){ return this.setValue(Funcs.power(this.obj, obj)); }
+
+    public Myvar mod(Object obj) {
+        return this.setValue(this.toFloat() % Funcs.toDouble(obj));
+    }
+
+    public Myvar pow(Object obj) {
+        return this.setValue(Funcs.power(this.obj, obj));
+    }
 
     //int obj
-    public Myvar add(int obj){
-        if(this.obj.getClass().getSimpleName().equals("String")){
+    public Myvar add(int obj) {
+        if (this.obj.getClass().getSimpleName().equals("String")) {
             Object Obj = obj;
             return this.setValue(this.obj.toString().concat(Obj.toString()));
         }
         return this.setValue(this.toDouble() + obj);
     }
-    public Myvar subtract(int obj){ return this.setValue(this.toDouble() - obj); }
-    public Myvar divide(int obj){ return this.setValue(this.toDouble() / obj); }
-    public Myvar multiply(int obj){
-        if(this.obj.getClass().getSimpleName().equals("String")) {
-            return this.setValue(this.obj.toString().repeat(obj));
+
+    public Myvar subtract(int obj) {
+        return this.setValue(this.toDouble() - obj);
+    }
+
+    public Myvar divide(int obj) {
+        return this.setValue(this.toDouble() / obj);
+    }
+
+    public Myvar multiply(int obj) {
+        if (this.obj.getClass().getSimpleName().equals("String")) {
+            return this.setValue(repeatStr(this.obj.toString(), obj));
         }
         return this.setValue(this.toDouble() * obj);
     }
-    public Myvar modulus(int obj){ return this.setValue(this.toDouble() % obj); }
-    public Myvar power(int obj){ return this.setValue(Funcs.power(this.obj, obj)); }
+
+    public Myvar modulus(int obj) {
+        return this.setValue(this.toDouble() % obj);
+    }
+
+    public Myvar power(int obj) {
+        return this.setValue(Funcs.power(this.obj, obj));
+    }
 
     //float obj
-    public Myvar add(float obj){
-        if(this.obj.getClass().getSimpleName().equals("String")){
+    public Myvar add(float obj) {
+        if (this.obj.getClass().getSimpleName().equals("String")) {
             Object Obj = obj;
             return this.setValue(this.obj.toString().concat(Obj.toString()));
         }
         return this.setValue(this.toDouble() + obj);
     }
-    public Myvar subtract(float obj){ return this.setValue(this.toDouble() - obj); }
-    public Myvar divide(float obj){ return this.setValue(this.toDouble() / obj); }
-    public Myvar multiply(float obj){
-        if(this.obj.getClass().getSimpleName().equals("String")) {
-            return this.setValue(this.obj.toString().repeat((int) obj));
+
+    public Myvar subtract(float obj) {
+        return this.setValue(this.toDouble() - obj);
+    }
+
+    public Myvar divide(float obj) {
+        return this.setValue(this.toDouble() / obj);
+    }
+
+    public Myvar multiply(float obj) {
+        if (this.obj.getClass().getSimpleName().equals("String")) {
+            return this.setValue(repeatStr(this.obj.toString(), (int) obj));
         }
         return this.setValue(this.toDouble() * obj);
     }
-    public Myvar modulus(float obj){ return this.setValue(this.toDouble() % obj); }
-    public Myvar power(float obj){ return this.setValue(Funcs.power(this.obj, obj)); }
+
+    public Myvar modulus(float obj) {
+        return this.setValue(this.toDouble() % obj);
+    }
+
+    public Myvar power(float obj) {
+        return this.setValue(Funcs.power(this.obj, obj));
+    }
 
     //double obj
-    public Myvar add(double obj){
-        if(this.obj.getClass().getSimpleName().equals("String")){
+    public Myvar add(double obj) {
+        if (this.obj.getClass().getSimpleName().equals("String")) {
             Object Obj = obj;
             return this.setValue(this.obj.toString().concat(Obj.toString()));
         }
         return this.setValue(this.toDouble() + obj);
     }
-    public Myvar subtract(double obj){ return this.setValue(this.toDouble() - obj); }
-    public Myvar divide(double obj){ return this.setValue(this.toDouble() / obj); }
-    public Myvar multiply(double obj){
-        if(this.obj.getClass().getSimpleName().equals("String")) {
-            return this.setValue(this.obj.toString().repeat((int) obj));
+
+    public Myvar subtract(double obj) {
+        return this.setValue(this.toDouble() - obj);
+    }
+
+    public Myvar divide(double obj) {
+        return this.setValue(this.toDouble() / obj);
+    }
+
+    public Myvar multiply(double obj) {
+        if (this.obj.getClass().getSimpleName().equals("String")) {
+            return this.setValue(repeatStr(this.obj.toString(), (int) obj));
         }
         return this.setValue(this.toDouble() * obj);
     }
-    public Myvar modulus(double obj){ return this.setValue(this.toDouble() % obj); }
-    public Myvar power(double obj){ return this.setValue(Funcs.power(this.obj, obj)); }
+
+    public Myvar modulus(double obj) {
+        return this.setValue(this.toDouble() % obj);
+    }
+
+    public Myvar power(double obj) {
+        return this.setValue(Funcs.power(this.obj, obj));
+    }
 
     //char obj
-    public Myvar add(char obj){
-        if(this.obj.getClass().getSimpleName().equals("String")){
+    public Myvar add(char obj) {
+        if (this.obj.getClass().getSimpleName().equals("String")) {
             Object Obj = obj;
             return this.setValue(this.obj.toString().concat(Obj.toString()));
         }
         Object Obj = obj;
-        return this.setValue(Funcs.toDouble(this.obj)+ Funcs.toDouble(Obj));
+        return this.setValue(Funcs.toDouble(this.obj) + Funcs.toDouble(Obj));
     }
 
-    public Myvar inputInt(String show){ return this.setValue(Funcs.inputInt(show)); }
-    public Myvar getStr(String show){ return this.setValue(Funcs.getStr(show)); }
-    public Myvar inputStr(String show){ return this.setValue(Funcs.inputStr(show)); }
-    public Myvar inputFloat(String show){ return this.setValue(Funcs.inputFloat(show)); }
-    public Myvar inputDouble(String show){ return this.setValue(Funcs.inputDouble(show)); }
-    public Myvar inputChar(String show){ return this.setValue(Funcs.inputChar(show)); }
-    public Myvar inputBool(String show){ return this.setValue(Funcs.inputBool(show)); }
+    public Myvar inputInt(String show) {
+        return this.setValue(Funcs.inputInt(show));
+    }
 
-    public Myvar random(){ return this.setValue(Funcs.random()); }
-    public Myvar randint(){ return this.setValue(Funcs.randint()); }
-    public Myvar randint(int max){ return this.setValue(Funcs.randint(max)); }
-    public Myvar randrange(int size){ return this.setValue(Funcs.randrange(size)); }
-    public Myvar randrange(int max, int size){ return this.setValue(Funcs.randrange(max, size)); }
-    public Object[] randsample(int sample_size){ return Funcs.randsample(arrobj, sample_size); }
+    public Myvar getStr(String show) {
+        return this.setValue(Funcs.getStr(show));
+    }
+
+    public Myvar inputStr(String show) {
+        return this.setValue(Funcs.inputStr(show));
+    }
+
+    public Myvar inputFloat(String show) {
+        return this.setValue(Funcs.inputFloat(show));
+    }
+
+    public Myvar inputDouble(String show) {
+        return this.setValue(Funcs.inputDouble(show));
+    }
+
+    public Myvar inputChar(String show) {
+        return this.setValue(Funcs.inputChar(show));
+    }
+
+    public Myvar inputBool(String show) {
+        return this.setValue(Funcs.inputBool(show));
+    }
+
+    public Myvar random() {
+        return this.setValue(Funcs.random());
+    }
+
+    public Myvar randint() {
+        return this.setValue(Funcs.randint());
+    }
+
+    public Myvar randint(int max) {
+        return this.setValue(Funcs.randint(max));
+    }
+
+    public Myvar randrange(int size) {
+        return this.setValue(Funcs.randrange(size));
+    }
+
+    public Myvar randrange(int max, int size) {
+        return this.setValue(Funcs.randrange(max, size));
+    }
+
+    public Object[] randsample(int sample_size) {
+        return Funcs.randsample(arrobj, sample_size);
+    }
+
+    public Myvar setConsoleLength(Integer value) {
+        MyPrinter.setConsoleLength(value);
+        return this;
+    }
 
 
     //##### Console Text Manipulatuon #####
 
-    public Myvar setConsoleLength(Integer value){ MyPrinter.setConsoleLength(value); return this; }
-    public Myvar alignNormal(){ MyPrinter.alignNormal(); return this; }
-    public Myvar alignCenter(){ MyPrinter.alignCenter(); return this; }
-    public Myvar alignLeft(){ MyPrinter.alignLeft(); return this; }
-    public Myvar alignRight(){ MyPrinter.alignRight(); return this; }
-    public Myvar alignReset(){ MyPrinter.resetAlignment(); return this; }
+    public Myvar alignNormal() {
+        MyPrinter.alignNormal();
+        return this;
+    }
 
+    public Myvar alignCenter() {
+        MyPrinter.alignCenter();
+        return this;
+    }
 
+    public Myvar alignLeft() {
+        MyPrinter.alignLeft();
+        return this;
+    }
 
-    public Myvar andprint(Object obj){
-        print(obj.toString().repeat(looper));
+    public Myvar alignRight() {
+        MyPrinter.alignRight();
+        return this;
+    }
+
+    public Myvar alignReset() {
+        MyPrinter.resetAlignment();
+        return this;
+    }
+
+    public Myvar andprint(Object obj) {
+        print(repeatStr(obj.toString(), looper));
         looper = 0;
         return this;
     }
 
-    public Myvar andrun(Command command){
-        for (int i=0;i<looper;i++){
+    public Myvar andrun(Command command) {
+        for (int i = 0; i < looper; i++) {
             command.function();
         }
         looper = 0;
         return this;
     }
 
-    public Myvar andtotal(String show){
+    public Myvar andtotal(String show) {
         if (looper != 0) {
             for (int i = 0; i < looper; i++) {
                 this.obj = this.toDouble() + Funcs.inputDouble(show);
@@ -282,13 +483,13 @@ public class Myvar implements Cloneable {
             looper = 0;
             return this;
         }
-        if (iswhileOn()){
+        if (iswhileOn()) {
             Object num;
-            while(iswhileOn()) {
+            while (iswhileOn()) {
                 num = Funcs.inputStr(show);
-                if (num.toString().equals(":q")){
+                if (num.toString().equals(":q")) {
                     this.obj = this.toDouble() + Funcs.toDouble(num);
-                }else{
+                } else {
                     whileOff();
                 }
             }
@@ -296,47 +497,46 @@ public class Myvar implements Cloneable {
         return this;
     }
 
-    public Myvar andsubtract(String show){
-        for (int i=0;i<looper;i++){
+    public Myvar andsubtract(String show) {
+        for (int i = 0; i < looper; i++) {
             this.obj = this.toDouble() - Funcs.inputDouble(show);
         }
         looper = 0;
         return this;
     }
 
-    public Myvar andmultiply(String show){
-        for (int i=0;i<looper;i++){
+    public Myvar andmultiply(String show) {
+        for (int i = 0; i < looper; i++) {
             this.obj = this.toDouble() * Funcs.inputDouble(show);
         }
         looper = 0;
         return this;
     }
 
-    public Myvar anddivide(String show){
-        for (int i=0;i<looper;i++){
+    public Myvar anddivide(String show) {
+        for (int i = 0; i < looper; i++) {
             this.obj = this.toDouble() / Funcs.inputDouble(show);
         }
         looper = 0;
         return this;
     }
 
-    public Myvar isnull(){
+    public Myvar isnull() {
         if (this.obj == null && this.arrobj == null) {
             this.on();
         }
         this.isRun = "ready";
-        return  this;
+        return this;
     }
 
-    public Myvar isequal(Object obj){
-        if(obj != null) {
+    public Myvar isequal(Object obj) {
+        if (obj != null) {
             if ((obj.hashCode() == (this.obj.hashCode()))) {
                 this.on();
             }
             this.isRun = "ready";
             return this;
-        }
-        else{
+        } else {
             if ((obj.equals(this.arrobj.hashCode()))) {
                 this.on();
             }
@@ -345,15 +545,14 @@ public class Myvar implements Cloneable {
         }
     }
 
-    public Myvar isnot_equal(Object obj){
-        if(obj != null) {
+    public Myvar isnot_equal(Object obj) {
+        if (obj != null) {
             if (!(obj.hashCode() == (this.obj.hashCode()))) {
                 this.on();
             }
             this.isRun = "ready";
             return this;
-        }
-        else{
+        } else {
             if (!(obj.equals(this.arrobj.hashCode()))) {
                 this.on();
             }
@@ -362,81 +561,78 @@ public class Myvar implements Cloneable {
         }
     }
 
-    public Myvar isgreater(Object obj){
+    public Myvar isgreater(Object obj) {
         if ((obj.hashCode() < (this.obj.hashCode()))) {
             this.on();
         }
         this.isRun = "ready";
-        return  this;
+        return this;
     }
 
-    public Myvar islesser(Object obj){
+    public Myvar islesser(Object obj) {
         if ((obj.hashCode() > (this.obj.hashCode()))) {
             this.on();
         }
         this.isRun = "ready";
-        return  this;
+        return this;
     }
 
-    public Myvar isgreater_or_equal(Object obj){
+    public Myvar isgreater_or_equal(Object obj) {
         if ((obj.hashCode() <= (this.obj.hashCode()))) {
             this.on();
         }
         this.isRun = "ready";
-        return  this;
+        return this;
     }
 
-    public Myvar islesser_or_equal(Object obj){
+    public Myvar islesser_or_equal(Object obj) {
         if ((obj.hashCode() >= (this.obj.hashCode()))) {
             this.on();
         }
         this.isRun = "ready";
-        return  this;
+        return this;
     }
 
-    //##### Variable Management #####
-
-    public boolean existVar(String varname){
+    public boolean existVar(String varname) {
         //check if var exist
         return varcontainer.containsKey(varname);
     }
 
-    public Myvar assign(String varname, Object obj){
-        if (!existVar(varname)){
+    //##### Variable Management #####
+
+    public Myvar assign(String varname, Object obj) {
+        if (!existVar(varname)) {
             varcontainer.putIfAbsent(varname, obj);
-        }
-        else{
+        } else {
             varcontainer.replace(varname, obj);
         }
         return this;
     }
 
-
-    public Object getVar(String varname){
-        if (existVar(varname)){
+    public Object getVar(String varname) {
+        if (existVar(varname)) {
             return varcontainer.get(varname);
         }
         return new Object();
     }
 
-    public Myvar delVar(String varname){
-        if (existVar(varname)){
+    public Myvar delVar(String varname) {
+        if (existVar(varname)) {
             varcontainer.remove(varname);
         }
         return this;
     }
 
-    public Myvar clearVars(){
+    public Myvar clearVars() {
         varcontainer.clear();//empty variable from variable map
         return this;
     }
 
-    private String listItems(Object[] arrayVar, Integer... varOnRow){
+    private String listItems(Object[] arrayVar, Integer... varOnRow) {
         Integer onRow;
-        if(varOnRow.length == 1){
+        if (varOnRow.length == 1) {
             onRow = varOnRow[0];
-        }
-        else{
+        } else {
             onRow = 3;
         }
         StringBuilder string_arr = new StringBuilder("\nvalues   : \n\t\t\t");
@@ -446,112 +642,114 @@ public class Myvar implements Cloneable {
         return string_arr + "\n";
     }
 
-    public Myvar listVars(){
-        varcontainer.forEach((s, o) -> print("\nvaraible :\t",s, "\nvalue    :\t",o,"\n"));
+    public Myvar listVars() {
+        varcontainer.forEach((s, o) -> print("\nvaraible :\t", s, "\nvalue    :\t", o, "\n"));
         return this;//empty variable from variable map
     }
 
-    public Myvar listArrs(){
-        arrcontainer.forEach((s, o) -> print("variable : ",s, " list", listItems(o)));
+    public Myvar listArrs() {
+        arrcontainer.forEach((s, o) -> print("variable : ", s, " list", listItems(o)));
         return this;//empty variable from variable map
     }
 
-    public Myvar listArrs(int varOnRow){
-        arrcontainer.forEach((s, o) -> print("variable : ",s, " list", listItems(o, varOnRow)));
+    public Myvar listArrs(int varOnRow) {
+        arrcontainer.forEach((s, o) -> print("variable : ", s, " list", listItems(o, varOnRow)));
         return this;//empty variable from variable map
     }
 
-    public Map<String, Object> getVarContainer(){ return varcontainer; }
+    public Map<String, Object> getVarContainer() {
+        return varcontainer;
+    }
 
-    public Map<String, Object[]> getArrContainer(){ return arrcontainer; }
+    public Map<String, Object[]> getArrContainer() {
+        return arrcontainer;
+    }
 
-    public Myvar increamentVar(String varname){
-        if (existVar(varname)){
+    public Myvar increamentVar(String varname) {
+        if (existVar(varname)) {
             Object new_ = Funcs.toDouble(getVar(varname)) + 1;
             varcontainer.replace(varname, getVar(varname), new_);
         }
         return this;//++ variable from variable map
     }
 
-    public Myvar increamentVar(String varname, int by){
-        if (existVar(varname)){
+    public Myvar increamentVar(String varname, int by) {
+        if (existVar(varname)) {
             Object new_ = Funcs.toDouble(getVar(varname)) + by;
             varcontainer.replace(varname, getVar(varname), new_);
         }
         return this;//++by variable from variable map
     }
 
-    public Myvar decrementVar(String varname){
-        if (existVar(varname)){
+    public Myvar decrementVar(String varname) {
+        if (existVar(varname)) {
             Object new_ = Funcs.toDouble(getVar(varname)) - 1;
             varcontainer.replace(varname, getVar(varname), new_);
         }
         return this;//-- variable from variable map
     }
 
-    public Myvar decrementVar(String varname, int by){
-        if (existVar(varname)){
+    public Myvar decrementVar(String varname, int by) {
+        if (existVar(varname)) {
             Object new_ = Funcs.toDouble(getVar(varname)) - by;
             varcontainer.replace(varname, getVar(varname), new_);
         }
         return this;//--by variable from variable map
     }
 
-    public boolean existArr(String varname){
+    public boolean existArr(String varname) {
         //check if var exist
         return arrcontainer.containsKey(varname);
     }
 
-    public Myvar assign(String varname, Object[] obj){
-        if (!existVar(varname)){
+    public Myvar assign(String varname, Object[] obj) {
+        if (!existVar(varname)) {
             arrcontainer.putIfAbsent(varname, obj);
-        }
-        else{
+        } else {
             arrcontainer.replace(varname, obj);
         }
         return this;
     }
 
-    public Object[] getArr(String varname){
-        if (existArr(varname)){
+    public Object[] getArr(String varname) {
+        if (existArr(varname)) {
             return arrcontainer.get(varname);
         }
         return new Object[0];
     }
 
-    public Myvar delArr(String varname){
-        if (existArr(varname)){
+    public Myvar delArr(String varname) {
+        if (existArr(varname)) {
             arrcontainer.remove(varname);
         }
         return this;
     }
 
-    public Myvar clearArrs(){
+    public Myvar clearArrs() {
         arrcontainer.clear();
         return this;//empty variable from variable map
     }
 
-    //##### Process Flows #####
-
-    public Myvar when(Object function, boolean result){
+    public Myvar when(Object function, boolean result) {
         isRun = "ready";
-        if(result == Funcs.toBoolean(function)){
+        if (result == Funcs.toBoolean(function)) {
             on();
-        }
-        else{
+        } else {
             off();
         }
         return this;
     }
 
-    public Myvar when(boolean result){
+    //##### Process Flows #####
+
+    public Myvar when(boolean result) {
         isRun = "ready";
         BoolStatus = result;
         return this;
     }
 
-    public Myvar elif(Object function, boolean result){
-        if(!isOn()) {
+    public Myvar elif(Object function, boolean result) {
+        if (!isOn()) {
             if (result == Funcs.toBoolean(function)) {
                 on();
             } else {
@@ -561,13 +759,13 @@ public class Myvar implements Cloneable {
         return this;
     }
 
-    public Myvar elif(boolean result){
+    public Myvar elif(boolean result) {
         BoolStatus = result;
         return this;
     }
 
-    public Myvar orelse(Command usercommand){
-        if(!isOn() && isRun.equals("ready")){
+    public Myvar orelse(Command usercommand) {
+        if (!isOn() && isRun.equals("ready")) {
             on();
             usercommand.function();
             isRun = "pass";
@@ -576,23 +774,21 @@ public class Myvar implements Cloneable {
         return this;
     }
 
-    public Myvar loop(int obj){
-        if (looper == 0){
+    public Myvar loop(int obj) {
+        if (looper == 0) {
             this.looper = obj;
-        }
-        else{
-            print("\nloop is still on : "+looper+" runs left.\n");
+        } else {
+            print("\nloop is still on : " + looper + " runs left.\n");
         }
         return this;
     }
 
-    public void loopwhile(){
+    public void loopwhile() {
         whileOn();
     }
 
-
-    public Myvar run(Command usercommand){
-        if(isOn() && isRun.equals("ready")){
+    public Myvar run(Command usercommand) {
+        if (isOn() && isRun.equals("ready")) {
             usercommand.function();
             isRun = "pass";
             off();
@@ -600,9 +796,13 @@ public class Myvar implements Cloneable {
         return this;
     }
 
-    public Myvar dothis(Command usercommand){
+    public Myvar dothis(Command usercommand) {
         usercommand.function();
         return this;
+    }
+
+    public static abstract class Command {
+        public abstract void function();
     }
 
 }

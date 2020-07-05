@@ -2,13 +2,13 @@ package com.techupstudio.utils.api;
 
 //takes am address, and post data, and returns the html as a string
 
-import com.techupstudio.utils.general.collections.JSONData;
+import com.techupstudio.utils.general.collections.JSONObject;
 
 import static com.techupstudio.utils.general.Funcs.println;
 
 public class Main {
 
-    public static void main (String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 
 //        String USERNAME = "Otc Chingy";
 //        String PASSWORD = "Adgjmptw111";
@@ -34,7 +34,7 @@ public class Main {
 //                        if (result.getResponse() != null){
 //                            try {
 //                                ACCESSTOKEN[0] = result.getResponseAsJson().getString("access_token");
-//                            } catch (Collections.JSONData.JSONException e) {
+//                            } catch (Collections.JSONObject.JSONException e) {
 //                                e.printStackTrace();
 //                            }
 //                        }
@@ -51,7 +51,7 @@ public class Main {
 //                        System.out.println(result);
 //                        try {
 //                            System.out.println(result.getResponseAsJson().getString("username"));
-//                        } catch (Collections.JSONData.JSONException e) {
+//                        } catch (Collections.JSONObject.JSONException e) {
 //                            e.printStackTrace();
 //                        }
 //                    }
@@ -62,10 +62,12 @@ public class Main {
         //do deleting directory
 
         String a = "[1, 45, \"bernard\", \"{age, name}\", 100, [21,15]]";
-        JSONData jsonData = new JSONData();
-        jsonData.add(1,1);jsonData.add(12,a);jsonData.add(13,3);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.set(1, 1);
+        jsonObject.set(12, a);
+        jsonObject.set(13, 3);
 
-        println(jsonData.getArray(12));
+        println(jsonObject.getArray(12));
 
 
     }
