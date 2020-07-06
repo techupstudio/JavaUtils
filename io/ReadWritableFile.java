@@ -18,7 +18,7 @@ public class ReadWritableFile {
     private FileWriter WRITER;
     //private FileReader READER;
 
-    ReadWritableFile(File file) throws IOException {
+    public ReadWritableFile(File file) throws IOException {
         initializeFile(file);
     }
 
@@ -30,7 +30,6 @@ public class ReadWritableFile {
         if (file.canWrite() || file.canRead()) {
             FILE = file;
             FILESCANNER = new Scanner(FILE);
-            WRITER = new FileWriter(FILE);
         } else {
             try {
                 throw new FileNotReadWritableException();
