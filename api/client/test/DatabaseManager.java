@@ -1,10 +1,10 @@
-package com.techupstudio.utils.api.client.test;
+package com.techupstudio.otc_chingy.mychurch.utils.api.client.test;
 
 
-import com.techupstudio.utils.api.client.sync.RestApiClient;
-import com.techupstudio.utils.general.collections.JSONObject;
+import com.techupstudio.otc_chingy.mychurch.utils.api.client.sync.RestApiClient;
+import com.techupstudio.otc_chingy.mychurch.utils.general.collections.JSONObject;
 
-public class DatabaseManager extends StoryLaneApiClient {
+public class DatabaseManager extends TechupApiClient {
 
     private int responseCode;
     private String responseData;

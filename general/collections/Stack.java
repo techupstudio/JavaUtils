@@ -1,4 +1,4 @@
-package com.techupstudio.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
 
 
 public class Stack<T> {
@@ -10,9 +10,12 @@ public class Stack<T> {
     }
 
     public T pop() {
-        T top = list.poplast();
-        if (top != null) list.remove(list.size() - 1);
-        return top;
+        if (!isEmpty()) {
+            T top = list.poplast();
+            list.remove(list.size() - 1);
+            return top;
+        }
+        return null;
     }
 
     public T peekTop() {

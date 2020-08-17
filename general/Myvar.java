@@ -1,10 +1,11 @@
-package com.techupstudio.utils.general;
+package com.techupstudio.otc_chingy.mychurch.utils.general;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
-import static com.techupstudio.utils.general.Funcs.repeatStr;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.repeatString;
 
 //interface Command{
 //    void function ();
@@ -184,7 +185,7 @@ public class Myvar implements Cloneable {
     }
 
     public Myvar endl(Integer obj) {
-        print(repeatStr("\n", obj));
+        print(repeatString("\n", obj));
         return this;
     }
 
@@ -194,7 +195,7 @@ public class Myvar implements Cloneable {
     }
 
     public Myvar tab(Integer obj) {
-        print(repeatStr("\t", obj));
+        print(repeatString("\t", obj));
         return this;
     }
 
@@ -257,7 +258,7 @@ public class Myvar implements Cloneable {
 
     public Myvar multiply(Object obj) {
         if (this.obj.getClass().getSimpleName().equals("String")) {
-            return this.setValue(repeatStr(this.obj.toString(), Funcs.toInteger(obj)));
+            return this.setValue(repeatString(this.obj.toString(), Funcs.toInteger(obj)));
         }
         return this.setValue(this.toDouble() * Funcs.toDouble(obj));
     }
@@ -289,7 +290,7 @@ public class Myvar implements Cloneable {
 
     public Myvar multiply(int obj) {
         if (this.obj.getClass().getSimpleName().equals("String")) {
-            return this.setValue(repeatStr(this.obj.toString(), obj));
+            return this.setValue(repeatString(this.obj.toString(), obj));
         }
         return this.setValue(this.toDouble() * obj);
     }
@@ -321,7 +322,7 @@ public class Myvar implements Cloneable {
 
     public Myvar multiply(float obj) {
         if (this.obj.getClass().getSimpleName().equals("String")) {
-            return this.setValue(repeatStr(this.obj.toString(), (int) obj));
+            return this.setValue(repeatString(this.obj.toString(), (int) obj));
         }
         return this.setValue(this.toDouble() * obj);
     }
@@ -353,7 +354,7 @@ public class Myvar implements Cloneable {
 
     public Myvar multiply(double obj) {
         if (this.obj.getClass().getSimpleName().equals("String")) {
-            return this.setValue(repeatStr(this.obj.toString(), (int) obj));
+            return this.setValue(repeatString(this.obj.toString(), (int) obj));
         }
         return this.setValue(this.toDouble() * obj);
     }
@@ -462,7 +463,7 @@ public class Myvar implements Cloneable {
     }
 
     public Myvar andprint(Object obj) {
-        print(repeatStr(obj.toString(), looper));
+        print(repeatString(obj.toString(), looper));
         looper = 0;
         return this;
     }
@@ -643,17 +644,32 @@ public class Myvar implements Cloneable {
     }
 
     public Myvar listVars() {
-        varcontainer.forEach((s, o) -> print("\nvaraible :\t", s, "\nvalue    :\t", o, "\n"));
+        varcontainer.forEach(new BiConsumer<String, Object>() {
+            @Override
+            public void accept(String s, Object o) {
+                Myvar.this.print("\nvaraible :\t", s, "\nvalue    :\t", o, "\n");
+            }
+        });
         return this;//empty variable from variable map
     }
 
     public Myvar listArrs() {
-        arrcontainer.forEach((s, o) -> print("variable : ", s, " list", listItems(o)));
+        arrcontainer.forEach(new BiConsumer<String, Object[]>() {
+            @Override
+            public void accept(String s, Object[] o) {
+                Myvar.this.print("variable : ", s, " list", Myvar.this.listItems(o));
+            }
+        });
         return this;//empty variable from variable map
     }
 
-    public Myvar listArrs(int varOnRow) {
-        arrcontainer.forEach((s, o) -> print("variable : ", s, " list", listItems(o, varOnRow)));
+    public Myvar listArrs(final int varOnRow) {
+        arrcontainer.forEach(new BiConsumer<String, Object[]>() {
+            @Override
+            public void accept(String s, Object[] o) {
+                Myvar.this.print("variable : ", s, " list", Myvar.this.listItems(o, varOnRow));
+            }
+        });
         return this;//empty variable from variable map
     }
 

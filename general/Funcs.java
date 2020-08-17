@@ -1,6 +1,17 @@
-package com.techupstudio.utils.general;
+package com.techupstudio.otc_chingy.mychurch.utils.general;
 
-import java.util.*;
+import com.techupstudio.otc_chingy.mychurch.utils.general.collections.Dictionary;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Funcs {
     //## Default Printer Onjects ##
@@ -8,8 +19,7 @@ public class Funcs {
     public static Printer printerln = new Printer("", " ", "\n");
 
     /**
-     * @author Bernard Azumah
-     * @author www.techupstudio.com
+     * @author Gladys
      * @version 1.0
      * @since 1.0
      */
@@ -972,7 +982,8 @@ public class Funcs {
         while (temp.contains("\n")) {
             if (temp.indexOf("\n") == index) {
                 if (newlineIndex.containsKey(memory)) {
-                    newlineIndex.replace(memory, toInteger(newlineIndex.get(memory)) + 1);
+                    //.replace
+                    newlineIndex.put(memory, toInteger(newlineIndex.get(memory)) + 1);
                 } else {
                     newlineIndex.put(memory, 1);
                 }
@@ -1036,9 +1047,9 @@ public class Funcs {
         for (int j = 0; j < len(newlineIndex); j++) {
             try {
                 String wrapped = wrap(split(line.toString().trim(), "\n")[j], wraplenght);
-                ret_Str.append(repeatStr(newline, newlineIndex.get(j))).append(wrapped);
+                ret_Str.append(repeatString(newline, newlineIndex.get(j))).append(wrapped);
             } catch (Exception e) {
-                ret_Str.append(repeatStr(newline, newlineIndex.get(j)));
+                ret_Str.append(repeatString(newline, newlineIndex.get(j)));
             }
         }
         if (newlineIndex.isEmpty()) {
@@ -1065,17 +1076,17 @@ public class Funcs {
                         .replace("\t", "|--|")
                         .length()) / 2;
                 tab = toDouble(tab) / 4;
-                tabbing = repeatStr(tabbing, toDouble(tab).intValue());
+                tabbing = repeatString(tabbing, toDouble(tab).intValue());
                 if (tab.toString().contains(".")) {
                     String ret = "0." + split(tab, ".")[1];
                     Object ret_num = toDouble(ret) * 5;
-                    spacing = repeatStr(" ", toInteger(ret_num));
+                    spacing = repeatString(" ", toInteger(ret_num));
                 }
                 ret_Str.append(format("<><><>",
-                        format(repeatStr(newline, newlineIndex.get(j)) + "<>", tabbing),
+                        format(repeatString(newline, newlineIndex.get(j)) + "<>", tabbing),
                         spacing, phrase.trim()));
             } catch (Exception e) {
-                ret_Str.append(repeatStr(newline, newlineIndex.get(j)));
+                ret_Str.append(repeatString(newline, newlineIndex.get(j)));
             }
         }
         if (newlineIndex.isEmpty()) {
@@ -1086,11 +1097,11 @@ public class Funcs {
                     .replace("\t", "|--|")
                     .length()) / 2;
             tab = toDouble(tab) / 4;
-            tabbing = repeatStr(tabbing, toDouble(tab).intValue());
+            tabbing = repeatString(tabbing, toDouble(tab).intValue());
             if (tab.toString().contains(".")) {
                 String ret = "0." + split(tab, ".")[1];
                 Object ret_num = toDouble(ret) * 5;
-                spacing = repeatStr(" ", toInteger(ret_num));
+                spacing = repeatString(" ", toInteger(ret_num));
             }
             ret_Str.append(format("<><><>",
                     format("<>", tabbing), spacing, phrase.trim()));
@@ -1112,9 +1123,9 @@ public class Funcs {
         for (int j = 0; j < len(newlineIndex); j++) {
             try {
                 phrase = split(line.toString().trim(), "\n")[j].trim();
-                ret_Str.append(repeatStr(newline, newlineIndex.get(j))).append(phrase);
+                ret_Str.append(repeatString(newline, newlineIndex.get(j))).append(phrase);
             } catch (Exception e) {
-                ret_Str.append(repeatStr(newline, newlineIndex.get(j)));
+                ret_Str.append(repeatString(newline, newlineIndex.get(j)));
             }
         }
         if (newlineIndex.isEmpty()) {
@@ -1137,14 +1148,14 @@ public class Funcs {
         for (int j = 0; j < len(newlineIndex); j++) {
             try {
                 String phrase = split(line.toString().trim(), "\n")[j].trim();
-                ret_Str.append(repeatStr(newline, newlineIndex.get(j))).append(repeatStr(" ", barlength - phrase.length())).append(phrase);
+                ret_Str.append(repeatString(newline, newlineIndex.get(j))).append(repeatString(" ", barlength - phrase.length())).append(phrase);
             } catch (Exception e) {
-                ret_Str.append(repeatStr(newline, newlineIndex.get(j)));
+                ret_Str.append(repeatString(newline, newlineIndex.get(j)));
             }
         }
         if (newlineIndex.isEmpty()) {
             String phrase = trim(line);
-            ret_Str.append(repeatStr(" ", barlength - phrase.length())).append(phrase);
+            ret_Str.append(repeatString(" ", barlength - phrase.length())).append(phrase);
         }
         return ret_Str.toString();
     }
@@ -1154,10 +1165,11 @@ public class Funcs {
         return line.toString().trim();
     }
 
-    public static String replaceFirst(String line, String section, String newString) {
-        int index = line.indexOf(section);
+    public static String repeatString(String line, int times) {
         StringBuilder s = new StringBuilder(line);
-        s.replace(index, index + section.length(), newString);
+        for (int i = 0; i < times; i++) {
+            s.append(line);
+        }
         return s.toString();
     }
 
@@ -1174,6 +1186,13 @@ public class Funcs {
     //##### Text Processing Functions #####
     //##### Text Processing Functions #####
     //##### Text Processing Functions #####
+
+    public static String replaceFirst(String line, String section, String newString) {
+        int index = line.indexOf(section);
+        StringBuilder s = new StringBuilder(line);
+        s.replace(index, index + section.length(), newString);
+        return s.toString();
+    }
 
     public static String replaceLast(String line, String section, String newString) {
         int index = line.lastIndexOf(section);
@@ -1187,14 +1206,6 @@ public class Funcs {
             line = replaceFirst(line, section, newString);
         }
         return line;
-    }
-
-    public static String repeatStr(String line, int times) {
-        StringBuilder builder = new StringBuilder(line);
-        for (int i = 0; i < times; i++) {
-            builder.append(line);
-        }
-        return builder.toString();
     }
 
     public static String format(String line, Object... with) {
@@ -1360,6 +1371,14 @@ public class Funcs {
         }
     }
 
+    public interface Action<T> {
+        void operate(T data);
+    }
+
+    public interface MapAction<K, V> {
+        void operate(K key, V value);
+    }
+
     private static class CannotPrintObjectException extends Exception {
         public CannotPrintObjectException() {
             super("\nCannotPrintObjectException :: Object may be null or a user defined class." +
@@ -1396,7 +1415,7 @@ public class Funcs {
          * eg. Printer pprint = new Printer() for default settings
          * and  Printer pprint = new Printer("", ", ", ".\n")
          * after creating and instance you can set
-         * startwith using the dot operator start(...),
+         * startwith using the dot operator read(...),
          * or set set seperator with sep(...) and end(...) to change endwith
          **/
         private Integer consoleLenght = 150;
@@ -1889,6 +1908,66 @@ public class Funcs {
 
         public Integer[] getSORTED() {
             return mergeSort(ARRAY, 0, ARRAY.length);
+        }
+    }
+
+    public static class ForEach<T> {
+        public ForEach(Collection<T> collection, Action<T> process) {
+            for (T data : collection) {
+                process.operate(data);
+            }
+        }
+    }
+
+    public static class MapForEach<K, V> {
+        public MapForEach(Map<K, V> map, MapAction<K, V> process) {
+            for (K key : map.keySet()) {
+                process.operate(key, map.get(key));
+            }
+        }
+
+        public MapForEach(Dictionary<K, V> map, MapAction<K, V> process) {
+            for (K key : map.keys()) {
+                process.operate(key, map.get(key));
+            }
+        }
+    }
+
+    public static abstract class Mapper<Item, Result> {
+        List<Item> items;
+
+        public Mapper(List<Item> items) {
+            this.items = items;
+        }
+
+        public abstract Result map(Item item);
+
+        public List<Result> getItems() {
+            List<Result> mapped = new ArrayList<>();
+            for (Item item: items){
+                mapped.add((map(item)));
+            }
+            return mapped;
+        }
+    }
+
+    public static abstract class Filter<Item> {
+        List<Item> items;
+
+        public Filter(List<Item> items) {
+            this.items = items;
+        }
+
+        public abstract boolean filter(Item item);
+
+        public List<Item> getItems() {
+            List<Item> filtered = new ArrayList<>();
+            for (Item item: items){
+                if (filter(item)) {
+                    filtered.add(item);
+                }
+            }
+            return filtered;
         }
     }
 

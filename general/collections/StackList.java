@@ -1,11 +1,11 @@
-package com.techupstudio.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Spliterator;
-import java.util.function.Consumer;
 
-import static com.techupstudio.utils.general.Funcs.range;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.range;
+
 
 public class StackList<T> extends Stack<T> implements Iterable<T> {
 
@@ -79,9 +79,10 @@ public class StackList<T> extends Stack<T> implements Iterable<T> {
         return super.list.iterator();
     }
 
-    @Override
-    public void forEach(Consumer<? super T> action) {
-        super.list.forEach(action);
+    public void forEach(com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.Action<T> action) {
+        for (T data : super.list) {
+            action.operate(data);
+        }
     }
 
     @Override

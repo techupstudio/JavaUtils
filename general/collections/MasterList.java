@@ -1,12 +1,17 @@
-package com.techupstudio.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
 
-import com.techupstudio.utils.general.Funcs;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.function.Consumer;
 
-import static com.techupstudio.utils.general.Funcs.range;
-import static com.techupstudio.utils.general.Funcs.toDouble;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.range;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toDouble;
 
 public class MasterList<T> implements Iterable<T> {
 
@@ -151,7 +156,7 @@ public class MasterList<T> implements Iterable<T> {
     }
 
     public MasterList<T> randsample(int size) {
-        return new MasterList(Funcs.randsample(DATA.toArray(), size));
+        return new MasterList(com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.randsample(DATA.toArray(), size));
     }
 
     public int firstIndexOf(T obj) {
@@ -175,7 +180,9 @@ public class MasterList<T> implements Iterable<T> {
     }
 
     public void forEach(Consumer<? super T> action) {
-        DATA.forEach(action);
+        for (T data : DATA) {
+            action.accept(data);
+        }
     }
 
     public Iterator<T> iterator() {
@@ -251,21 +258,15 @@ public class MasterList<T> implements Iterable<T> {
     }
 
     public MasterList<T> toSet() {
-        return new MasterList(asSet());
+        return new MasterList<T>(asSet());
     }
 
-    public List asSet() {
-        List<T> n = new ArrayList<>();
-        DATA.forEach((o) -> {
-            if (!n.contains(o)) {
-                n.add(o);
-            }
-        });
-        return n;
+    public List<T> asSet() {
+        return new ArrayList<T>(new HashSet<T>(DATA));
     }
 
     public MasterList<T> sort() {
-        return changeToMyList(new Funcs.SortedNumArray(toDouble(DATA.toArray())).toDouble());
+        return changeToMyList(new com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.SortedNumArray(toDouble(DATA.toArray())).toDouble());
     }
 
     private MasterList<T> changeToMyList(Double[] toDouble) {
@@ -298,6 +299,13 @@ public class MasterList<T> implements Iterable<T> {
 
     public Enumerator<T> getEnumerator() {
         return new Enumerator<>(this);
+    }
+
+    public void forEach(com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.Action<T> action) {
+        Enumerator<T> enumerator = getEnumerator();
+        while (enumerator.hasNext()) {
+            action.operate(enumerator.getNext());
+        }
     }
 
 }

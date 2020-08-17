@@ -1,7 +1,9 @@
-package com.techupstudio.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
 
 
-import static com.techupstudio.utils.general.Funcs.format;
+import androidx.annotation.NonNull;
+
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.format;
 
 public class KeyValuePair<K, V> {
     private K KEY;
@@ -31,8 +33,9 @@ public class KeyValuePair<K, V> {
         VALUE = value;
     }
 
+    @NonNull
     public String toString() {
-        return format("KeyValuePair[<> : <>]", getKey(), getValue());
+        return format("KeyValuePair<<> : <>>", getKey(), getValue());
     }
 
 }

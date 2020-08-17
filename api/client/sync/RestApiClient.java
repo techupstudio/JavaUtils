@@ -1,16 +1,16 @@
-package com.techupstudio.utils.api.client.sync;
+package com.techupstudio.otc_chingy.mychurch.utils.api.client.sync;
 
-import com.techupstudio.utils.general.collections.JSONObject;
-import com.techupstudio.utils.general.collections.KeyValuePair;
-import com.techupstudio.utils.general.collections.XMLObject;
+import com.techupstudio.otc_chingy.mychurch.utils.general.collections.JSONObject;
+import com.techupstudio.otc_chingy.mychurch.utils.general.collections.KeyValuePair;
+import com.techupstudio.otc_chingy.mychurch.utils.general.collections.XMLObject;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static com.techupstudio.utils.general.Funcs.format;
-import static com.techupstudio.utils.general.Funcs.range;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.format;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.range;
 
 public class RestApiClient {
 
@@ -82,7 +82,7 @@ public class RestApiClient {
         this.baseUrlString = url.trim().replace(" ", "%20");
     }
 
-    private RestApiClient setOnExecuteRequestListener(OnExecuteRequestListener listener) {
+    private RestApiClient setOnExecuteRequestListener(final OnExecuteRequestListener listener) {
         this.requestCompleteListener = new OnRequestCompleteListener() {
             @Override
             public void onComplete(APIResponseObject apiResponseObject) {
@@ -385,44 +385,50 @@ public class RestApiClient {
         }
     }
 
-    public static class HttpRequestMethod {
-        public static final String GET = "GET";
-        public static final String PUT = "PUT";
-        public static final String POST = "POST";
-        public static final String _LOCK = "LOCK";
-        public static final String _COPY = "COPY";
-        public static final String HEAD = "HEAD";
-        public static final String _VIEW = "VIEW";
-        public static final String _LINK = "LINK";
-        public static final String _PATCH = "PATCH";
-        public static final String _PURGE = "PURGE";
-        public static final String _UPDATE = "UPDATE";
-        public static final String DELETE = "DELETE";
-        public static final String _UNLINK = "UNLINK";
-        public static final String _UNLOCK = "UNLOCK";
-        public static final String OPTIONS = "OPTIONS";
-        public static final String _PROPFIND = "PROPFIND";
+    public interface HttpRequestMethod {
+        String GET = "GET";
+        String PUT = "PUT";
+        String POST = "POST";
+        String _LOCK = "LOCK";
+        String _COPY = "COPY";
+        String HEAD = "HEAD";
+        String _VIEW = "VIEW";
+        String _LINK = "LINK";
+        String _PATCH = "PATCH";
+        String _PURGE = "PURGE";
+        String _UPDATE = "UPDATE";
+        String DELETE = "DELETE";
+        String _UNLINK = "UNLINK";
+        String _UNLOCK = "UNLOCK";
+        String OPTIONS = "OPTIONS";
+        String _PROPFIND = "PROPFIND";
     }
 
-    public static class HttpRequestHeaders {
-        public static final String JSON = "application/json";
-        public static final String ACCEPT = "Accept";
-        public static final String CONTENT_TYPE = "Content-Type";
-        public static final String ENCODING_GZIP = "gzip";
-        public static final String AUTHORIZATION = "Authorization";
-        public static final String MIME_TEXT_PLAIN = "text/plain";
-        public static final String ACCEPT_ENCODING = "Accept-Encoding";
-        public static final String CONTENT_ENCODING = "Content-Encoding";
-        public static final String MIME_FORM_ENCODED = "application/x-ww-form-urlencoded";
+    public interface HttpRequestHeaders {
+
+        interface KEYS {
+            String ACCEPT = "Accept";
+            String CONTENT_TYPE = "Content-Type";
+            String AUTHORIZATION = "Authorization";
+            String ACCEPT_ENCODING = "Accept-Encoding";
+            String CONTENT_ENCODING = "Content-Encoding";
+        }
+
+        interface VALUES {
+            String ENCODING_GZIP = "gzip";
+            String JSON = "application/json";
+            String MIME_TEXT_PLAIN = "text/plain";
+            String MIME_FORM_ENCODED = "application/x-ww-form-urlencoded";
+        }
     }
 
-    public static class HttpResponseCodes {
-        public static final int OK = 200;
-        public static final int BAD_REQUEST = 400;
-        public static final int UNAUTHORIZED = 401;
-        public static final int NOT_FOUND = 404;
-        public static final int METHOD_NOT_ALLOWED = 405;
-        public static final int INTERNAL_SERVER_ERROR = 500;
+    public interface HttpResponseCodes {
+        int OK = 200;
+        int BAD_REQUEST = 400;
+        int UNAUTHORIZED = 401;
+        int NOT_FOUND = 404;
+        int METHOD_NOT_ALLOWED = 405;
+        int INTERNAL_SERVER_ERROR = 500;
     }
 
     class KeyValue extends KeyValuePair<String, String> {
@@ -436,21 +442,12 @@ public class RestApiClient {
         public RequestXMLDataAdder() {
         }
 
-        public void setXMLParent(String parent) {
-            RAW_XML_DATA.setParentTAG(parent);
-        }
-
-        public RequestXMLDataAdder addXMLProperty(String propertyName, String propertyValue) {
-            RAW_XML_DATA.addProperty(propertyName, propertyValue);
-            return new RequestXMLDataAdder();
-        }
-
-        private RequestXMLDataAdder addXMLChild(XMLObject child) {
+        public RequestXMLDataAdder addXMLChild(XMLObject child) {
             RAW_XML_DATA.addChildren(child);
             return new RequestXMLDataAdder();
         }
 
-        private RequestXMLDataAdder addXMLChildren(XMLObject... child) {
+        public RequestXMLDataAdder addXMLChildren(XMLObject... child) {
             RAW_XML_DATA.addChildren(child);
             return new RequestXMLDataAdder();
         }

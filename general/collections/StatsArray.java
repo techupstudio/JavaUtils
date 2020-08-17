@@ -1,10 +1,11 @@
-package com.techupstudio.utils.general.collections;
-
-import com.techupstudio.utils.general.Funcs;
+package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
 
 import java.util.List;
 
-import static com.techupstudio.utils.general.Funcs.*;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.SortedNumArray;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.range;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.shuffle;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toDouble;
 
 public class StatsArray extends MasterList<Double> {
 
@@ -35,7 +36,7 @@ public class StatsArray extends MasterList<Double> {
     }
 
     private Double[] getSorted() {
-        return new Funcs.SortedNumArray(toDouble(super.toArray())).toDouble();
+        return new SortedNumArray(toDouble(super.toArray())).toDouble();
     }
 
     public Object[] getSortedArray() {
@@ -51,11 +52,11 @@ public class StatsArray extends MasterList<Double> {
     }
 
     public Object getLCM() {
-        return Funcs.getLCM(toDouble(super.asSet().toArray()));
+        return com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.getLCM(toDouble(super.asSet().toArray()));
     }
 
     public Object getHCF() {
-        return Funcs.getHCF(toDouble(super.asSet().toArray()));
+        return com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.getHCF(toDouble(super.asSet().toArray()));
     }
 
     public Object[] getShuffle() {
@@ -75,7 +76,7 @@ public class StatsArray extends MasterList<Double> {
     }
 
     public Object[][] getRandomSample(int size, int groups) {
-        return Funcs.randsample(toDouble(toArray()), size, groups);
+        return com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.randsample(toDouble(toArray()), size, groups);
     }
 
 
@@ -145,7 +146,7 @@ public class StatsArray extends MasterList<Double> {
 
     public String getModeCount() {
         if (getMode() != null) {
-            return Funcs.toStrings(count(Funcs.toDouble(getMode())));
+            return com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toStrings(count(com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toDouble(getMode())));
         }
         return null;
     }

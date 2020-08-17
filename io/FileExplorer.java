@@ -1,6 +1,6 @@
-package com.techupstudio.utils.io;
+package com.techupstudio.otc_chingy.mychurch.utils.io;
 
-import com.techupstudio.utils.general.collections.Stack;
+import com.techupstudio.otc_chingy.mychurch.utils.general.collections.Stack;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,41 +17,42 @@ import java.util.Objects;
 public class FileExplorer {
 
     private File HOME;
-    private File CURRENTFILE;
+    private File CURRENT_FILE;
     private String TRANSFER_STATE;
-    private Stack<File> FORWARDSTACK;
-    private Stack<File> BACKWARDSTACK;
+    private Stack<File> FORWARD_STACK;
+    private Stack<File> BACKWARD_STACK;
     private List<File> TEMP_FILES_LIST;
 
     public FileExplorer() {
-        CURRENTFILE = new File(Paths.get("").toAbsolutePath().toString());
+        CURRENT_FILE = new File(Paths.get("").toAbsolutePath().toString());
         initializeFields();
     }
 
     public FileExplorer(File directory) {
-        CURRENTFILE = directory;
+        CURRENT_FILE = directory;
         initializeFields();
     }
 
     public FileExplorer(String directoryPath) {
         if (directoryPath.equals("")) {
-            CURRENTFILE = new File(Paths.get("").toAbsolutePath().toString());
+            CURRENT_FILE = new File(Paths.get("").toAbsolutePath().toString());
         } else {
-            CURRENTFILE = new File(directoryPath);
+            CURRENT_FILE = new File(directoryPath);
         }
         initializeFields();
     }
 
     public FileExplorer(FileExplorer fileExplorer) {
-        CURRENTFILE = fileExplorer.getCurrentFile();
-        TEMP_FILES_LIST = getFilesToTransfer();
+        CURRENT_FILE = fileExplorer.getCurrentFile();
+        TRANSFER_STATE = fileExplorer.getTransferState();
+        TEMP_FILES_LIST = fileExplorer.getFilesToTransfer();
         initializeFields();
     }
 
     private void initializeFields() {
-        FORWARDSTACK = new Stack<>();
-        BACKWARDSTACK = new Stack<>();
-        HOME = CURRENTFILE;
+        FORWARD_STACK = new Stack<>();
+        BACKWARD_STACK = new Stack<>();
+        HOME = CURRENT_FILE;
         TEMP_FILES_LIST = new ArrayList<>();
     }
 
@@ -84,18 +85,18 @@ public class FileExplorer {
     }
 
     public FileExplorer createNewFolder(String childName) {
-        FileManager.createDirectory(CURRENTFILE, childName);
+        FileManager.createDirectory(CURRENT_FILE, childName);
         return this;
     }
 
     public FileExplorer createNewFile(String fileName) {
-        FileManager.createFile(CURRENTFILE, fileName);
+        FileManager.createFile(CURRENT_FILE, fileName);
         return this;
     }
 
     public FileExplorer renameFile(String oldName, String newName) {
         if (getFile(oldName).exists()) {
-            getFile(oldName).renameTo(new File(CURRENTFILE, newName));
+            getFile(oldName).renameTo(new File(CURRENT_FILE, newName));
         }
         return this;
     }
@@ -209,46 +210,34 @@ public class FileExplorer {
         return this;
     }
 
-//            public void renameSelf(String newName){ CURRENTFILE.renameTo(new File(CURRENTFILE.getParentFile(), newName)); }
-//
-//            public void deleteSelf(){ CURRENTFILE.delete(); }
-
     public boolean isFile() {
-        return CURRENTFILE.isFile();
+        return CURRENT_FILE.isFile();
     }
 
     public boolean isFolder() {
-        return CURRENTFILE.isFile();
+        return CURRENT_FILE.isDirectory();
     }
 
     public URI getCurrentFileURI() {
-        return CURRENTFILE.toURI();
+        return CURRENT_FILE.toURI();
     }
 
-    public ReadWritableFile openCurrentFileAsReadWritableFile() {
+    public ReadWritableFile openCurrentFileAsReadWritableFile() throws IOException {
         if (isFile()) {
-            try {
-                return new ReadWritableFile(getCurrentFile());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            return new ReadWritableFile(getCurrentFile());
         }
         return null;
     }
 
-    public ReadWritableFile openReadWritableFile(String fileName) {
+    public ReadWritableFile openReadWritableFile(String fileName) throws IOException {
         if (getFile(fileName).isFile()) {
-            try {
-                return new ReadWritableFile(getFile(fileName));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            return new ReadWritableFile(getFile(fileName));
         }
         return null;
     }
 
     public String getCurrentPath() {
-        return CURRENTFILE.getAbsolutePath();
+        return CURRENT_FILE.getAbsolutePath();
     }
 
     public String makeFilePath(String newPathName) {
@@ -256,96 +245,86 @@ public class FileExplorer {
     }
 
     public String[] getFileNames() {
-        String[] files = CURRENTFILE.list();
+        String[] files = CURRENT_FILE.list();
         return (files == null) ? new String[]{} : files;
     }
 
     public File[] getFileItems() {
-        File[] files = CURRENTFILE.listFiles();
+        File[] files = CURRENT_FILE.listFiles();
         return (files == null) ? new File[]{} : files;
     }
 
-    public FileExplorer openFolder(String folderName) {
+    public FileExplorer openFolder(String folderName) throws FileNotDirectoryException, FileNotFoundException {
         if (getFile(folderName).exists()) {
             if (getFile(folderName).isDirectory()) {
                 return new FileExplorer(getFile(folderName));
             }
-            try {
-                throw new FileExplorer.FileNotDirectoryException();
-            } catch (FileExplorer.FileNotDirectoryException e) {
-                e.printStackTrace();
+            throw new FileNotDirectoryException();
+
+        }
+        throw new FileNotFoundException();
+    }
+
+    public FileExplorer openNonNullFolder(String folderName) throws FileNotDirectoryException {
+        if (getFile(folderName).exists()) {
+            if (getFile(folderName).isDirectory()) {
+                return new FileExplorer(getFile(folderName));
             }
-        } else {
-            try {
-                throw new FileNotFoundException();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            throw new FileNotDirectoryException();
+        }
+        else{
+            if (getFile(folderName).mkdirs()){
+                return openNonNullFolder(folderName);
             }
         }
         return null;
     }
 
-    public FileExplorer exploreFile(String fileName) {
+    public FileExplorer exploreFile(String fileName) throws FileNotFoundException {
         if (getFile(fileName).exists()) {
-            BACKWARDSTACK.push(getCurrentFile());
-            CURRENTFILE = getFile(fileName);
+            BACKWARD_STACK.push(getCurrentFile());
+            CURRENT_FILE = getFile(fileName);
         } else {
-            try {
-                throw new FileNotFoundException();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            throw new FileNotFoundException();
         }
         return this;
     }
 
-    public FileExplorer goBack() {
-        if (BACKWARDSTACK.isEmpty()) {
+    public FileExplorer goBack() throws FileNotFoundException {
+        if (BACKWARD_STACK.isEmpty()) {
             return null;
         }
-        if (BACKWARDSTACK.peekTop().exists()) {
-            FORWARDSTACK.push(getCurrentFile());
-            CURRENTFILE = BACKWARDSTACK.pop();
+        if (BACKWARD_STACK.peekTop().exists()) {
+            FORWARD_STACK.push(getCurrentFile());
+            CURRENT_FILE = BACKWARD_STACK.pop();
         } else {
-            try {
-                throw new FileNotFoundException();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            throw new FileNotFoundException();
         }
         return this;
     }
 
-    public FileExplorer goForward() {
-        if (FORWARDSTACK.isEmpty()) {
+    public FileExplorer goForward() throws FileNotFoundException {
+        if (FORWARD_STACK.isEmpty()) {
             return null;
         }
-        if (FORWARDSTACK.peekTop().exists()) {
-            BACKWARDSTACK.push(getCurrentFile());
-            CURRENTFILE = FORWARDSTACK.pop();
+        if (FORWARD_STACK.peekTop().exists()) {
+            BACKWARD_STACK.push(getCurrentFile());
+            CURRENT_FILE = FORWARD_STACK.pop();
         } else {
-            try {
-                throw new FileNotFoundException();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            throw new FileNotFoundException();
         }
         return this;
     }
 
-    public FileExplorer goHome() {
+    public FileExplorer goHome() throws FileNotFoundException {
         if (HOME.exists()) {
-            if (CURRENTFILE != HOME) {
-                BACKWARDSTACK.push(getCurrentFile());
-                BACKWARDSTACK.push(getCurrentFile());
-                CURRENTFILE = HOME;
+            if (CURRENT_FILE != HOME) {
+                BACKWARD_STACK.push(getCurrentFile());
+                BACKWARD_STACK.push(getCurrentFile());
+                CURRENT_FILE = HOME;
             }
         } else {
-            try {
-                throw new FileNotFoundException();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            throw new FileNotFoundException();
         }
         return this;
     }
@@ -364,24 +343,24 @@ public class FileExplorer {
     }
 
     public FileExplorer getBackwardFile() {
-        return new FileExplorer(BACKWARDSTACK.peekTop());
+        return new FileExplorer(BACKWARD_STACK.peekTop());
     }
 
     public FileExplorer getForwardFile() {
-        return new FileExplorer(FORWARDSTACK.peekTop());
+        return new FileExplorer(FORWARD_STACK.peekTop());
     }
 
     public File getCurrentFile() {
-        return CURRENTFILE;
+        return CURRENT_FILE;
     }
 
     public File getFile(String fileName) {
-        return new File(CURRENTFILE, fileName);
+        return new File(CURRENT_FILE, fileName);
     }
 
     public FileExplorer ls() {
-        if (CURRENTFILE.isDirectory()) {
-            FileManager.listDir(CURRENTFILE);
+        if (CURRENT_FILE.isDirectory()) {
+            FileManager.listDir(CURRENT_FILE);
         }
         return this;
     }
@@ -398,7 +377,7 @@ public class FileExplorer {
         }
     }
 
-    public void forEachFileInFolderAndSubFolders(FileProcess fileProcess) {
+    public void forEachFileInFolderAndSubFolders(final FileProcess fileProcess) {
         Objects.requireNonNull(fileProcess);
 
         forEachSubFolder(new FileProcess() {
@@ -415,7 +394,7 @@ public class FileExplorer {
 
     }
 
-    public void forEachSubFolder(FileProcess fileProcess) {
+    public void forEachSubFolder(final FileProcess fileProcess) {
         Objects.requireNonNull(fileProcess);
 
         forEachFolder(new FileProcess() {
@@ -438,7 +417,7 @@ public class FileExplorer {
         });
     }
 
-    public void forEachFile(FileProcess fileProcess) {
+    public void forEachFile(final FileProcess fileProcess) {
         Objects.requireNonNull(fileProcess);
 
         forEachFileOrFolder(new FileProcess() {
@@ -451,7 +430,7 @@ public class FileExplorer {
         });
     }
 
-    public void forEachFolder(FileProcess fileProcess) {
+    public void forEachFolder(final FileProcess fileProcess) {
         Objects.requireNonNull(fileProcess);
 
         forEachFileOrFolder(new FileProcess() {
@@ -467,19 +446,19 @@ public class FileExplorer {
     public boolean contains(String fileName) {
         System.out.print("searching file : " + fileName + " -- {");
         int index = Arrays.binarySearch(getFileNames(), fileName);
-        System.out.print("\n\t\tresult : " + String.valueOf(index) + " ,");
+        System.out.print("\n\t\tresult : " + index + " ,");
         return index >= 0;
     }
 
     public void put(File file) {
-        FileManager.copy(file, CURRENTFILE);
+        FileManager.copy(file, CURRENT_FILE);
     }
 
     public void put(File file, String newName) {
-        FileManager.copy(file, CURRENTFILE, newName);
+        FileManager.copy(file, CURRENT_FILE, newName);
     }
 
-    public void forEachFileOrFolderLike(String pattern, FileProcess fileProcess) {
+    public void forEachFileOrFolderLike(final String pattern, final FileProcess fileProcess) {
         Objects.requireNonNull(fileProcess);
 
         forEachFileOrFolder(new FileProcess() {
@@ -492,7 +471,7 @@ public class FileExplorer {
         });
     }
 
-    public void forEachSubFileOrFolderLike(String pattern, FileProcess fileProcess) {
+    public void forEachSubFileOrFolderLike(final String pattern, final FileProcess fileProcess) {
         Objects.requireNonNull(fileProcess);
 
         forEachFileOrFolder(new FileProcess() {
@@ -522,7 +501,7 @@ public class FileExplorer {
         void process(File file);
     }
 
-    private class FileNotDirectoryException extends Exception {
+    public class FileNotDirectoryException extends Exception {
         FileNotDirectoryException() {
         }
     }

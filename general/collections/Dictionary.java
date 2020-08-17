@@ -1,7 +1,13 @@
-package com.techupstudio.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
 
-import java.util.*;
-import java.util.function.BiConsumer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Dictionary<K, V> implements Iterable<KeyValuePair<K, V>> {
 
@@ -19,7 +25,10 @@ public class Dictionary<K, V> implements Iterable<KeyValuePair<K, V>> {
     }
 
     public void join(Map<K, V> obj) {
-        obj.forEach((k, v) -> DATA.put(k, v));
+
+        for (K key : keys()) {
+            DATA.put(key, get(key));
+        }
     }
 
     public void set(K key, V value) {
@@ -31,11 +40,16 @@ public class Dictionary<K, V> implements Iterable<KeyValuePair<K, V>> {
     }
 
     public void setIfAbsent(K key, V value) {
-        DATA.putIfAbsent(key, value);
+        if (!hasKey(key)) {
+            set(key, value);
+        }
     }
 
     public V getOrDefault(K key, V defaultValue) {
-        return DATA.getOrDefault(key, defaultValue);
+        if (hasKey(key)) {
+            return get(key);
+        }
+        return defaultValue;
     }
 
     public void remove(K key) {
@@ -43,15 +57,28 @@ public class Dictionary<K, V> implements Iterable<KeyValuePair<K, V>> {
     }
 
     public void remove(K key, V value) {
-        DATA.remove(key, value);
+        if (hasKeyValue(key, value)) {
+            remove(key);
+        }
     }
 
     public void replace(K key, V value) {
-        DATA.replace(key, value);
+        if (hasKey(key)) {
+            set(key, value);
+        }
     }
 
     public void replace(K key, V value, V new_value) {
-        DATA.replace(key, new_value);
+        if (hasKeyValue(key, value)) {
+            set(key, new_value);
+        }
+    }
+
+    public void replace(K key, V value, K new_key, V new_value) {
+        if (hasKeyValue(key, value)) {
+            remove(key, value);
+            set(key, new_value);
+        }
     }
 
     public boolean hasKey(K key) {
@@ -74,36 +101,25 @@ public class Dictionary<K, V> implements Iterable<KeyValuePair<K, V>> {
         return DATA.values();
     }
 
-    public int count(K key) {
+    public int count(V value) {
         int count = 0;
-        for (K i : DATA.keySet()) {
-            if (key == i) {
+        for (V i : DATA.values()) {
+            if (value == i) {
                 count++;
             }
         }
         return count;
     }
 
-    public int count(K key, V value) {
-        int count = 0;
-        for (K i : DATA.keySet()) {
-            if (key == i && value == DATA.get(key)) {
-                count++;
+    public Set<K> getKeysWithValue(V value) {
+        Set<K> keys = new HashSet<>();
+        for (KeyValuePair<K, V> kv : this) {
+            if (kv.getValue() == value) {
+                keys.add(kv.getKey());
             }
         }
-        return count;
+        return keys;
     }
-
-    public String[][] iter() {
-        String[][] n = new String[size()][];
-        int index = 0;
-        for (K i : DATA.keySet()) {
-            n[index] = new String[]{i.toString(), get(i).toString()};
-            index++;
-        }
-        return n;
-    }
-
 
     public int size() {
         return DATA.size();
@@ -113,12 +129,14 @@ public class Dictionary<K, V> implements Iterable<KeyValuePair<K, V>> {
         DATA.clear();
     }
 
-    public void forEach(BiConsumer<? super K, ? super V> action) {
-        DATA.forEach(action);
+    public void forEach(com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.MapAction<K, V> action) {
+        for (K key : keys()) {
+            action.operate(key, get(key));
+        }
     }
 
     public Dictionary<K, V> clone() {
-        return new Dictionary<>(DATA);
+        return new Dictionary<K, V>(DATA);
     }
 
     public String toString() {
@@ -133,9 +151,11 @@ public class Dictionary<K, V> implements Iterable<KeyValuePair<K, V>> {
         return DATA.isEmpty();
     }
 
-    protected List<KeyValuePair<K, V>> getList() {
-        List<KeyValuePair<K, V>> list = new ArrayList<>();
-        forEach((k, v) -> list.add(new KeyValuePair<>(k, v)));
+    public List<KeyValuePair<K, V>> getList() {
+        final List<KeyValuePair<K, V>> list = new ArrayList<>();
+        for (K key : keys()) {
+            list.add(new KeyValuePair<>(key, get(key)));
+        }
         return list;
     }
 
@@ -146,18 +166,6 @@ public class Dictionary<K, V> implements Iterable<KeyValuePair<K, V>> {
     @Override
     public Iterator<KeyValuePair<K, V>> iterator() {
         return getList().iterator();
-    }
-
-    public Collection<K> getKeysWithValue(V value) {
-        List<K> keys = new ArrayList<>();
-        if (hasValue(value)) {
-            for (K key : keys()) {
-                if (get(key) == value) {
-                    keys.add(key);
-                }
-            }
-        }
-        return keys;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.techupstudio.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
 
 
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.techupstudio.utils.general.Funcs.format;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.format;
 
 
 public class ObservableVariable<V> extends Variable<V> {
@@ -146,7 +146,7 @@ public class ObservableVariable<V> extends Variable<V> {
     public void unbind(ObservableVariable other) {
         if (hasBinder(other))
             getBinder(other).unbind();
-        if (other.hasBinder(other))
+        if (other.hasBinder(this))
             other.getBinder(this).unbind();
     }
 
@@ -232,7 +232,7 @@ public class ObservableVariable<V> extends Variable<V> {
             requester.mBinderMap.put(receiver, this);
         }
 
-        public void bindUniDirectional(Class<R> rClass) {
+        public void bindUniDirectional(final Class<R> rClass) {
 
             unbind();
 
@@ -247,7 +247,7 @@ public class ObservableVariable<V> extends Variable<V> {
             requester.mBinderMap.put(receiver, this);
         }
 
-        public void bindUniDirectional(UniDirectionalBindMethod<T, R> uniDirectionalBindMethod) {
+        public void bindUniDirectional(final UniDirectionalBindMethod<T, R> uniDirectionalBindMethod) {
 
             unbind();
 
@@ -287,7 +287,7 @@ public class ObservableVariable<V> extends Variable<V> {
             requester.mBinderMap.put(receiver, this);
         }
 
-        public void bindBiDirectional(Class<R> rClass, Class<T> tClass) {
+        public void bindBiDirectional(final Class<R> rClass, final Class<T> tClass) {
 
             unbind();
 
@@ -310,7 +310,7 @@ public class ObservableVariable<V> extends Variable<V> {
         }
 
 
-        public void bindBiDirectional(BiDirectionalBindMethod<T, R> biDirectionalBindMethod) {
+        public void bindBiDirectional(final BiDirectionalBindMethod<T, R> biDirectionalBindMethod) {
 
             unbind();
 

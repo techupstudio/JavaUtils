@@ -1,10 +1,9 @@
-package com.techupstudio.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
 
 import java.util.Iterator;
-import java.util.function.Consumer;
 
-import static com.techupstudio.utils.general.Funcs.format;
-import static com.techupstudio.utils.general.Funcs.range;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.format;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.range;
 
 public class LinkedList<T> implements Iterable<T> {
 
@@ -32,11 +31,10 @@ public class LinkedList<T> implements Iterable<T> {
         };
     }
 
-    @Override
-    public void forEach(Consumer<? super T> action) {
+    public void forEach(com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.Action<T> action) {
         Enumerator<T> enumerator = getEnumerator();
         while (enumerator.hasNext()) {
-            action.accept(enumerator.getNext());
+            action.operate(enumerator.getNext());
         }
     }
 

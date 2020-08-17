@@ -1,11 +1,11 @@
-package com.techupstudio.utils.api.client.test;
+package com.techupstudio.otc_chingy.mychurch.utils.api.client.test;
 
-import com.techupstudio.utils.api.client.sync.RestApiClient;
-import com.techupstudio.utils.general.collections.JSONObject;
+import com.techupstudio.otc_chingy.mychurch.utils.api.client.sync.RestApiClient;
+import com.techupstudio.otc_chingy.mychurch.utils.general.collections.JSONObject;
 
-import static com.techupstudio.utils.general.Funcs.println;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.println;
 
-public class StoryLaneApiClient {
+public class TechupApiClient {
 
     private String HOMEURL;
 
@@ -15,7 +15,7 @@ public class StoryLaneApiClient {
     private String responseData;
     private String responseMessage;
 
-    public StoryLaneApiClient(String homeURL) {
+    public TechupApiClient(String homeURL) {
         setHomeUrl(homeURL);
     }
 
@@ -68,8 +68,8 @@ public class StoryLaneApiClient {
     private String authenticateUser() throws Exception {
 
         RestApiClient client = new RestApiClient(getUrlForRoute("/auth"));
-        client.addHeader(RestApiClient.HttpRequestHeaders.ACCEPT, RestApiClient.HttpRequestHeaders.JSON);
-        client.addHeader(RestApiClient.HttpRequestHeaders.CONTENT_TYPE, RestApiClient.HttpRequestHeaders.JSON);
+        client.addHeader(RestApiClient.HttpRequestHeaders.KEYS.ACCEPT, RestApiClient.HttpRequestHeaders.VALUES.JSON);
+        client.addHeader(RestApiClient.HttpRequestHeaders.KEYS.CONTENT_TYPE, RestApiClient.HttpRequestHeaders.VALUES.JSON);
 
         client.addJSONData("username", USERNAME);
         client.addJSONData("password", PASSWORD);
@@ -90,7 +90,7 @@ public class StoryLaneApiClient {
         try {
             String access_token = authenticateUser();
             if (access_token != null) {
-                client.addHeader(RestApiClient.HttpRequestHeaders.AUTHORIZATION, "JWT " + access_token);
+                client.addHeader(RestApiClient.HttpRequestHeaders.KEYS.AUTHORIZATION, "JWT " + access_token);
                 return client;
             }
         } catch (Exception e) {
@@ -112,8 +112,8 @@ public class StoryLaneApiClient {
         RestApiClient client = getAuthenticatedClientForRoute(route);
         if (client != null) {
             if (jsonData.length == 1) {
-                client.addHeader(RestApiClient.HttpRequestHeaders.ACCEPT, RestApiClient.HttpRequestHeaders.JSON);
-                client.addHeader(RestApiClient.HttpRequestHeaders.CONTENT_TYPE, RestApiClient.HttpRequestHeaders.JSON);
+                client.addHeader(RestApiClient.HttpRequestHeaders.KEYS.ACCEPT, RestApiClient.HttpRequestHeaders.VALUES.JSON);
+                client.addHeader(RestApiClient.HttpRequestHeaders.KEYS.CONTENT_TYPE, RestApiClient.HttpRequestHeaders.VALUES.JSON);
                 client.setJSONData(jsonData[0]);
             }
             try {
@@ -130,8 +130,8 @@ public class StoryLaneApiClient {
     protected RestApiClient postJsonToRoute(String route, JSONObject object) {
         RestApiClient client = getAuthenticatedClientForRoute(route);
         if (client != null) {
-            client.addHeader(RestApiClient.HttpRequestHeaders.ACCEPT, RestApiClient.HttpRequestHeaders.JSON);
-            client.addHeader(RestApiClient.HttpRequestHeaders.CONTENT_TYPE, RestApiClient.HttpRequestHeaders.JSON);
+            client.addHeader(RestApiClient.HttpRequestHeaders.KEYS.ACCEPT, RestApiClient.HttpRequestHeaders.VALUES.JSON);
+            client.addHeader(RestApiClient.HttpRequestHeaders.KEYS.CONTENT_TYPE, RestApiClient.HttpRequestHeaders.VALUES.JSON);
             client.setJSONData(object);
             try {
                 client.executeRequestMethod(RestApiClient.RequestMethod.POST);
@@ -147,8 +147,8 @@ public class StoryLaneApiClient {
     protected RestApiClient sendJsonToRoute(String route, JSONObject object, RestApiClient.RequestMethod method) {
         RestApiClient client = getAuthenticatedClientForRoute(route);
         if (client != null) {
-            client.addHeader(RestApiClient.HttpRequestHeaders.ACCEPT, RestApiClient.HttpRequestHeaders.JSON);
-            client.addHeader(RestApiClient.HttpRequestHeaders.CONTENT_TYPE, RestApiClient.HttpRequestHeaders.JSON);
+            client.addHeader(RestApiClient.HttpRequestHeaders.KEYS.ACCEPT, RestApiClient.HttpRequestHeaders.VALUES.JSON);
+            client.addHeader(RestApiClient.HttpRequestHeaders.KEYS.CONTENT_TYPE, RestApiClient.HttpRequestHeaders.VALUES.JSON);
             client.setJSONData(object);
             try {
                 client.executeRequestMethod(method);

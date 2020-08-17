@@ -1,7 +1,7 @@
-package com.techupstudio.utils.general;
+package com.techupstudio.otc_chingy.mychurch.utils.general;
 
 
-import com.techupstudio.utils.general.collections.Stack;
+import com.techupstudio.otc_chingy.mychurch.utils.general.collections.Stack;
 
 public class Main {
 
@@ -784,7 +784,7 @@ public class Main {
 //
 //        File test = fx.getFile("_copy.txt");
 //        File dest = fx.getCurrentFile();
-//        DirectoryManager.FileManager.copy(test, dest);
+//        DirectoryManager.TechupFileManager.copy(test, dest);
 
 
 //        Funcs.CountDownTimer timer = new Funcs.CountDownTimer(5000, 1000) {

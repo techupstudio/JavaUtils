@@ -1,9 +1,14 @@
-package com.techupstudio.utils.general.collections.graph;
+package com.techupstudio.otc_chingy.mychurch.utils.general.collections.graph;
 
-import com.techupstudio.utils.general.collections.KeyValuePair;
 
-import java.util.*;
-import java.util.function.Consumer;
+import com.techupstudio.otc_chingy.mychurch.utils.general.collections.KeyValuePair;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ListGraph<T> extends Graph<T> {
 
@@ -21,7 +26,7 @@ public class ListGraph<T> extends Graph<T> {
 
     @Override
     public void addVertice(Vertice<T> vertice) {
-        adjList.put(vertice.getValue(), new VerticeEdge(vertice, new ArrayList<>()));
+        adjList.put(vertice.getValue(), new VerticeEdge(vertice, new ArrayList<Edge<T>>()));
     }
 
     @Override
@@ -239,12 +244,9 @@ public class ListGraph<T> extends Graph<T> {
 
     @Override
     public void traverse(VerticeOperation<T> operation) {
-        adjList.values().forEach(new Consumer<VerticeEdge>() {
-            @Override
-            public void accept(VerticeEdge verticeEdge) {
-                operation.operate(verticeEdge.getVertice());
-            }
-        });
+        for (VerticeEdge verticeEdge : adjList.values()) {
+            operation.operate(verticeEdge.getVertice());
+        }
     }
 
     @Override

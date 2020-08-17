@@ -1,9 +1,11 @@
-package com.techupstudio.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.techupstudio.utils.general.Funcs.*;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.format;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.print;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toDouble;
 
 public class BinaryTree<T> {
 
@@ -175,7 +177,7 @@ public class BinaryTree<T> {
                     HEAD = rightmost_node;
                 }
 
-                //get the rightmost (largest) node in the left branch and set it to temp
+                //getTermsAndConditions the rightmost (largest) node in the left branch and set it to temp
                 // or the leftmost (smallest) node in the right branch and set it to temp
             }
         }
@@ -339,7 +341,7 @@ public class BinaryTree<T> {
                 return toDouble(item1) < toDouble(item2);
             }
         };
-        public static final Comparator<String> StringComparator = new Comparator<>() {
+        public static final Comparator<String> StringComparator = new Comparator<String>() {
             @Override
             public boolean item1_equals_item2(String item1, String item2) {
                 return item1.equals(item2);
@@ -355,7 +357,7 @@ public class BinaryTree<T> {
                 return item1.compareTo(item2) < 0;
             }
         };
-        public static final Comparator<Character> CharacterComparator = new Comparator<>() {
+        public static final Comparator<Character> CharacterComparator = new Comparator<Character>() {
             @Override
             public boolean item1_equals_item2(Character item1, Character item2) {
                 return item1 == item2;

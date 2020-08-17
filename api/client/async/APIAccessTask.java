@@ -1,7 +1,7 @@
-package com.techupstudio.utils.api.client.async;
+package com.techupstudio.otc_chingy.mychurch.utils.api.client.async;
 
-import com.techupstudio.utils.general.collections.JSONObject;
-import com.techupstudio.utils.general.collections.KeyValuePair;
+import com.techupstudio.otc_chingy.mychurch.utils.general.collections.JSONObject;
+import com.techupstudio.otc_chingy.mychurch.utils.general.collections.KeyValuePair;
 
 import java.io.*;
 import java.net.HttpURLConnection;

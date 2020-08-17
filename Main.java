@@ -1,8 +1,8 @@
-package com.techupstudio.utils;
+package com.techupstudio.otc_chingy.mychurch.utils;
 
 
-import com.techupstudio.utils.general.collections.graph.*;
-import com.techupstudio.utils.io.FileExplorer;
+import com.techupstudio.otc_chingy.mychurch.utils.general.collections.graph.*;
+import com.techupstudio.otc_chingy.mychurch.utils.io.FileExplorer;
 
 import java.io.File;
 

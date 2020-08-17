@@ -1,37 +1,47 @@
-package com.techupstudio.utils.io;
+package com.techupstudio.otc_chingy.mychurch.utils.io;
 
-import java.io.*;
+import com.techupstudio.otc_chingy.mychurch.utils.general.Funcs;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.techupstudio.utils.general.Funcs.println;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.println;
 
 public class FileManager {
 
-    private FileManager() {
+    public FileManager() {
     }
 
-    public static void createDirectory(File parent, String childName) {
+    public static boolean createDirectory(File parent, String childName) {
         File temp = new File(parent, childName);
-        if (!temp.exists()) {
-            temp.mkdirs();
-        }
+        if (!temp.exists())
+            return temp.mkdirs();
+        return true;
     }
 
     public static File getDirectory(File parent, String childName) {
-        File folder = new File(parent, childName);
-        return folder;
+        return new File(parent, childName);
     }
 
-    public static void createFile(File parent, String fileName) {
+    public static boolean createFile(File parent, String fileName) {
         File temp = new File(parent, fileName);
         if (!temp.exists()) {
             try {
-                temp.createNewFile();
+                return temp.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        return true;
     }
 
     public static File getFile(File parent, String fileName) {
@@ -55,8 +65,16 @@ public class FileManager {
         }
     }
 
-    public static void makeDir(String path) {
-        new File(path).mkdirs();
+    public static boolean makeDir(String path) {
+        File file = new File(path);
+
+        if (!file.exists()){
+            if (file.isFile()){
+               file = file.getParentFile();
+            }
+            return file != null && file.mkdirs();
+        }
+        return true;
     }
 
     public static void write(File file, String line) {
@@ -107,8 +125,6 @@ public class FileManager {
                         break;
                     }
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -155,8 +171,6 @@ public class FileManager {
                         break;
                     }
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -227,10 +241,19 @@ public class FileManager {
                 if (newLocation.exists() && newLocation.isDirectory()) {
                     File copiedFile = getCopiedFile(file, newLocation, newName);
                     copiedFile.createNewFile();
-                    FileInputStream inputStream = new FileInputStream(file);
-                    FileOutputStream fileOutputStream = new FileOutputStream(copiedFile);
-                    while (inputStream.available() != 0) {
-                        fileOutputStream.write(inputStream.read());
+
+                    try {
+                        FileInputStream inputStream = new FileInputStream(file);
+                        FileOutputStream fileOutputStream = new FileOutputStream(copiedFile);
+                        int len;
+                        byte[] buffer = new byte[1024];
+                        while ((len = inputStream.read(buffer)) > 0) {
+                            fileOutputStream.write(buffer, 0, len);
+                        }
+                        inputStream.close();
+                        fileOutputStream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -339,7 +362,33 @@ public class FileManager {
     }
 
     public static void listEnviron() {
-        System.getenv().forEach((k, v) -> println("KEY : " + k, "\tVALUE : " + v));
+        new Funcs.MapForEach<>(System.getenv(), new Funcs.MapAction<String, String>() {
+            @Override
+            public void operate(String key, String value) {
+                println(key + ": " + value);
+            }
+        });
+    }
+
+    public static File getPathWithoutFilename(File file) {
+        if (file != null) {
+            if (file.isDirectory()) {
+                // no file to be split off. Return everything
+                return file;
+            } else {
+                String filename = file.getName();
+                String filepath = file.getAbsolutePath();
+
+                // Construct path without file name.
+                String pathwithoutname = filepath.substring(0,
+                        filepath.length() - filename.length());
+                if (pathwithoutname.endsWith("/")) {
+                    pathwithoutname = pathwithoutname.substring(0, pathwithoutname.length() - 1);
+                }
+                return new File(pathwithoutname);
+            }
+        }
+        return null;
     }
 
     private static long sizeOfFile(File file, int pow) {

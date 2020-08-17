@@ -1,10 +1,19 @@
-package com.techupstudio.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
 
-import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import static com.techupstudio.utils.general.Funcs.*;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.MapAction;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.format;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toBoolean;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toCharacter;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toDouble;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toFloat;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toInteger;
+import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toStrings;
 
 public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
 
@@ -15,7 +24,7 @@ public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
     public JSONObject() {
     }
 
-    public JSONObject(Object jsonString) throws JSONObject.JSONException {
+    public JSONObject(Object jsonString) throws JSONException {
         isJsonString = !isJsonString;
         buildJsonArray(jsonString.toString().trim());
         isJsonString = !isJsonString;
@@ -34,9 +43,9 @@ public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
         }
     }
 
-    private void buildJsonArray(String jsonString) throws JSONObject.JSONException {
-        if (validateJson(jsonString)) {
-            jsonString = jsonString.substring(1, jsonString.length() - 1).trim();
+    private void buildJsonArray(String jsonstring) throws JSONException {
+        if (validateJson(jsonstring)) {
+            jsonstring = jsonstring.substring(1, jsonstring.length() - 1).trim();
 
             KeyValuePair<Object, Object> kv = new KeyValuePair<>();
             Stack<Character> s = new Stack<>();
@@ -44,7 +53,7 @@ public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
             StringBuilder data = new StringBuilder();
 
             //breaking string by comma
-            for (Character c : jsonString.toCharArray()) {
+            for (Character c : jsonstring.toCharArray()) {
 
                 if (!s.isEmpty() && c == s.peekTop()) {
                     s.pop();
@@ -69,6 +78,7 @@ public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
             if (data.length() > 0) {
                 stringList.add(data.toString().trim());
             }
+
 
             //breaking string into key values
             for (String line : stringList) {
@@ -96,14 +106,15 @@ public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
                 set(kv.getKey(), kv.getValue());
             }
 
+
         } else {
-            throw new JSONObject.JSONException();
+            throw new JSONException();
         }
     }
 
-    private boolean validateJson(String jsonString) {
-        if (jsonString != null && jsonString.charAt(0) == '{' && jsonString.charAt(jsonString.length() - 1) == '}') {
-            return jsonString.contains(":") || (jsonString.contains(":") && jsonString.contains(","));
+    private boolean validateJson(String jsonstring) {
+        if (jsonstring != null && jsonstring.charAt(0) == '{' && jsonstring.charAt(jsonstring.length() - 1) == '}') {
+            return jsonstring.contains(":") || (jsonstring.contains(":") && jsonstring.contains(","));
         }
         return false;
     }
@@ -199,7 +210,7 @@ public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
         return toBoolean(getOrDefault(key, defaultValue));
     }
 
-    public JSONObject getJSONObject(Object key) throws JSONObject.JSONException {
+    public JSONObject getJSONObject(Object key) throws JSONException {
         return new JSONObject(get(key));
     }
 
@@ -321,20 +332,15 @@ public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
         return new_collection;
     }
 
-    public void forEach(BiConsumer action) {
-        for (KeyValuePair kv : getAsList()) {
-            action.accept(getObject(kv.getKey()), getObject(kv.getValue()));
-        }
-    }
-
     @Override
     public Iterator<KeyValuePair<Object, Object>> iterator() {
         return DATA.iterator();
     }
 
-    @Override
-    public void forEach(Consumer<? super KeyValuePair<Object, Object>> action) {
-        DATA.forEach(action);
+    public void forEach(MapAction<Object, Object> action) {
+        for (KeyValuePair<Object, Object> kv : DATA) {
+            action.operate(kv.getKey(), kv.getValue());
+        }
     }
 
     public Enumerator<KeyValuePair<Object, Object>> getEnumeration() {
