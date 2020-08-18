@@ -1944,7 +1944,7 @@ public class Funcs {
 
         public List<Result> getItems() {
             List<Result> mapped = new ArrayList<>();
-            for (Item item: items){
+            for (Item item : items) {
                 mapped.add((map(item)));
             }
             return mapped;
@@ -1962,7 +1962,7 @@ public class Funcs {
 
         public List<Item> getItems() {
             List<Item> filtered = new ArrayList<>();
-            for (Item item: items){
+            for (Item item : items) {
                 if (filter(item)) {
                     filtered.add(item);
                 }

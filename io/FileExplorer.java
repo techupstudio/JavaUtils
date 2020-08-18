@@ -271,9 +271,8 @@ public class FileExplorer {
                 return new FileExplorer(getFile(folderName));
             }
             throw new FileNotDirectoryException();
-        }
-        else{
-            if (getFile(folderName).mkdirs()){
+        } else {
+            if (getFile(folderName).mkdirs()) {
                 return openNonNullFolder(folderName);
             }
         }

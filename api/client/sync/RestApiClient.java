@@ -4,7 +4,11 @@ import com.techupstudio.otc_chingy.mychurch.utils.general.collections.JSONObject
 import com.techupstudio.otc_chingy.mychurch.utils.general.collections.KeyValuePair;
 import com.techupstudio.otc_chingy.mychurch.utils.general.collections.XMLObject;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -345,46 +349,6 @@ public class RestApiClient {
         void onStart();
     }
 
-    public static class APIResponseObject {
-        private int responseCode;
-        private String response;
-        private String responseMessage;
-
-        APIResponseObject(int responseCode, String responseMessage, String response) {
-            this.responseMessage = responseMessage;
-            this.responseCode = responseCode;
-            this.response = response;
-        }
-
-        public String getResponse() {
-            return response;
-        }
-
-        public int getResponseCode() {
-            return responseCode;
-        }
-
-        public boolean hasResponse() {
-            return response != null;
-        }
-
-        public String getResponseMessage() {
-            return responseMessage;
-        }
-
-        public JSONObject getResponseAsJson() throws JSONObject.JSONException {
-            return new JSONObject(response);
-        }
-
-        public String toString() {
-            JSONObject response = new JSONObject();
-            response.set("code", getResponseCode());
-            response.set("message", getResponseMessage());
-            response.set("result", getResponse());
-            return response.toString();
-        }
-    }
-
     public interface HttpRequestMethod {
         String GET = "GET";
         String PUT = "PUT";
@@ -429,6 +393,46 @@ public class RestApiClient {
         int NOT_FOUND = 404;
         int METHOD_NOT_ALLOWED = 405;
         int INTERNAL_SERVER_ERROR = 500;
+    }
+
+    public static class APIResponseObject {
+        private int responseCode;
+        private String response;
+        private String responseMessage;
+
+        APIResponseObject(int responseCode, String responseMessage, String response) {
+            this.responseMessage = responseMessage;
+            this.responseCode = responseCode;
+            this.response = response;
+        }
+
+        public String getResponse() {
+            return response;
+        }
+
+        public int getResponseCode() {
+            return responseCode;
+        }
+
+        public boolean hasResponse() {
+            return response != null;
+        }
+
+        public String getResponseMessage() {
+            return responseMessage;
+        }
+
+        public JSONObject getResponseAsJson() throws JSONObject.JSONException {
+            return new JSONObject(response);
+        }
+
+        public String toString() {
+            JSONObject response = new JSONObject();
+            response.set("code", getResponseCode());
+            response.set("message", getResponseMessage());
+            response.set("result", getResponse());
+            return response.toString();
+        }
     }
 
     class KeyValue extends KeyValuePair<String, String> {

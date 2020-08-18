@@ -33,8 +33,8 @@ public class Main {
                 })
                 .setOnRequestCompleteListener(result -> {
                     runner.interrupt();
-                    if (result.getResponseCode() == HttpURLConnection.HTTP_OK){
-                        if (result.getResponse() != null){
+                    if (result.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        if (result.getResponse() != null) {
                             try {
                                 ACCESSTOKEN[0] = result.getResponseAsJson().getString("access_token");
                             } catch (JSONObject.JSONException e) {
@@ -47,7 +47,7 @@ public class Main {
         restApiClient.executeRequestMethod(RestApiClient.RequestMethod.POST);
 
         restApiClient = new RestApiClient("http://192.168.137.1:80/login")
-                .addHeader(RestApiClient.HttpRequestHeaders.KEYS.AUTHORIZATION,"JWT "+ACCESSTOKEN[0])
+                .addHeader(RestApiClient.HttpRequestHeaders.KEYS.AUTHORIZATION, "JWT " + ACCESSTOKEN[0])
                 .setOnRequestCompleteListener(new RestApiClient.OnRequestCompleteListener() {
                     @Override
                     public void onComplete(RestApiClient.APIResponseObject result) {

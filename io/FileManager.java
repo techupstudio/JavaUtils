@@ -68,9 +68,9 @@ public class FileManager {
     public static boolean makeDir(String path) {
         File file = new File(path);
 
-        if (!file.exists()){
-            if (file.isFile()){
-               file = file.getParentFile();
+        if (!file.exists()) {
+            if (file.isFile()) {
+                file = file.getParentFile();
             }
             return file != null && file.mkdirs();
         }
