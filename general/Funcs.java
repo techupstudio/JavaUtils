@@ -198,11 +198,7 @@ public class Funcs {
         if (!(value.equals("true") || value.equals("false") || value.equals("t") || value.equals("f"))) {
             return inputBool("( invalid input )  enter boolean : ");
         }
-        if (value.equals("true") || value.equals("t")) {
-            return true;
-        } else {
-            return false;
-        }
+        return value.equals("true") || value.equals("t");
     }
 
     //##### End of Printers #####
@@ -497,9 +493,9 @@ public class Funcs {
             }
         }
 
-        String Date[] = date().split(" ");
+        String[] Date = date().split(" ");
         String timezone = time().split(" ")[1];
-        String Time[] = time().split(" ")[0].split(":");
+        String[] Time = time().split(" ")[0].split(":");
         String date = date(), day = Date[0], month = Date[1], dayNum = Date[2], year = Date[3];
         String time = time(), hour = Time[0], minutes = Time[1], seconds = Time[2];
 
@@ -550,9 +546,9 @@ public class Funcs {
 
 
         if (isWithFormatting) {
-            String Date[] = date().split(" ");
+            String[] Date = date().split(" ");
             String timezone = time().split(" ")[1];
-            String Time[] = time().split(" ")[0].split(":");
+            String[] Time = time().split(" ")[0].split(":");
             String date = date(), day = Date[0], month = Date[1], dayNum = Date[2], year = Date[3];
             String time = time(), hour = Time[0], minutes = Time[1], seconds = Time[2];
 
@@ -868,7 +864,7 @@ public class Funcs {
     }
 
     public static Object[] shuffle(Object[] obj) {
-        Object ret_arr[] = new Object[len(obj)];
+        Object[] ret_arr = new Object[len(obj)];
         Integer[] indexed = new Integer[len(obj)];
         for (int i : range(len(ret_arr))) {
             int index = randint(len(obj) - 1);

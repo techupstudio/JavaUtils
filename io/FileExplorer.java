@@ -379,17 +379,7 @@ public class FileExplorer {
     public void forEachFileInFolderAndSubFolders(final FileProcess fileProcess) {
         Objects.requireNonNull(fileProcess);
 
-        forEachSubFolder(new FileProcess() {
-            @Override
-            public void process(File file) {
-                new FileExplorer(file).forEachFile(new FileProcess() {
-                    @Override
-                    public void process(File file) {
-                        fileProcess.process(file);
-                    }
-                });
-            }
-        });
+        forEachSubFolder(file -> new FileExplorer(file).forEachFile(file1 -> fileProcess.process(file1)));
 
     }
 
@@ -400,12 +390,7 @@ public class FileExplorer {
             private void action(File file) {
                 if (file != null) {
                     fileProcess.process(file);
-                    new FileExplorer(file).forEachFolder(new FileProcess() {
-                        @Override
-                        public void process(File file) {
-                            action(file);
-                        }
-                    });
+                    new FileExplorer(file).forEachFolder(file1 -> action(file1));
                 }
             }
 
@@ -419,12 +404,9 @@ public class FileExplorer {
     public void forEachFile(final FileProcess fileProcess) {
         Objects.requireNonNull(fileProcess);
 
-        forEachFileOrFolder(new FileProcess() {
-            @Override
-            public void process(File file) {
-                if (file.isFile()) {
-                    fileProcess.process(file);
-                }
+        forEachFileOrFolder(file -> {
+            if (file.isFile()) {
+                fileProcess.process(file);
             }
         });
     }
@@ -432,12 +414,9 @@ public class FileExplorer {
     public void forEachFolder(final FileProcess fileProcess) {
         Objects.requireNonNull(fileProcess);
 
-        forEachFileOrFolder(new FileProcess() {
-            @Override
-            public void process(File file) {
-                if (file.isDirectory()) {
-                    fileProcess.process(file);
-                }
+        forEachFileOrFolder(file -> {
+            if (file.isDirectory()) {
+                fileProcess.process(file);
             }
         });
     }
@@ -460,12 +439,9 @@ public class FileExplorer {
     public void forEachFileOrFolderLike(final String pattern, final FileProcess fileProcess) {
         Objects.requireNonNull(fileProcess);
 
-        forEachFileOrFolder(new FileProcess() {
-            @Override
-            public void process(File file) {
-                if (file.getName().toLowerCase().contains(pattern.toLowerCase())) {
-                    fileProcess.process(file);
-                }
+        forEachFileOrFolder(file -> {
+            if (file.getName().toLowerCase().contains(pattern.toLowerCase())) {
+                fileProcess.process(file);
             }
         });
     }
@@ -480,12 +456,7 @@ public class FileExplorer {
                     fileProcess.process(file);
                 }
                 if (file.isDirectory()) {
-                    new FileExplorer(file).forEachFileOrFolder(new FileProcess() {
-                        @Override
-                        public void process(File file) {
-                            action(file);
-                        }
-                    });
+                    new FileExplorer(file).forEachFileOrFolder(file1 -> action(file1));
                 }
             }
 

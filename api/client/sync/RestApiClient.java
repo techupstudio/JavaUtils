@@ -87,19 +87,9 @@ public class RestApiClient {
     }
 
     private RestApiClient setOnExecuteRequestListener(final OnExecuteRequestListener listener) {
-        this.requestCompleteListener = new OnRequestCompleteListener() {
-            @Override
-            public void onComplete(APIResponseObject apiResponseObject) {
-                listener.onComplete(apiResponseObject);
-            }
-        };
+        this.requestCompleteListener = apiResponseObject -> listener.onComplete(apiResponseObject);
 
-        this.requestStartListener = new OnRequestStartListener() {
-            @Override
-            public void onStart() {
-                listener.onStart();
-            }
-        };
+        this.requestStartListener = () -> listener.onStart();
 
         return this;
     }

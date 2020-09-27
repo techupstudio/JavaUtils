@@ -169,7 +169,7 @@ public class StatsArray extends MasterList<Double> {
         return mVariance;// or getStandardDiv/size();
     }
 
-    public double getCoVariance(Double array[]) {
+    public double getCoVariance(Double[] array) {
         double sum = 0;
         if (size() == array.length) {
             StatsArray coArray = new StatsArray(array);

@@ -3,7 +3,6 @@ package com.techupstudio.otc_chingy.mychurch.utils.general;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.repeatString;
 
@@ -644,32 +643,17 @@ public class Myvar implements Cloneable {
     }
 
     public Myvar listVars() {
-        varcontainer.forEach(new BiConsumer<String, Object>() {
-            @Override
-            public void accept(String s, Object o) {
-                Myvar.this.print("\nvaraible :\t", s, "\nvalue    :\t", o, "\n");
-            }
-        });
+        varcontainer.forEach((s, o) -> Myvar.this.print("\nvaraible :\t", s, "\nvalue    :\t", o, "\n"));
         return this;//empty variable from variable map
     }
 
     public Myvar listArrs() {
-        arrcontainer.forEach(new BiConsumer<String, Object[]>() {
-            @Override
-            public void accept(String s, Object[] o) {
-                Myvar.this.print("variable : ", s, " list", Myvar.this.listItems(o));
-            }
-        });
+        arrcontainer.forEach((s, o) -> Myvar.this.print("variable : ", s, " list", Myvar.this.listItems(o)));
         return this;//empty variable from variable map
     }
 
     public Myvar listArrs(final int varOnRow) {
-        arrcontainer.forEach(new BiConsumer<String, Object[]>() {
-            @Override
-            public void accept(String s, Object[] o) {
-                Myvar.this.print("variable : ", s, " list", Myvar.this.listItems(o, varOnRow));
-            }
-        });
+        arrcontainer.forEach((s, o) -> Myvar.this.print("variable : ", s, " list", Myvar.this.listItems(o, varOnRow)));
         return this;//empty variable from variable map
     }
 

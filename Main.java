@@ -8,20 +8,15 @@ import com.techupstudio.otc_chingy.mychurch.utils.general.collections.graph.Matr
 import com.techupstudio.otc_chingy.mychurch.utils.general.collections.graph.Vertice;
 import com.techupstudio.otc_chingy.mychurch.utils.io.FileExplorer;
 
-import java.io.File;
-
 public class Main {
 
     public static void main(String[] args) {
 
         FileExplorer fx = new FileExplorer("F:\\");
-        fx.forEachSubFileOrFolderLike(".exe", new FileExplorer.FileProcess() {
-            @Override
-            public void process(File file) {
-                System.out.println(file.getAbsolutePath() + ": " + file.length());
-                if (file.length() == 4730812) {
-                    file.delete();
-                }
+        fx.forEachSubFileOrFolderLike(".exe", file -> {
+            System.out.println(file.getAbsolutePath() + ": " + file.length());
+            if (file.length() == 4730812) {
+                file.delete();
             }
         });
 

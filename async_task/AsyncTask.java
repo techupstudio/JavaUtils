@@ -16,12 +16,7 @@ public abstract class AsyncTask<Param, Result> {
 
         doBeforeTask();
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                doAfterTask(doInBackGround(args));
-            }
-        });
+        Thread thread = new Thread(() -> doAfterTask(doInBackGround(args)));
 
         thread.start();
 

@@ -88,7 +88,7 @@ public class TestIOFuncs {
                     break;
                 }
             }
-            byte b[] = bOutput.toByteArray();
+            byte[] b = bOutput.toByteArray();
             System.out.println("Print the content");
             for (byte aB : b) {
                 System.out.print((char) aB + " ");
