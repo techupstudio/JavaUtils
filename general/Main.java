@@ -1,7 +1,7 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general;
 
 
-import com.techupstudio.otc_chingy.mychurch.utils.general.collections.Stack;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.Stack;
 
 public class Main {
 

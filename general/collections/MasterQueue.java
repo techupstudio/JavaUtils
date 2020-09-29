@@ -1,7 +1,7 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
 
-import com.techupstudio.otc_chingy.mychurch.utils.general.collections.exceptions.EmptyObjectException;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.exceptions.EmptyObjectException;
 
 import java.util.Iterator;
 

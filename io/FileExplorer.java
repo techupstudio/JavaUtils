@@ -1,6 +1,6 @@
-package com.techupstudio.otc_chingy.mychurch.utils.io;
+package com.techupstudio.otc_chingy.mychurch.core.utils.io;
 
-import com.techupstudio.otc_chingy.mychurch.utils.general.collections.Stack;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.Stack;
 
 import java.io.File;
 import java.io.FileNotFoundException;

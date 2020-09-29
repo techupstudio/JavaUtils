@@ -1,6 +1,6 @@
-package com.techupstudio.otc_chingy.mychurch.utils.io;
+package com.techupstudio.otc_chingy.mychurch.core.utils.io;
 
-import com.techupstudio.otc_chingy.mychurch.utils.general.Funcs;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.println;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.println;
 
 public class FileManager {
 

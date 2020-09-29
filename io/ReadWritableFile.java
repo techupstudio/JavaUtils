@@ -1,4 +1,4 @@
-package com.techupstudio.otc_chingy.mychurch.utils.io;
+package com.techupstudio.otc_chingy.mychurch.core.utils.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.format;
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.range;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
 
 public class ReadWritableFile {
     private File FILE;

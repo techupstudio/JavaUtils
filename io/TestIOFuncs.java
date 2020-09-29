@@ -1,4 +1,4 @@
-package com.techupstudio.otc_chingy.mychurch.utils.io;
+package com.techupstudio.otc_chingy.mychurch.core.utils.io;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -1,10 +1,10 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.repeatString;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.repeatString;
 
 //interface Command{
 //    void function ();

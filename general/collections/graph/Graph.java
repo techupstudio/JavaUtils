@@ -1,4 +1,4 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections.graph;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.graph;
 
 import java.util.List;
 

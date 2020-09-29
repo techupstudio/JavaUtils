@@ -1,4 +1,4 @@
-package com.techupstudio.otc_chingy.mychurch.utils.async_task;
+package com.techupstudio.otc_chingy.mychurch.core.utils.async_task;
 
 public abstract class AsyncTask<Param, Result> {
 

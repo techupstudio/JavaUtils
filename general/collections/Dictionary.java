@@ -1,4 +1,4 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -129,7 +129,7 @@ public class Dictionary<K, V> implements Iterable<KeyValuePair<K, V>> {
         DATA.clear();
     }
 
-    public void forEach(com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.MapAction<K, V> action) {
+    public void forEach(com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.MapAction<K, V> action) {
         for (K key : keys()) {
             action.operate(key, get(key));
         }

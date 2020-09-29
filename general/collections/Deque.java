@@ -1,6 +1,6 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
-import com.techupstudio.otc_chingy.mychurch.utils.general.collections.exceptions.EmptyObjectException;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.exceptions.EmptyObjectException;
 
 import java.util.Iterator;
 
@@ -70,7 +70,7 @@ public class Deque<T> implements Iterable<T> {
         return DATA.iterator();
     }
 
-    public void forEach(com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.Action<T> action) {
+    public void forEach(com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.Action<T> action) {
         Enumerator<T> enumerator = DATA.getEnumerator();
         while (enumerator.hasNext()) {
             action.operate(enumerator.getNext());

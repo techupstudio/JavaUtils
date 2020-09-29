@@ -1,7 +1,7 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
 
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.format;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
 
 public class Variable<V> {
     private String KEY;

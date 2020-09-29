@@ -1,4 +1,4 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.function.Consumer;
 
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.range;
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toDouble;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toDouble;
 
 public class MasterList<T> implements Iterable<T> {
 
@@ -156,7 +156,7 @@ public class MasterList<T> implements Iterable<T> {
     }
 
     public MasterList<T> randsample(int size) {
-        return new MasterList(com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.randsample(DATA.toArray(), size));
+        return new MasterList(com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.randsample(DATA.toArray(), size));
     }
 
     public int firstIndexOf(T obj) {
@@ -266,7 +266,7 @@ public class MasterList<T> implements Iterable<T> {
     }
 
     public MasterList<T> sort() {
-        return changeToMyList(new com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.SortedNumArray(toDouble(DATA.toArray())).toDouble());
+        return changeToMyList(new com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.SortedNumArray(toDouble(DATA.toArray())).toDouble());
     }
 
     private MasterList<T> changeToMyList(Double[] toDouble) {
@@ -301,7 +301,7 @@ public class MasterList<T> implements Iterable<T> {
         return new Enumerator<>(this);
     }
 
-    public void forEach(com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.Action<T> action) {
+    public void forEach(com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.Action<T> action) {
         Enumerator<T> enumerator = getEnumerator();
         while (enumerator.hasNext()) {
             action.operate(enumerator.getNext());

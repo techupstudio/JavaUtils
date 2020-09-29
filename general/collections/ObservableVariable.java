@@ -1,4 +1,4 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
 
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.format;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
 
 
 public class ObservableVariable<V> extends Variable<V> {
