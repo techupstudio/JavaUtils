@@ -120,9 +120,9 @@ public class Funcs {
                 print(show);
                 break;
         }
-        Integer value;
+        int value;
         Scanner input = Scan();
-        while (!input.hasNextInt()) {
+        if (!input.hasNextInt()) {
             print("( invalid input )  enter number(s) : ");
             return inputInt("");
         }
@@ -223,7 +223,7 @@ public class Funcs {
                 print(show);
                 break;
         }
-        Float value;
+        float value;
         Scanner input = Scan();
         if (!input.hasNextFloat()) {
             return inputFloat("( invalid input )  enter number(s) : ");
@@ -251,7 +251,7 @@ public class Funcs {
                 print(show);
                 break;
         }
-        Double value;
+        double value;
         Scanner input = Scan();
         if (!input.hasNextDouble()) {
             return inputDouble("( invalid input )  enter number(s) : ");
@@ -426,7 +426,7 @@ public class Funcs {
         return retArr;
     }
 
-    public static List<Integer> toInteger(List obj) {
+    public static List<Integer> toInteger(List<?> obj) {
         List<Integer> retArr = new ArrayList<>();
         for (int i = 0; i < len(obj); i++) {
             retArr.add(toInteger(obj.get(i)));
@@ -434,7 +434,7 @@ public class Funcs {
         return retArr;
     }
 
-    public static List<Integer> toRound(List obj) {
+    public static List<Integer> toRound(List<?> obj) {
         List<Integer> retArr = new ArrayList<>();
         for (int i = 0; i < len(obj); i++) {
             retArr.add(toRound(obj.get(i)));
@@ -442,7 +442,7 @@ public class Funcs {
         return retArr;
     }
 
-    public static List<Double> toDouble(List obj) {
+    public static List<Double> toDouble(List<?> obj) {
         List<Double> retArr = new ArrayList<>();
         for (int i = 0; i < len(obj); i++) {
             retArr.add(toDouble(obj.get(i)));
@@ -450,7 +450,7 @@ public class Funcs {
         return retArr;
     }
 
-    public static List<Float> toFloat(List obj) {
+    public static List<Float> toFloat(List<?> obj) {
         List<Float> retArr = new ArrayList<>();
         for (int i = 0; i < len(obj); i++) {
             retArr.add(toFloat(obj.get(i)));
@@ -458,7 +458,7 @@ public class Funcs {
         return retArr;
     }
 
-    public static List<Boolean> toBoolean(List obj) {
+    public static List<Boolean> toBoolean(List<?> obj) {
         List<Boolean> retArr = new ArrayList<>();
         for (int i = 0; i < len(obj); i++) {
             retArr.add(toBoolean(obj.get(i)));
@@ -466,7 +466,7 @@ public class Funcs {
         return retArr;
     }
 
-    public static List<Character> toCharacter(List obj) {
+    public static List<Character> toCharacter(List<?> obj) {
         List<Character> retArr = new ArrayList<>();
         for (int i = 0; i < len(obj); i++) {
             retArr.add(toCharacter(obj.get(i)));
@@ -474,132 +474,12 @@ public class Funcs {
         return retArr;
     }
 
-    public static List<String> toString(List obj) {
+    public static List<String> toString(List<?> obj) {
         List<String> retArr = new ArrayList<>();
         for (int i = 0; i < len(obj); i++) {
             retArr.add(toStrings(obj.get(i)));
         }
         return retArr;
-    }
-
-    public static Date datetime() {
-        return new Date();
-    }
-
-    public static String datetime(String... periods) {
-        if (periods.length == 1) {
-            if (periods[0].split(" ").length > 1) {
-                periods = periods[0].split(" ");
-            }
-        }
-
-        String[] Date = date().split(" ");
-        String timezone = time().split(" ")[1];
-        String[] Time = time().split(" ")[0].split(":");
-        String date = date(), day = Date[0], month = Date[1], dayNum = Date[2], year = Date[3];
-        String time = time(), hour = Time[0], minutes = Time[1], seconds = Time[2];
-
-        StringBuilder periodStr = new StringBuilder();
-
-        for (String val : periods) {
-            if (val.equalsIgnoreCase("datetime") || val.equals("DT")) {
-                periodStr.append(date);
-            } else if (val.equalsIgnoreCase("date") || val.equals("D")) {
-                periodStr.append(date);
-            } else if (val.equalsIgnoreCase("time") || val.equals("T")) {
-                periodStr.append(time);
-            } else if (val.equalsIgnoreCase("day") || val.equals("d")) {
-                periodStr.append(day);
-            } else if (val.equalsIgnoreCase("day.number") || val.equals("dn")) {
-                periodStr.append(dayNum);
-            } else if (val.equalsIgnoreCase("month") || val.equals("M")) {
-                periodStr.append(month);
-            } else if (val.equalsIgnoreCase("year") || val.equalsIgnoreCase("y")) {
-                periodStr.append(year);
-            } else if (val.equalsIgnoreCase("hour") || val.equalsIgnoreCase("h")) {
-                periodStr.append(hour);
-            } else if (val.equalsIgnoreCase("minute") || val.equals("m")) {
-                periodStr.append(minutes);
-            } else if (val.equalsIgnoreCase("second") || val.equalsIgnoreCase("s")) {
-                periodStr.append(seconds);
-            } else if (val.equalsIgnoreCase("timezone") || val.equalsIgnoreCase("tz")) {
-                periodStr.append(timezone);
-            } else {
-                periodStr.append("<>");
-            }
-            if (!val.equals(periods[periods.length - 1])) {
-                periodStr.append(" ");
-            }
-        }
-        return periodStr.toString();
-    }
-
-    public static String datetime(boolean isWithFormatting, String... periods) {
-        StringBuilder periodStr = new StringBuilder();
-        if (periods.length == 1) {
-            periodStr = new StringBuilder(periods[0]);
-        } else {
-            for (String val : periods) {
-                periodStr.append(val).append(" ");
-            }
-        }
-
-
-        if (isWithFormatting) {
-            String[] Date = date().split(" ");
-            String timezone = time().split(" ")[1];
-            String[] Time = time().split(" ")[0].split(":");
-            String date = date(), day = Date[0], month = Date[1], dayNum = Date[2], year = Date[3];
-            String time = time(), hour = Time[0], minutes = Time[1], seconds = Time[2];
-
-            if (periodStr.toString().contains("<DT>")) {
-                periodStr = new StringBuilder(periodStr.toString().replace("<DT>", datetime().toString()));
-            }
-            if (periodStr.toString().contains("<D>")) {
-                periodStr = new StringBuilder(periodStr.toString().replace("<D>", date));
-            }
-            if (periodStr.toString().contains("<T>")) {
-                periodStr = new StringBuilder(periodStr.toString().replace("<T>", time));
-            }
-            if (periodStr.toString().contains("<dn>")) {
-                periodStr = new StringBuilder(periodStr.toString().replace("<dn>", dayNum));
-            }
-            if (periodStr.toString().contains("<d>")) {
-                periodStr = new StringBuilder(periodStr.toString().replace("<d>", day));
-            }
-            if (periodStr.toString().contains("<M>")) {
-                periodStr = new StringBuilder(periodStr.toString().replace("<M>", month));
-            }
-            if (periodStr.toString().contains("<y>")) {
-                periodStr = new StringBuilder(periodStr.toString().replace("<y>", year));
-            }
-            if (periodStr.toString().contains("<h>")) {
-                periodStr = new StringBuilder(periodStr.toString().replace("<h>", hour));
-            }
-            if (periodStr.toString().contains("<m>")) {
-                periodStr = new StringBuilder(periodStr.toString().replace("<m>", minutes));
-            }
-            if (periodStr.toString().contains("<s>")) {
-                periodStr = new StringBuilder(periodStr.toString().replace("<s>", seconds));
-            }
-            if (periodStr.toString().contains("<tz>")) {
-                periodStr = new StringBuilder(periodStr.toString().replace("<tz>", timezone));
-            }
-            return periodStr.toString();
-
-        } else {
-            return datetime(periods);
-        }
-    }
-
-    public static String date() {
-        String[] datetime = datetime().toString().split(" ");
-        return datetime[0] + " " + datetime[1] + " " + datetime[2] + " " + datetime[5];
-    }
-
-    public static String time() {
-        String[] datetime = datetime().toString().split(" ");
-        return datetime[3] + " " + datetime[4];
     }
 
     public static Object power(Object number, Object exponent) {
@@ -1367,14 +1247,6 @@ public class Funcs {
         }
     }
 
-    public interface Action<T> {
-        void operate(T data);
-    }
-
-    public interface MapAction<K, V> {
-        void operate(K key, V value);
-    }
-
     private static class CannotPrintObjectException extends Exception {
         public CannotPrintObjectException() {
             super("\nCannotPrintObjectException :: Object may be null or a user defined class." +
@@ -1907,63 +1779,49 @@ public class Funcs {
         }
     }
 
-    public static class ForEach<T> {
-        public ForEach(Collection<T> collection, Action<T> process) {
-            for (T data : collection) {
-                process.operate(data);
+    public interface Action<T> {
+        void run(T data);
+    }
+
+    public interface MapAction<K, V> {
+        void run(K key, V value);
+    }
+
+    public interface Mapper<K, V>{
+        V map(K item);
+    }
+
+    public interface Filterer<K>{
+        boolean filter(K item);
+    }
+
+    public static <T extends Collection<K>, K, V> List<V> map(T collection, Mapper<K, V> mapper){
+        List<V> mapped = new ArrayList<>();
+        for (K item : collection) {
+            mapped.add((mapper.map(item)));
+        }
+        return mapped;
+    }
+
+    public static <T extends Collection<K>, K> List<K> filter(T collection, Filterer<K> filterer){
+        List<K> filtered = new ArrayList<>();
+        for (K item : collection) {
+            if (filterer.filter(item)) {
+                filtered.add(item);
             }
+        }
+        return filtered;
+    }
+
+    public static <T extends Collection<K>, K> void forEach(T collection, Action<K> action){
+        for (K item : collection) {
+            action.run(item);
         }
     }
 
-    public static class MapForEach<K, V> {
-        public MapForEach(Map<K, V> map, MapAction<K, V> process) {
-            for (K key : map.keySet()) {
-                process.operate(key, map.get(key));
-            }
-        }
-
-        public MapForEach(Dictionary<K, V> map, MapAction<K, V> process) {
-            for (K key : map.keys()) {
-                process.operate(key, map.get(key));
-            }
-        }
-    }
-
-    public static abstract class Mapper<Item, Result> {
-        List<Item> items;
-
-        public Mapper(List<Item> items) {
-            this.items = items;
-        }
-
-        public abstract Result map(Item item);
-
-        public List<Result> getItems() {
-            List<Result> mapped = new ArrayList<>();
-            for (Item item : items) {
-                mapped.add((map(item)));
-            }
-            return mapped;
-        }
-    }
-
-    public static abstract class Filter<Item> {
-        List<Item> items;
-
-        public Filter(List<Item> items) {
-            this.items = items;
-        }
-
-        public abstract boolean filter(Item item);
-
-        public List<Item> getItems() {
-            List<Item> filtered = new ArrayList<>();
-            for (Item item : items) {
-                if (filter(item)) {
-                    filtered.add(item);
-                }
-            }
-            return filtered;
+    public static <T extends Map<K, V>, K, V> void forEach(Map<K, V> map, MapAction<K, V> action){
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            action.run(entry.getKey(), entry.getValue());
         }
     }
 

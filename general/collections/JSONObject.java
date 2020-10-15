@@ -339,7 +339,7 @@ public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
 
     public void forEach(MapAction<Object, Object> action) {
         for (KeyValuePair<Object, Object> kv : DATA) {
-            action.operate(kv.getKey(), kv.getValue());
+            action.run(kv.getKey(), kv.getValue());
         }
     }
 

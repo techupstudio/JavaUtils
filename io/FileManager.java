@@ -362,7 +362,7 @@ public class FileManager {
     }
 
     public static void listEnviron() {
-        new Funcs.MapForEach<>(System.getenv(), (key, value) -> println(key + ": " + value));
+        Funcs.forEach(System.getenv(), (key, value) -> println(key + ": " + value));
     }
 
     public static File getPathWithoutFilename(File file) {

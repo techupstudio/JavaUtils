@@ -24,6 +24,7 @@ package com.techupstudio.otc_chingy.mychurch.core.utils.general.language;
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -94,6 +95,10 @@ public class Inflector {
         public String toString() {
             return expression + ", " + replacement;
         }
+    }
+
+    public interface Processor<T, R>{
+        R process(T item);
     }
 
     private LinkedList<Rule> plurals = new LinkedList<Rule>();
@@ -219,7 +224,7 @@ public class Inflector {
      * @param lowerCaseAndUnderscoredWord the word that is to be converted to camel case
      * @param delimiterChars optional characters that are used to delimit word boundaries
      * @return the lower camel case version of the word
-     * @see #underscore(String, char[])
+     * @see #underscore(String, String[])
      * @see #camelCase(String, boolean, char[])
      * @see #upperCamelCase(String, char[])
      */
@@ -245,7 +250,7 @@ public class Inflector {
      * @param lowerCaseAndUnderscoredWord the word that is to be converted to camel case
      * @param delimiterChars optional characters that are used to delimit word boundaries
      * @return the upper camel case version of the word
-     * @see #underscore(String, char[])
+     * @see #underscore(String, String[])
      * @see #camelCase(String, boolean, char[])
      * @see #lowerCamelCase(String, char[])
      */
@@ -277,7 +282,7 @@ public class Inflector {
      *        lowercased
      * @param delimiterChars optional characters that are used to delimit word boundaries
      * @return the camel case version of the word
-     * @see #underscore(String, char[])
+     * @see #underscore(String, String[])
      * @see #upperCamelCase(String, char[])
      * @see #lowerCamelCase(String, char[])
      */
@@ -311,6 +316,44 @@ public class Inflector {
      * Examples:
      *
      * <pre>
+     *   inflector.joinCamelCase(&quot;activeRecord&quot;, &quot;_&quot;)     #=&gt; &quot;active_record&quot;
+     *   inflector.joinCamelCase(&quot;ActiveRecord&quot;, &quot;-&quot;)     #=&gt; &quot;active-record&quot;
+     *   inflector.joinCamelCase(&quot;firstName&quot;, &quot;&&quot;)        #=&gt; &quot;first&name&quot;
+     *   inflector.joinCamelCase(&quot;FirstName&quot;, &quot;@&quot;)        #=&gt; &quot;first@name&quot;
+     *   inflector.joinCamelCase(&quot;name&quot;, &quot;_&quot;)             #=&gt; &quot;name&quot;
+     *   inflector.joinCamelCase(&quot;The.firstName&quot;, &quot;_&quot;)    #=&gt; &quot;the_first_name&quot;
+     * </pre>
+     *
+     *
+     *
+     * @param camelCaseWord the camel-cased word that is to be converted;
+     * @param replacement replacement character for matched delimiters
+     * @param delimiterStrings optional characters that are used to delimit word boundaries (beyond capitalization)
+     * @return a lower-cased version of the input, with separate words delimited by the underscore character.
+     */
+    public String joinCamelCase(String camelCaseWord, String replacement,
+                                String... delimiterStrings ) {
+        if (camelCaseWord == null) return null;
+        String result = camelCaseWord.trim();
+        if (result.length() == 0) return "";
+        result = result.replaceAll("([A-Z]+)([A-Z][a-z])", "$1"+replacement+"$2");
+        result = result.replaceAll("([a-z\\d])([A-Z])", "$1"+replacement+"$2");
+        result = result.replace("-", replacement);
+        if (delimiterStrings != null) {
+            for (String delimiterChar : delimiterStrings) {
+                result = result.replace(delimiterChar, replacement);
+            }
+        }
+        return result.toLowerCase();
+    }
+
+    /**
+     * Makes an underscored form from the expression in the string (the reverse of the {@link #camelCase(String, boolean, char[])
+     * camelCase} method. Also changes any characters that match the supplied delimiters into underscore.
+     *
+     * Examples:
+     *
+     * <pre>
      *   inflector.underscore(&quot;activeRecord&quot;)     #=&gt; &quot;active_record&quot;
      *   inflector.underscore(&quot;ActiveRecord&quot;)     #=&gt; &quot;active_record&quot;
      *   inflector.underscore(&quot;firstName&quot;)        #=&gt; &quot;first_name&quot;
@@ -322,20 +365,69 @@ public class Inflector {
      *
      *
      * @param camelCaseWord the camel-cased word that is to be converted;
-     * @param delimiterChars optional characters that are used to delimit word boundaries (beyond capitalization)
+     * @param delimiterStrings optional characters that are used to delimit word boundaries (beyond capitalization)
      * @return a lower-cased version of the input, with separate words delimited by the underscore character.
      */
     public String underscore( String camelCaseWord,
-                              char... delimiterChars ) {
-        if (camelCaseWord == null) return null;
-        String result = camelCaseWord.trim();
+                              String... delimiterStrings ) {
+        return joinCamelCase(camelCaseWord, "_", delimiterStrings);
+    }
+
+    /**
+     * Makes an underscored form from the expression in the string (the reverse of the {@link #camelCase(String, boolean, char[])
+     * camelCase} method. Also changes any characters that match the supplied delimiters into underscore.
+     *
+     * Examples:
+     *
+     * <pre>
+     *   inflector.hyphen(&quot;activeRecord&quot;)     #=&gt; &quot;active-record&quot;
+     *   inflector.hyphen(&quot;ActiveRecord&quot;)     #=&gt; &quot;active-record&quot;
+     *   inflector.hyphen(&quot;firstName&quot;)        #=&gt; &quot;first-name&quot;
+     *   inflector.hyphen(&quot;FirstName&quot;)        #=&gt; &quot;first-name&quot;
+     *   inflector.hyphen(&quot;name&quot;)             #=&gt; &quot;name&quot;
+     *   inflector.hyphen(&quot;The.firstName&quot;)    #=&gt; &quot;the-first-name&quot;
+     * </pre>
+     *
+     *
+     *
+     * @param camelCaseWord the camel-cased word that is to be converted;
+     * @param delimiterStrings optional characters that are used to delimit word boundaries (beyond capitalization)
+     * @return a lower-cased version of the input, with separate words delimited by the underscore character.
+     */
+    public String hyphen( String camelCaseWord,
+                          String... delimiterStrings ) {
+        return joinCamelCase(camelCaseWord, "-", delimiterStrings);
+    }
+
+    /**
+     * Makes an underscored form from the expression in the string (the reverse of the {@link #camelCase(String, boolean, char[])
+     * camelCase} method. Also changes any characters that match the supplied delimiters into underscore.
+     *
+     * Examples:
+     *
+     * <pre>
+     *   inflector.underscore(&quot;activeRecord&quot;)     #=&gt; &quot;active_record&quot;
+     *   inflector.underscore(&quot;ActiveRecord&quot;)     #=&gt; &quot;active_record&quot;
+     *   inflector.underscore(&quot;firstName&quot;)        #=&gt; &quot;first_name&quot;
+     *   inflector.underscore(&quot;FirstName&quot;)        #=&gt; &quot;first_name&quot;
+     *   inflector.underscore(&quot;name&quot;)             #=&gt; &quot;name&quot;
+     *   inflector.underscore(&quot;The.firstName&quot;)    #=&gt; &quot;the_first_name&quot;
+     * </pre>
+     *
+     *
+     *
+     * @param text the camel-cased word that is to be converted;
+     * @param replacement string to replace matched delimiter
+     * @param delimiterStrings optional characters that are used to delimit word boundaries (beyond capitalization)
+     * @return a lower-cased version of the input, with separate words delimited by the underscore character.
+     */
+    public String replace( String text, String replacement, String... delimiterStrings ) {
+        if (text == null) return null;
+        String result = text.trim();
         if (result.length() == 0) return "";
-        result = result.replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2");
-        result = result.replaceAll("([a-z\\d])([A-Z])", "$1_$2");
-        result = result.replace('-', '_');
-        if (delimiterChars != null) {
-            for (char delimiterChar : delimiterChars) {
-                result = result.replace(delimiterChar, '_');
+        if (delimiterStrings != null) {
+            for (String delimiterChar : delimiterStrings) {
+                result = result.replace(delimiterChar, replacement);
             }
         }
         return result.toLowerCase();
@@ -506,11 +598,31 @@ public class Inflector {
     protected static String replaceAllWithUppercase( String input,
                                                      String regex,
                                                      int groupNumberToUppercase ) {
+        return replaceAll(input, regex, item -> item.group(groupNumberToUppercase).toUpperCase());
+    }
+
+    /**
+     * Utility method to replace all occurrences given by the specific backreference with its uppercased form, and remove all
+     * other backreferences.
+     *
+     * The Java {@link Pattern regular expression processing} does not use the preprocessing directives <code>\l</code>,
+     * <code>&#92;u</code>, <code>\L</code>, and <code>\U</code>. If so, such directives could be used in the replacement string
+     * to uppercase or lowercase the backreferences. For example, <code>\L1</code> would lowercase the first backreference, and
+     * <code>&#92;u3</code> would uppercase the 3rd backreference.
+     *
+     *
+     * @param input
+     * @param regex
+     * @param processor
+     * @return the input string with the appropriate characters converted to upper-case
+     */
+    protected static String replaceAll( String input, String regex,
+                                                     Processor<Matcher, String> processor) {
         Pattern underscoreAndDotPattern = Pattern.compile(regex);
         Matcher matcher = underscoreAndDotPattern.matcher(input);
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
-            matcher.appendReplacement(sb, matcher.group(groupNumberToUppercase).toUpperCase());
+            matcher.appendReplacement(sb, processor.process(matcher));
         }
         matcher.appendTail(sb);
         return sb.toString();

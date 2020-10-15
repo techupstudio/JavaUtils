@@ -81,7 +81,7 @@ public class StackList<T> extends Stack<T> implements Iterable<T> {
 
     public void forEach(com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.Action<T> action) {
         for (T data : super.list) {
-            action.operate(data);
+            action.run(data);
         }
     }
 

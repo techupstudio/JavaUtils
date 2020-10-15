@@ -131,7 +131,7 @@ public class Dictionary<K, V> implements Iterable<KeyValuePair<K, V>> {
 
     public void forEach(com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.MapAction<K, V> action) {
         for (K key : keys()) {
-            action.operate(key, get(key));
+            action.run(key, get(key));
         }
     }
 

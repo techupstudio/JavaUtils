@@ -304,7 +304,7 @@ public class MasterList<T> implements Iterable<T> {
     public void forEach(com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.Action<T> action) {
         Enumerator<T> enumerator = getEnumerator();
         while (enumerator.hasNext()) {
-            action.operate(enumerator.getNext());
+            action.run(enumerator.getNext());
         }
     }
 
