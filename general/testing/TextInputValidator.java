@@ -1,10 +1,13 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.testing;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.regex.Pattern;
 
 public class TextInputValidator {
 
-    public static boolean validateEmail(String email) {
+    public static boolean isValidEmail(String email) {
         return Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
                 + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
                 + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
@@ -13,14 +16,27 @@ public class TextInputValidator {
                 + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$").matcher(email).matches();
     }
 
-    public static boolean validateTextLength(String inputValue, int min, int max) {
+    public static boolean isValidUrl(String inputValue) {
+        if (inputValue == null || inputValue.trim().isEmpty())
+            return false;
+
+        try {
+            URL url = new URL(inputValue);
+            url.toURI();
+            return true;
+        } catch (MalformedURLException | URISyntaxException e) {
+            return false;
+        }
+    }
+
+    public static boolean isValidTextLength(String inputValue, int min, int max) {
         return inputValue != null
                 && !inputValue.isEmpty()
                 && inputValue.length() >= min
                 && inputValue.length() <= max;
     }
 
-    public static boolean validateNumber(String inputValue) {
+    public static boolean isValidNumber(String inputValue) {
         if (inputValue == null || inputValue.trim().isEmpty())
             return false;
 
@@ -32,28 +48,28 @@ public class TextInputValidator {
         }
     }
 
-    public static boolean validateFloatNumber(String inputValue) {
+    public static boolean isValidFloatNumber(String inputValue) {
         if (!inputValue.contains("."))
             return false;
-        return validateNumber(inputValue);
+        return isValidNumber(inputValue);
     }
 
-    public static boolean validateIntegerNumber(String inputValue) {
+    public static boolean isValidIntegerNumber(String inputValue) {
         if (inputValue.contains("."))
             return false;
-        return validateNumber(inputValue);
+        return isValidNumber(inputValue);
     }
 
-    public static boolean validatePhoneNumber(String inputValue) {
+    public static boolean isValidPhoneNumber(String inputValue) {
         if (inputValue == null || inputValue.trim().isEmpty())
             return false;
 
         inputValue = inputValue.trim().replace(" ", "");
 
         if (inputValue.startsWith("+") && inputValue.length() > 10 && inputValue.length() < 14) {
-            return validateIntegerNumber(inputValue.substring(inputValue.length() - 9));
+            return isValidIntegerNumber(inputValue.substring(inputValue.length() - 9));
         } else if (!inputValue.startsWith("+") && inputValue.length() == 10) {
-            return validateIntegerNumber(inputValue);
+            return isValidIntegerNumber(inputValue);
         }
         return false;
     }
