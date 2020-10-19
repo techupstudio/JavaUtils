@@ -26,11 +26,12 @@ public class ObservableVariable<V> extends Variable<V> {
     }
 
     public ObservableVariable(V initialValue) {
-        super.setValue(initialValue);
         init();
+        super.setValue(initialValue);
     }
 
     public ObservableVariable(OnValueChangedListener<V> onValueChangedListener) {
+        init();
         this.onValueChangedListeners.add(onValueChangedListener);
     }
 
@@ -47,11 +48,11 @@ public class ObservableVariable<V> extends Variable<V> {
         onValueChangedListeners = new ArrayList<>();
     }
 
-    private void set(V value) {
+    protected void set(V value) {
         super.setValue(value);
     }
 
-    private V get() {
+    protected V get() {
         return super.getValue();
     }
 
