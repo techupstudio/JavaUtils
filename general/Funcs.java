@@ -1,11 +1,8 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general;
 
-import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.Dictionary;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -545,6 +542,7 @@ public class Funcs {
     //##### Math Functions #####
     //##### Math Functions #####
 
+
     public static int len(Object obj) {
         return obj.toString().length();
     }
@@ -723,7 +721,7 @@ public class Funcs {
             List<Object> Indexed = new ArrayList<>();
             for (int i = 0; i < sample_size; i++) {
                 index = randint(size - 1);
-                while (findIn(Indexed, index)) {
+                while (findIn(Indexed, index) != -1) {
                     index = randint(size - 1);
                 }
                 Indexed.add(index);
@@ -748,7 +746,7 @@ public class Funcs {
         Integer[] indexed = new Integer[len(obj)];
         for (int i : range(len(ret_arr))) {
             int index = randint(len(obj) - 1);
-            while (findIn(indexed, index)) {
+            while (findIn(indexed, index) != -1) {
                 index = randint(len(obj) - 1);
             }
             ret_arr[i] = obj[index];
@@ -1140,6 +1138,18 @@ public class Funcs {
         return result;
     }
 
+    //##### End of Text Processing Functions #####
+    //##### End of Text Processing Functions #####
+    //##### End of Text Processing Functions #####
+    //##### End of Text Processing Functions #####
+    //##### End of Text Processing Functions #####
+
+    //##### General Functions #####
+    //##### General Functions #####
+    //##### General Functions #####
+    //##### General Functions #####
+    //##### General Functions #####
+
     public static String choice() {
         String v = inputStr("").toLowerCase();
         switch (v) {
@@ -1152,74 +1162,6 @@ public class Funcs {
                 break;
         }
         return choice();
-    }
-
-    public static Boolean findIn(String[] words, String key, boolean matchcase) {
-        if (matchcase) {
-            for (String word : words) {
-                if (word != null && word.equals(key)) {
-                    return true;
-                }
-            }
-            return false;
-        } else {
-            for (String word : words) {
-                if (word != null && word.equalsIgnoreCase(key)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    public static Boolean findIn(List<?> objects, Object key, boolean matchcase) {
-        if (matchcase) {
-            for (Object obj : objects) {
-                if ((obj != null && obj.equals(key)) || obj == key) {
-                    return true;
-                }
-            }
-            return false;
-        } else {
-            for (Object obj : objects) {
-                if (obj != null && obj.toString().equalsIgnoreCase(key.toString())) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    //##### End of Text Processing Functions #####
-    //##### End of Text Processing Functions #####
-    //##### End of Text Processing Functions #####
-    //##### End of Text Processing Functions #####
-    //##### End of Text Processing Functions #####
-
-    //##### General Functions #####
-    //##### General Functions #####
-    //##### General Functions #####
-    //##### General Functions #####
-    //##### General Functions #####
-
-    public static boolean findIn(List<?> objects, Object key) {
-        for (Object obj : objects) {
-            if ((obj != null && obj.equals(key)) || obj == key) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static Boolean findIn(Object[] objs, Object key) {
-        if (objs != null) {
-            for (Object obj : objs) {
-                if ((obj != null && obj.equals(key)) || obj == key) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public static void listItems(Object[] arrayVar) {
@@ -1245,6 +1187,125 @@ public class Funcs {
                 print(anArrayVar, "\t");
             }
         }
+    }
+
+    public static <T extends Collection<K>, K, V> List<V> map(T collection, Mapper<K, V> mapper) {
+        List<V> mapped = new ArrayList<>();
+        for (K item : collection) {
+            mapped.add((mapper.map(item)));
+        }
+        return mapped;
+    }
+
+    public static <T extends Collection<K>, K> List<K> filter(T collection, Filterer<K> filterer) {
+        List<K> filtered = new ArrayList<>();
+        for (K item : collection) {
+            if (filterer.filter(item)) {
+                filtered.add(item);
+            }
+        }
+        return filtered;
+    }
+
+    public static <T extends Collection<K>, K> void forEach(T collection, Action<K> action) {
+        for (K item : collection) {
+            action.run(item);
+        }
+    }
+
+    public static <T extends Map<K, V>, K, V> void forEach(Map<K, V> map, MapAction<K, V> action) {
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            action.run(entry.getKey(), entry.getValue());
+        }
+    }
+
+    public static <T extends Collection<V>, V> int search(T collection, Filterer<V> filterer) {
+        int i = -1;
+        for (V item : collection) {
+            i++;
+            if (filterer.filter(item)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static <K, V> List<V> map(K[] collection, Mapper<K, V> mapper) {
+        List<V> mapped = new ArrayList<>();
+        for (K item : collection) {
+            mapped.add((mapper.map(item)));
+        }
+        return mapped;
+    }
+
+    public static <T> List<T> filter(T[] collection, Filterer<T> filterer) {
+        List<T> filtered = new ArrayList<>();
+        for (T item : collection) {
+            if (filterer.filter(item)) {
+                filtered.add(item);
+            }
+        }
+        return filtered;
+    }
+
+    public static <T> void forEach(T[] collection, Action<T> action) {
+        for (T item : collection) {
+            action.run(item);
+        }
+    }
+
+    public static <T> int search(T[] collection, Filterer<T> filterer) {
+        int i = -1;
+        for (T item : collection) {
+            i++;
+            if (filterer.filter(item)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static <T extends CharSequence> int findIn(T[] collection, T key, boolean matchCase) {
+        return findIn(Arrays.asList(collection), key, matchCase);
+    }
+
+    public static <T extends CharSequence> int findIn(Collection<T> collection, T key, boolean matchCase) {
+        if (matchCase) {
+            return search(collection, (o) -> o.toString().equals(key.toString()));
+        } else {
+            return search(collection, (o) -> o.toString().equalsIgnoreCase(key.toString()));
+        }
+    }
+
+    public static <T> int findIn(Collection<T> collection, T key) {
+        int i = -1;
+        for (T obj : collection) {
+            i++;
+            if (obj == key) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static <T> int findIn(T[] collection, T key) {
+        return findIn(collection, key);
+    }
+
+    public interface Action<T> {
+        void run(T data);
+    }
+
+    public interface MapAction<K, V> {
+        void run(K key, V value);
+    }
+
+    public interface Mapper<K, V> {
+        V map(K item);
+    }
+
+    public interface Filterer<K> {
+        boolean filter(K item);
     }
 
     private static class CannotPrintObjectException extends Exception {
@@ -1778,52 +1839,5 @@ public class Funcs {
             return mergeSort(ARRAY, 0, ARRAY.length);
         }
     }
-
-    public interface Action<T> {
-        void run(T data);
-    }
-
-    public interface MapAction<K, V> {
-        void run(K key, V value);
-    }
-
-    public interface Mapper<K, V>{
-        V map(K item);
-    }
-
-    public interface Filterer<K>{
-        boolean filter(K item);
-    }
-
-    public static <T extends Collection<K>, K, V> List<V> map(T collection, Mapper<K, V> mapper){
-        List<V> mapped = new ArrayList<>();
-        for (K item : collection) {
-            mapped.add((mapper.map(item)));
-        }
-        return mapped;
-    }
-
-    public static <T extends Collection<K>, K> List<K> filter(T collection, Filterer<K> filterer){
-        List<K> filtered = new ArrayList<>();
-        for (K item : collection) {
-            if (filterer.filter(item)) {
-                filtered.add(item);
-            }
-        }
-        return filtered;
-    }
-
-    public static <T extends Collection<K>, K> void forEach(T collection, Action<K> action){
-        for (K item : collection) {
-            action.run(item);
-        }
-    }
-
-    public static <T extends Map<K, V>, K, V> void forEach(Map<K, V> map, MapAction<K, V> action){
-        for (Map.Entry<K, V> entry : map.entrySet()) {
-            action.run(entry.getKey(), entry.getValue());
-        }
-    }
-
 
 }

@@ -1,11 +1,15 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.testing;
 
 import android.text.TextUtils;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import java.util.Collection;
 
-/** Contains common assertions. */
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+/**
+ * Contains common assertions.
+ */
 public final class Preconditions {
 
     private Preconditions() {
