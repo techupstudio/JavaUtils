@@ -1,6 +1,15 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
+import android.os.Build;
+
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Action;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedAction;
+
 import java.util.Iterator;
+import java.util.function.Consumer;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
 import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
@@ -13,39 +22,13 @@ public class LinkedList<T> implements Iterable<T> {
     LinkedList() {
     }
 
-    @Override
-    public Iterator<T> iterator() {
-        return new Iterator<T>() {
-
-            Enumerator<T> enumerator = getEnumerator();
-
-            @Override
-            public boolean hasNext() {
-                return enumerator.hasNext();
-            }
-
-            @Override
-            public T next() {
-                return enumerator.getNext();
-            }
-        };
-    }
-
-    public void forEach(com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.Action<T> action) {
-        Enumerator<T> enumerator = getEnumerator();
-        while (enumerator.hasNext()) {
-            action.run(enumerator.getNext());
-        }
-    }
-
     public void append(T value) {
         if (isEmpty()) {
             head = new Node(value);
-            SIZE++;
         } else {
             getTempAt(size() - 1).next = new Node(value);
-            SIZE++;
         }
+        SIZE++;
     }
 
     public void insert(int index, T value) {
@@ -112,9 +95,7 @@ public class LinkedList<T> implements Iterable<T> {
 
     public void removeObject(T object) {
         int found = findFirstIndexOf(object);
-        if (found == -1) {
-            return;
-        } else {
+        if (found != -1) {
             remove(found);
         }
     }
@@ -134,8 +115,10 @@ public class LinkedList<T> implements Iterable<T> {
 
     public int findFirstIndexOf(T object) {
         if (!isEmpty()) {
-            for (int i : range(size())) {
-                if (get(i) == object) {
+            int i = -1;
+            for (T o : this) {
+                i++;
+                if (o == object) {
                     return i;
                 }
             }
@@ -144,20 +127,23 @@ public class LinkedList<T> implements Iterable<T> {
     }
 
     public int findLastIndexOf(T object) {
+        int lastIndex = -1;
         if (!isEmpty()) {
-            for (int i : range(size())) {
-                if (get((SIZE - 1) - i) == object) {
-                    return (SIZE - 1) - i;
+            int i = -1;
+            for (T o : this) {
+                i++;
+                if (o == object) {
+                    lastIndex = i;
                 }
             }
         }
-        return -1;
+        return lastIndex;
     }
 
     public int count(T object) {
         int counter = 0;
-        for (int i : range(size())) {
-            if (get(i) == object) {
+        for (T o : this) {
+            if (o == object) {
                 counter++;
             }
         }
@@ -177,15 +163,9 @@ public class LinkedList<T> implements Iterable<T> {
         return size() == 0;
     }
 
-    public Enumerator<T> getEnumerator() {
-        return new Enumerator<>(this);
-    }
-
     public String toString() {
         StringBuilder list = new StringBuilder("LinkedList[");
-        for (int i : range(size())) {
-            list.append(get(i)).append((i == size() - 1) ? "" : ", ");
-        }
+        forEach((i, o) -> list.append(o).append((i == size() - 1) ? "" : ", "));
         return list + "]";
     }
 
@@ -205,6 +185,48 @@ public class LinkedList<T> implements Iterable<T> {
         }
 
         return temp;
+    }
+
+    public void forEach(Action<T> action) {
+        for (T t : this) {
+            action.run(t);
+        }
+    }
+
+    public void forEach(IndexedAction<T> action) {
+        int i = -1;
+        for (T t : this) {
+            i++;
+            action.run(i, t);
+        }
+    }
+
+    @NonNull
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+            Node temp = head;
+
+            @Override
+            public boolean hasNext() {
+                return temp != null;
+            }
+
+            @Override
+            public T next() {
+                T value = temp.value;
+                temp = temp.next;
+                return value;
+            }
+        };
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void forEach(@NonNull Consumer<? super T> action) {
+        for (T t : this) {
+            action.accept(t);
+        }
     }
 
     private class Node {

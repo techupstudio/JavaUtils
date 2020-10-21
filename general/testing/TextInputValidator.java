@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class TextInputValidator {
 
-    public static boolean isValidEmail(String email) {
+    public static boolean isValidEmail(CharSequence email) {
         return Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
                 + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
                 + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
@@ -34,6 +34,10 @@ public class TextInputValidator {
                 && !inputValue.isEmpty()
                 && inputValue.length() >= min
                 && inputValue.length() <= max;
+    }
+
+    public static boolean isTextNotEmpty(String inputValue) {
+        return inputValue != null && !inputValue.trim().isEmpty();
     }
 
     public static boolean isValidNumber(String inputValue) {

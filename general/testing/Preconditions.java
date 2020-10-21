@@ -1,7 +1,5 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.testing;
 
-import android.text.TextUtils;
-
 import java.util.Collection;
 
 import androidx.annotation.NonNull;
@@ -37,7 +35,7 @@ public final class Preconditions {
 
     @NonNull
     public static String checkNotEmpty(@Nullable String string) {
-        if (TextUtils.isEmpty(string)) {
+        if (string == null || string.length() == 0) {
             throw new IllegalArgumentException("Must not be null or empty");
         }
         return string;

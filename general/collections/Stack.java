@@ -3,39 +3,41 @@ package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
 public class Stack<T> {
 
-    protected MasterList<T> list = new MasterList<>();
+    protected Items<T> items;
+
+    public Stack() {
+        items = new Items<>();
+    }
 
     public void push(T value) {
-        list.append(value);
+        items.appendBack(value);
     }
 
     public T pop() {
-        if (!isEmpty()) {
-            T top = list.poplast();
-            list.remove(list.size() - 1);
-            return top;
-        }
-        return null;
+        return items.popBack();
     }
 
     public T peekTop() {
-        return list.poplast();
+        return items.peekFront();
     }
 
     public int size() {
-        return list.size();
+        return items.size();
     }
 
     public boolean isEmpty() {
-        return list.isEmpty();
+        return items.isEmpty();
     }
 
     public void clear() {
-        list.clear();
+        items.clear();
     }
 
+    @Override
     public String toString() {
-        return list.toString();
+        final StringBuilder sb = new StringBuilder("Stack{");
+        sb.append("items=").append(items);
+        sb.append('}');
+        return sb.toString();
     }
-
 }

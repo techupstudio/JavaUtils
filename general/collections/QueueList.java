@@ -1,11 +1,10 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
+
 import android.os.Build;
 
-import com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Action;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
@@ -13,26 +12,8 @@ import java.util.function.Consumer;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
+public class QueueList<T> extends Queue<T> implements Iterable<T> {
 
-
-public class StackList<T> extends Stack<T> implements Iterable<T> {
-
-    public StackList() {
-        super();
-    }
-
-    public StackList(Stack<T> stack) {
-        super();
-        for (int i : range(stack.size())) {
-            push(stack.pop());
-        }
-    }
-
-    public StackList(Collection<T> list) {
-        super();
-        Funcs.forEach(list, o -> push(o));
-    }
 
     public T peek(int index) {
         return items.peek(index);
@@ -74,9 +55,10 @@ public class StackList<T> extends Stack<T> implements Iterable<T> {
         return items.asList();
     }
 
-    public Stack<T> toStack() {
+    public Queue<T> toQueue() {
         return this;
     }
+
 
     public void forEach(Action<T> action) {
         items.forEach(action);
@@ -96,6 +78,6 @@ public class StackList<T> extends Stack<T> implements Iterable<T> {
 
     @Override
     public String toString() {
-        return super.toString().replace("Stack", "StackList");
+        return super.toString().replace("Queue", "QueueList");
     }
 }

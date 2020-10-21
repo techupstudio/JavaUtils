@@ -1,52 +1,39 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
 
-import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.exceptions.EmptyObjectException;
+public class Queue<T> {
 
-import java.util.Iterator;
-
-public class Queue<T> implements Iterable<T> {
-
-    private LinkedList<T> DATA = new LinkedList<>();
+    protected Items<T> items;
 
     public Queue() {
+        items = new Items<>();
     }
 
     public void enqueue(T object) {
-        DATA.append(object);
+        items.appendBack(object);
     }
 
     public T dequeue() {
-        T temp = peekFront();
-        DATA.remove(0);
-        return temp;
+        return items.peekBack();
     }
 
-    public T peekFront() {
-        if (isEmpty()) {
-            try {
-                throw new EmptyObjectException("Queue");
-            } catch (EmptyObjectException e) {
-                e.printStackTrace();
-            }
-        }
-        return DATA.get(0);
+    public T peek() {
+        return items.peekFront();
     }
 
     public boolean isEmpty() {
-        return DATA.isEmpty();
+        return items.isEmpty();
     }
 
     public int size() {
-        return DATA.size();
-    }
-
-    public String toString() {
-        return DATA.toString().replace("LinkedList", "Queue");
+        return items.size();
     }
 
     @Override
-    public Iterator<T> iterator() {
-        return DATA.iterator();
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Queue{");
+        sb.append("items=").append(items);
+        sb.append('}');
+        return sb.toString();
     }
 }

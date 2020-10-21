@@ -25,6 +25,8 @@ package com.techupstudio.otc_chingy.mychurch.core.utils.general.language;
  */
 
 
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Processor;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -55,6 +57,7 @@ public class Inflector {
     public Inflector() {
         initialize();
     }
+
     protected Inflector(Inflector original) {
         this.plurals.addAll(original.plurals);
         this.singulars.addAll(original.singulars);
@@ -649,10 +652,6 @@ public class Inflector {
                 "quail", "information", "rice", "caribou", "money", "gas", "bison",
                 "snow", "wind", "storm", "water", "cattle", "moose", "air", "rain",
                 "species", "series", "fish", "sheep");
-    }
-
-    public interface Processor<T, R> {
-        R process(T item);
     }
 
     protected static class Rule {

@@ -1,26 +1,28 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general;
 
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Action;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Filterer;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedAction;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedFilterer;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedMapper;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.MapAction;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Mapper;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Funcs {
-    //## Default Printer Onjects ##
-    public static Printer printer = new Printer();
-    public static Printer printerln = new Printer("", " ", "\n");
 
-    /**
-     * @author Gladys
-     * @version 1.0
-     * @since 1.0
-     */
-
+    private static Printer printer = new Printer();
+    private static Printer printerln = new Printer("", " ", "\n");
     private Funcs() {
     }
 
@@ -28,11 +30,9 @@ public class Funcs {
         return new Scanner(System.in);
     }
 
-    public static void print(double[] objects) {
-        printer.print(objects);
-    }
+    //TODO: create pretty printer class
 
-    public static void print(String[] objects) {
+    public static <T> void print(T... objects) {
         printer.print(objects);
     }
 
@@ -42,68 +42,16 @@ public class Funcs {
     //######    Printer    ######
     //######    Printer    ######
 
-    public static void print(Integer[] objects) {
-        printer.print(objects);
-    }
-
-    public static void print(Float[] objects) {
-        printer.print(objects);
-    }
-
-    public static void print(Double[] objects) {
-        printer.print(objects);
-    }
-
-    public static void print(Long[] objects) {
-        printer.print(objects);
-    }
-
-    public static void print(Character[] objects) {
-        printer.print(objects);
-    }
-
-    public static void print(Object objects) {
-        printer.print(objects);
-    }
-
-    public static void print(Object... objects) {
-        printer.print(objects);
-    }
-
-    public static void println(double[] objects) {
+    public static <T> void println(T... objects) {
         printerln.print(objects);
     }
 
-    public static void println(String[] objects) {
-        printerln.print(objects);
+    public static <T> void print(Object object) {
+        printer.print(object);
     }
 
-    public static void println(Integer[] objects) {
-        printerln.print(objects);
-    }
-
-    public static void println(Float[] objects) {
-        printerln.print(objects);
-    }
-
-    public static void println(Double[] objects) {
-        printerln.print(objects);
-    }
-
-    public static void println(Long[] objects) {
-        printerln.print(objects);
-    }
-
-    public static void println(Character[] objects) {
-        printerln.print(objects);
-    }
-
-    public static void println(Object objects) {
-        printerln.print(objects);
-    }
-
-    public static void println(Object... objects) {
-        printerln.print(objects);
+    public static <T> void println(Object object) {
+        printerln.print(object);
     }
 
     public static Integer inputInt(String show) {
@@ -126,6 +74,12 @@ public class Funcs {
         value = input.nextInt();
         return value;
     }
+
+    //##### End of Printers #####
+    //##### End of Printers #####
+    //##### End of Printers #####
+    //##### End of Printers #####
+    //##### End of Printers #####
 
     public static String inputStr(String show) {
         switch (show) {
@@ -198,17 +152,6 @@ public class Funcs {
         return value.equals("true") || value.equals("t");
     }
 
-    //##### End of Printers #####
-    //##### End of Printers #####
-    //##### End of Printers #####
-    //##### End of Printers #####
-    //##### End of Printers #####
-
-
-    //##### TESTERS #####
-    //##### TESTERS #####
-    //##### TESTERS #####
-
     public static Float inputFloat(String show) {
         switch (show) {
             case "":
@@ -228,14 +171,6 @@ public class Funcs {
         value = input.nextFloat();
         return value;
     }
-
-    //### END ###//### END ###//### END ###
-
-    //######  Input Functions  ######
-    //######  Input Functions  ######
-    //######  Input Functions  ######
-    //######  Input Functions  ######
-    //######  Input Functions  ######
 
     public static Double inputDouble(String show) {
         switch (show) {
@@ -257,72 +192,53 @@ public class Funcs {
         return value;
     }
 
-    public static String toStrings(Object obj) {
-        return obj.toString();
-    }
+    //######  Input Functions  ######
+    //######  Input Functions  ######
+    //######  Input Functions  ######
+    //######  Input Functions  ######
+    //######  Input Functions  ######
 
-    public static Character toCharacter(Object obj) {
-        return (char) obj.hashCode();
-    }
-
-    public static Object dressNumber(Object obj) {
+    public static <T> Object dressNumber(T obj) {
         if (obj.toString().contains(".0")) {
             return toInteger(obj);
         }
         return obj;
     }
 
-    public static Integer toInteger(Object obj) {
-        try {
-            if (obj.getClass().getSimpleName().equalsIgnoreCase("Boolean")) {
-                if (obj.toString().equals("true")) {
-                    return 1;
-                }
-                return 0;
-            } else if (obj.getClass().getSimpleName().equalsIgnoreCase("String")) {
-                if (obj.toString().equals("true")) {
-                    return Integer.valueOf(obj.toString());
-                }
-                return Integer.valueOf(obj.toString());
-            } else {
-                return toRound(toDouble(obj));
-            }
-
-        } catch (Exception e) {
-            try {
-                throw new CannotConvertToObjectException();
-            } catch (CannotConvertToObjectException cnc) {
-                cnc.printStackTrace();
-            }
-        }
-        return -1;
+    public static <T> String toString(T obj) {
+        return obj.toString();
     }
 
-    public static Double toDouble(Object obj) {
+    public static <T> Character toCharacter(T obj) {
+        return (char) obj.hashCode();
+    }
 
-        try {
-            return Double.valueOf(obj.toString());
-        } catch (Exception e) {
-            try {
-                throw new CannotConvertToObjectException();
-            } catch (CannotConvertToObjectException cnc) {
-                cnc.printStackTrace();
+    public static <T> Integer toInteger(T obj) {
+        if (obj instanceof Boolean) {
+            if (obj.toString().equals("true")) {
+                return 1;
             }
+            return 0;
+        } else if (obj instanceof String) {
+            return Integer.valueOf(obj.toString());
+        } else {
+            return toRound(toDouble(obj));
         }
-        return (double) -1;
+    }
+
+    public static <T> Double toDouble(T obj) {
+        return Double.valueOf(obj.toString());
     }
 
     public static Float toFloat(Object obj) {
-        try {
-            return Float.valueOf(obj.toString());
-        } catch (Exception e) {
-            try {
-                throw new CannotConvertToObjectException();
-            } catch (CannotConvertToObjectException cnc) {
-                cnc.printStackTrace();
-            }
+        return Float.valueOf(obj.toString());
+    }
+
+    public static <T> Boolean toBoolean(T obj) {
+        if (obj instanceof Integer) {
+            return !obj.toString().equals("0");
         }
-        return (float) -1;
+        return Boolean.valueOf(obj.toString());
     }
 
     //##### End of Input Functions #####
@@ -338,144 +254,105 @@ public class Funcs {
     //#### Object Convertor Functions #####
     //#### Object Convertor Functions #####
 
-    public static Boolean toBoolean(Object obj) {
-        try {
-            if (obj.toString().equals("1")) {
-                return true;
-            }
-            return Boolean.valueOf(obj.toString());
-        } catch (Exception e) {
-            try {
-                throw new CannotConvertToObjectException();
-            } catch (CannotConvertToObjectException cnc) {
-                cnc.printStackTrace();
-            }
-        }
-        return false;
+    public static <T> Integer toRound(T obj) {
+        return (int) Math.round(toDouble(obj));
     }
 
-    public static Integer toRound(Object obj) {
-        try {
-            return (int) Math.round(toDouble(obj));
-        } catch (Exception e) {
-            try {
-                throw new CannotConvertToObjectException();
-            } catch (CannotConvertToObjectException cnc) {
-                cnc.printStackTrace();
-            }
-        }
-        return -1;
-    }
-
-    public static Integer[] toInteger(Object[] obj) {
-        Integer[] retArr = new Integer[len(obj)];
+    public static <T> int[] toInteger(T... obj) {
+        int[] retArr = new int[len(obj)];
         for (int i = 0; i < len(obj); i++) {
             retArr[i] = toInteger(obj[i]);
         }
         return retArr;
     }
 
-    public static Integer[] toRound(Object[] obj) {
-        Integer[] retArr = new Integer[len(obj)];
+    public static <T> int[] toRound(T... obj) {
+        int[] retArr = new int[len(obj)];
         for (int i = 0; i < len(obj); i++) {
             retArr[i] = toRound(obj[i]);
         }
         return retArr;
     }
 
-    public static Double[] toDouble(Object[] obj) {
-        Double[] retArr = new Double[len(obj)];
+    public static <T> double[] toDouble(T... obj) {
+        double[] retArr = new double[len(obj)];
         for (int i = 0; i < len(obj); i++) {
             retArr[i] = toDouble(obj[i]);
         }
         return retArr;
     }
 
-    public static Float[] toFloat(Object[] obj) {
-        Float[] retArr = new Float[len(obj)];
+    public static <T> float[] toFloat(T... obj) {
+        float[] retArr = new float[len(obj)];
         for (int i = 0; i < len(obj); i++) {
             retArr[i] = toFloat(obj[i]);
         }
         return retArr;
     }
 
-    public static Boolean[] toBoolean(Object[] obj) {
-        Boolean[] retArr = new Boolean[len(obj)];
+    public static <T> boolean[] toBoolean(T... obj) {
+        boolean[] retArr = new boolean[len(obj)];
         for (int i = 0; i < len(obj); i++) {
             retArr[i] = toBoolean(obj[i]);
         }
         return retArr;
     }
 
-    public static Character[] toCharacter(Object[] obj) {
-        Character[] retArr = new Character[len(obj)];
+    public static <T> char[] toCharacter(T... obj) {
+        char[] retArr = new char[len(obj)];
         for (int i = 0; i < len(obj); i++) {
             retArr[i] = toCharacter(obj[i]);
         }
         return retArr;
     }
 
-    public static String[] toStrings(Object[] obj) {
+    public static <T> String[] toString(T... obj) {
         String[] retArr = new String[len(obj)];
         for (int i = 0; i < len(obj); i++) {
-            retArr[i] = toStrings(obj[i]);
+            retArr[i] = toString(obj[i]);
         }
         return retArr;
     }
 
-    public static List<Integer> toInteger(List<?> obj) {
+    public static <T> List<Integer> toInteger(Collection<T> collection) {
         List<Integer> retArr = new ArrayList<>();
-        for (int i = 0; i < len(obj); i++) {
-            retArr.add(toInteger(obj.get(i)));
-        }
+        forEach(collection, (o) -> retArr.add(toInteger(o)));
         return retArr;
     }
 
-    public static List<Integer> toRound(List<?> obj) {
+    public static <T> List<Integer> toRound(Collection<T> collection) {
         List<Integer> retArr = new ArrayList<>();
-        for (int i = 0; i < len(obj); i++) {
-            retArr.add(toRound(obj.get(i)));
-        }
+        forEach(collection, (o) -> retArr.add(toRound(o)));
         return retArr;
     }
 
-    public static List<Double> toDouble(List<?> obj) {
+    public static <T> List<Double> toDouble(Collection<T> collection) {
         List<Double> retArr = new ArrayList<>();
-        for (int i = 0; i < len(obj); i++) {
-            retArr.add(toDouble(obj.get(i)));
-        }
+        forEach(collection, (o) -> retArr.add(toDouble(o)));
         return retArr;
     }
 
-    public static List<Float> toFloat(List<?> obj) {
+    public static <T> List<Float> toFloat(Collection<T> collection) {
         List<Float> retArr = new ArrayList<>();
-        for (int i = 0; i < len(obj); i++) {
-            retArr.add(toFloat(obj.get(i)));
-        }
+        forEach(collection, (o) -> retArr.add(toFloat(o)));
         return retArr;
     }
 
-    public static List<Boolean> toBoolean(List<?> obj) {
+    public static <T> List<Boolean> toBoolean(Collection<T> collection) {
         List<Boolean> retArr = new ArrayList<>();
-        for (int i = 0; i < len(obj); i++) {
-            retArr.add(toBoolean(obj.get(i)));
-        }
+        forEach(collection, (o) -> retArr.add(toBoolean(o)));
         return retArr;
     }
 
-    public static List<Character> toCharacter(List<?> obj) {
+    public static <T> List<Character> toCharacter(Collection<T> collection) {
         List<Character> retArr = new ArrayList<>();
-        for (int i = 0; i < len(obj); i++) {
-            retArr.add(toCharacter(obj.get(i)));
-        }
+        forEach(collection, (o) -> retArr.add(toCharacter(o)));
         return retArr;
     }
 
-    public static List<String> toString(List<?> obj) {
+    public static <T> List<String> toString(Collection<T> collection) {
         List<String> retArr = new ArrayList<>();
-        for (int i = 0; i < len(obj); i++) {
-            retArr.add(toStrings(obj.get(i)));
-        }
+        forEach(collection, (o) -> retArr.add(toString(o)));
         return retArr;
     }
 
@@ -487,75 +364,33 @@ public class Funcs {
         return obj;
     }
 
-    //#####   len --- return length of oblject #####
-    public static int len(double[] obj) {
-        return obj.length;
-    }
-
-    //##### End of Converters #####
-    //##### End of Converters #####
-    //##### End of Converters #####
-    //##### End of Converters #####
-    //##### End of Converters #####
-
-
-    //##### Date Time Functions #####
-    //##### Date Time Functions #####
-    //##### Date Time Functions #####
-    //##### Date Time Functions #####
-    //##### Date Time Functions #####
-
-    public static int len(String[] obj) {
-        return obj.length;
-    }
-
-    public static int len(Integer[] obj) {
-        return obj.length;
-    }
-
-    public static int len(Float[] obj) {
-        return obj.length;
-    }
-
-    public static int len(Double[] obj) {
-        return obj.length;
-    }
-
-    public static int len(Long[] obj) {
-        return obj.length;
-    }
-
-    public static int len(Character[] obj) {
-        return obj.length;
-    }
-
-    //##### End of Date Time Functions #####
-    //##### End of Date Time Functions #####
-    //##### End of Date Time Functions #####
-    //##### End of Date Time Functions #####
-    //##### End of Date Time Functions #####
-
-
-    //##### Math Functions #####
-    //##### Math Functions #####
-    //##### Math Functions #####
-    //##### Math Functions #####
-    //##### Math Functions #####
-
-
-    public static int len(Object obj) {
+    public static <T> int len(T obj) {
         return obj.toString().length();
     }
 
-    public static int len(Object... obj) {
+    //##### End of Converters #####
+    //##### End of Converters #####
+    //##### End of Converters #####
+    //##### End of Converters #####
+    //##### End of Converters #####
+
+
+    //##### Math Functions #####
+    //##### Math Functions #####
+    //##### Math Functions #####
+    //##### Math Functions #####
+    //##### Math Functions #####
+
+    @SafeVarargs
+    public static <T> int len(T... obj) {
         return obj.length;
     }
 
-    public static int len(List<?> obj) {
+    public static <T> int len(Collection<T> obj) {
         return obj.size();
     }
 
-    public static int len(Map<?, ?> obj) {
+    public static <X, Y> int len(Map<X, Y> obj) {
         return obj.size();
     }
 
@@ -588,11 +423,7 @@ public class Funcs {
         if (num_a == num_b) {
             ret_value = num_a;
         } else if ((num_a % num_b == 0) || (num_b % num_a == 0)) {
-            if (num_a > num_b) {
-                ret_value = num_a;
-            } else {
-                ret_value = num_b;
-            }
+            ret_value = Math.max(num_a, num_b);
         } else {
             ret_value = (num_a * num_b) / toDouble(getHCF(num_a, num_b));
         }
@@ -636,7 +467,6 @@ public class Funcs {
     }
 
     public static int randint() {
-        //new Random().getNext...()
         int random1 = randint((int) (random() * 100) + 1, (int) (random() * 1000) + 1);
         int random2 = randint((int) (random() * 100) + 1, (int) (random() * 10000) + 1);
         return randint((int) (random() * random1) + 1, (int) (random() * random2) + 1);
@@ -685,8 +515,7 @@ public class Funcs {
         }
 
         Integer[] ret_range = new Integer[len(ret_list)];
-        ret_list.toArray(ret_range);
-        return ret_range;
+        return ret_list.toArray(ret_range);
     }
 
     public static Integer[] randrange(int size) {
@@ -713,46 +542,65 @@ public class Funcs {
         return ret_range;
     }
 
-    public static Object[] randsample(Object[] list, int sample_size) {
+    public static <T> List<T> randsample(T[] list, int sample_size) {
         int size = len(list);
-        if (!(sample_size > size)) {
-            Integer index;
-            Object[] ret_sample = new Object[sample_size];
-            List<Object> Indexed = new ArrayList<>();
+        if (sample_size < size) {
+            Random random = new Random();
+            List<T> ret_sample = new ArrayList<>();
+            List<Integer> indexes = Arrays.asList(range(size));
             for (int i = 0; i < sample_size; i++) {
-                index = randint(size - 1);
-                while (findIn(Indexed, index) != -1) {
-                    index = randint(size - 1);
-                }
-                Indexed.add(index);
-                ret_sample[i] = list[index];
+                int index = random.nextInt(indexes.size());
+                ret_sample.add(list[indexes.remove(index)]);
             }
             return ret_sample;
-        } else {
-            return null;
         }
+        throw new Error("Sample size cant be greater than the collection size");
     }
 
-    public static Object[][] randsample(Object[] list, int sample_size, int groups) {
-        Object[][] ret_sample = new Object[groups][sample_size];
+    public static <T> List<List<T>> randsample(T[] list, int sample_size, int groups) {
+        List<List<T>> ret_sample = new ArrayList<>();
         for (int i = 0; i < groups; i++) {
-            ret_sample[i] = randsample(list, sample_size);
+            ret_sample.add(randsample(list, sample_size));
         }
         return ret_sample;
     }
 
-    public static Object[] shuffle(Object[] obj) {
-        Object[] ret_arr = new Object[len(obj)];
+    public static <T> List<T> randsample(Collection<T> list, int sample_size) {
+        int size = list.size();
+        if (sample_size < size) {
+            Random random = new Random();
+            List<T> items = new ArrayList<>(list);
+            List<T> ret_sample = new ArrayList<>();
+            List<Integer> indexes = Arrays.asList(range(size));
+            for (int i = 0; i < sample_size; i++) {
+                int index = random.nextInt(indexes.size());
+                ret_sample.add(items.get(indexes.remove(index)));
+            }
+            return ret_sample;
+        }
+        throw new Error("Sample size cant be greater than the collection size");
+    }
+
+    public static <T> List<Collection<T>> randsample(Collection<T> list, int sample_size, int groups) {
+        List<Collection<T>> ret_sample = new ArrayList<>();
+        for (int i = 0; i < groups; i++) {
+            ret_sample.add(randsample(list, sample_size));
+        }
+        return ret_sample;
+    }
+
+    public static <T> T[] shuffle(T... obj) {
+        List<T> ret_arr = new ArrayList<T>();
         Integer[] indexed = new Integer[len(obj)];
         for (int i : range(len(ret_arr))) {
             int index = randint(len(obj) - 1);
             while (findIn(indexed, index) != -1) {
                 index = randint(len(obj) - 1);
             }
-            ret_arr[i] = obj[index];
+            ret_arr.add(i, obj[index]);
             indexed[i] = index;
         }
-        return ret_arr;
+        return ret_arr.toArray(obj);
     }
 
     public static Integer[] swapSort(Integer[] array) {
@@ -803,7 +651,7 @@ public class Funcs {
         return obj;
     }
 
-    public static String[] split(Object line, Object at) {
+    public static String[] split(CharSequence line, Object at) {
         List<String> ret_list = new ArrayList<>();
         if (line.toString().contains("<>".replace("<>", at.toString()))) {
             boolean match;
@@ -824,8 +672,7 @@ public class Funcs {
             }
             String[] ret_arr = new String[len(ret_list)];
             if (len(ret_list) != 0) {
-                ret_list.toArray(ret_arr);
-                return ret_arr;
+                return ret_list.toArray(ret_arr);
             }
         }
         String[] split = new String[1];
@@ -833,7 +680,7 @@ public class Funcs {
         return split;
     }
 
-    public static String trim(Object line) {
+    public static String trim(CharSequence line) {
         StringBuilder trimmed = new StringBuilder(line.toString().trim());
         line = line.toString().replace(trimmed.toString(), " f|b ");
         String front = (split(line, "|"))[0];
@@ -849,9 +696,9 @@ public class Funcs {
         return trimmed.toString();
     }
 
-    private static Map<Integer, Integer> getNewlineIndex(Object line) {
+    private static Map<Integer, Integer> getNewlineIndex(CharSequence line) {
         Map<Integer, Integer> newlineIndex = new HashMap<>();
-        Integer memory = 0, index = 0;
+        int memory = 0, index = 0;
         String temp = line.toString();
         while (temp.contains("\n")) {
             if (temp.indexOf("\n") == index) {
@@ -877,7 +724,7 @@ public class Funcs {
         return newlineIndex;
     }
 
-    private static String wordwrap(Object _line, Integer length) {
+    private static String wordwrap(CharSequence _line, Integer length) {
         String line = _line.toString();
         if (line.length() > length) {
             line = line.substring(0, length) + wordwrap("\n" + line.substring(length), length);
@@ -885,7 +732,7 @@ public class Funcs {
         return line;
     }
 
-    private static String wrap(Object _line, Integer length) {
+    private static String wrap(CharSequence _line, Integer length) {
         String line = _line.toString();
         StringBuilder ret = new StringBuilder();
         StringBuilder full_ret = new StringBuilder();
@@ -914,7 +761,7 @@ public class Funcs {
         return full_ret.toString();
     }
 
-    public static String wrapLine(Object line, Integer wraplenght) {
+    public static String wrapLine(CharSequence line, Integer wraplenght) {
         Map<Integer, Integer> newlineIndex = getNewlineIndex(line);
         String newline = "\n";
         StringBuilder ret_Str = new StringBuilder();
@@ -932,7 +779,7 @@ public class Funcs {
         return ret_Str.toString();
     }
 
-    public static String alignCenter(Object line, Integer barlength) {
+    public static String alignCenter(CharSequence line, Integer barlength) {
         if (line.toString().split("\n").length == 1 && line.toString().split(" ").length == 1) {
             if (line.toString().length() > barlength) {
                 line = line + "\n";
@@ -952,7 +799,7 @@ public class Funcs {
                 tab = toDouble(tab) / 4;
                 tabbing = repeatString(tabbing, toDouble(tab).intValue());
                 if (tab.toString().contains(".")) {
-                    String ret = "0." + split(tab, ".")[1];
+                    String ret = "0." + split(tab.toString(), ".")[1];
                     Object ret_num = toDouble(ret) * 5;
                     spacing = repeatString(" ", toInteger(ret_num));
                 }
@@ -973,7 +820,7 @@ public class Funcs {
             tab = toDouble(tab) / 4;
             tabbing = repeatString(tabbing, toDouble(tab).intValue());
             if (tab.toString().contains(".")) {
-                String ret = "0." + split(tab, ".")[1];
+                String ret = "0." + split(tab.toString(), ".")[1];
                 Object ret_num = toDouble(ret) * 5;
                 spacing = repeatString(" ", toInteger(ret_num));
             }
@@ -983,7 +830,7 @@ public class Funcs {
         return ret_Str.toString();
     }
 
-    public static String alignLeft(Object line, Integer barlength) {
+    public static String alignLeft(CharSequence line, Integer barlength) {
         if (line.toString().split("\n").length == 1 && line.toString().split(" ").length == 1) {
             if (line.toString().length() > barlength) {
                 line = line + "\n";
@@ -1008,7 +855,7 @@ public class Funcs {
         return ret_Str.toString();
     }
 
-    public static String alignRight(Object line, Integer barlength) {
+    public static String alignRight(CharSequence line, Integer barlength) {
         if (line.toString().split("\n").length == 1 && line.toString().split(" ").length == 1) {
             if (line.toString().length() > barlength) {
                 line = line + "\n";
@@ -1034,12 +881,12 @@ public class Funcs {
         return ret_Str.toString();
     }
 
-    public static String alignNormal(Object line, Integer barlength) {
+    public static String alignNormal(CharSequence line, Integer barlength) {
         line = wrapLine(line, barlength);
         return line.toString().trim();
     }
 
-    public static String repeatString(String line, int times) {
+    public static String repeatString(CharSequence line, int times) {
         StringBuilder s = new StringBuilder(line);
         for (int i = 0; i < times; i++) {
             s.append(line);
@@ -1047,26 +894,26 @@ public class Funcs {
         return s.toString();
     }
 
-
-    //##### End of Math Functions #####
-    //##### End of Math Functions #####
-    //##### End of Math Functions #####
-    //##### End of Math Functions #####
-    //##### End of Math Functions #####
-
-
-    //##### Text Processing Functions #####
-    //##### Text Processing Functions #####
-    //##### Text Processing Functions #####
-    //##### Text Processing Functions #####
-    //##### Text Processing Functions #####
-
     public static String replaceFirst(String line, String section, String newString) {
         int index = line.indexOf(section);
         StringBuilder s = new StringBuilder(line);
         s.replace(index, index + section.length(), newString);
         return s.toString();
     }
+
+
+    //##### End of Math Functions #####
+    //##### End of Math Functions #####
+    //##### End of Math Functions #####
+    //##### End of Math Functions #####
+    //##### End of Math Functions #####
+
+
+    //##### Text Processing Functions #####
+    //##### Text Processing Functions #####
+    //##### Text Processing Functions #####
+    //##### Text Processing Functions #####
+    //##### Text Processing Functions #####
 
     public static String replaceLast(String line, String section, String newString) {
         int index = line.lastIndexOf(section);
@@ -1138,61 +985,47 @@ public class Funcs {
         return result;
     }
 
-    //##### End of Text Processing Functions #####
-    //##### End of Text Processing Functions #####
-    //##### End of Text Processing Functions #####
-    //##### End of Text Processing Functions #####
-    //##### End of Text Processing Functions #####
-
-    //##### General Functions #####
-    //##### General Functions #####
-    //##### General Functions #####
-    //##### General Functions #####
-    //##### General Functions #####
-
-    public static String choice() {
+    public static boolean choice() {
         String v = inputStr("").toLowerCase();
         switch (v) {
+            case "yes":
             case "y":
-                return "y";
+                return true;
+            case "no":
             case "n":
-                return "n";
+                return false;
             default:
                 print("( invalid ) please choose y or n");
-                break;
+                return choice();
         }
-        return choice();
     }
 
-    public static void listItems(Object[] arrayVar) {
-        print();
-        for (int i = 0; i < len(arrayVar); i++) {
-            print(arrayVar[i], ((i + 1) % 3 == 0) ? "\n" : "\t\t");
-        }
-        print();
-    }
+    //##### End of Text Processing Functions #####
+    //##### End of Text Processing Functions #####
+    //##### End of Text Processing Functions #####
+    //##### End of Text Processing Functions #####
+    //##### End of Text Processing Functions #####
 
-    public static void listItems(Object[] arrayVar, Integer ElementsOnRow, String... RowHeaders) {
-        print();
-        for (String words : RowHeaders) {
-            print(words, "\t\t");
-        }
-        print();
-        if (ElementsOnRow > 0) {
-            for (int i = 0; i < len(arrayVar); i++) {
-                print(arrayVar[i], ((i + 1) % ElementsOnRow == 0) ? "\n" : "\t\t");
-            }
-        } else {
-            for (Object anArrayVar : arrayVar) {
-                print(anArrayVar, "\t");
-            }
-        }
-    }
+    //##### General Functions #####
+    //##### General Functions #####
+    //##### General Functions #####
+    //##### General Functions #####
+    //##### General Functions #####
 
     public static <T extends Collection<K>, K, V> List<V> map(T collection, Mapper<K, V> mapper) {
         List<V> mapped = new ArrayList<>();
         for (K item : collection) {
             mapped.add((mapper.map(item)));
+        }
+        return mapped;
+    }
+
+    public static <T extends Collection<K>, K, V> List<V> map(T collection, IndexedMapper<K, V> mapper) {
+        int i = -1;
+        List<V> mapped = new ArrayList<>();
+        for (K item : collection) {
+            i++;
+            mapped.add((mapper.map(i, item)));
         }
         return mapped;
     }
@@ -1207,9 +1040,29 @@ public class Funcs {
         return filtered;
     }
 
+    public static <T extends Collection<K>, K> List<K> filter(T collection, IndexedFilterer<K> filterer) {
+        int i = -1;
+        List<K> filtered = new ArrayList<>();
+        for (K item : collection) {
+            i++;
+            if (filterer.filter(i, item)) {
+                filtered.add(item);
+            }
+        }
+        return filtered;
+    }
+
     public static <T extends Collection<K>, K> void forEach(T collection, Action<K> action) {
         for (K item : collection) {
             action.run(item);
+        }
+    }
+
+    public static <T extends Collection<K>, K> void forEach(T collection, IndexedAction<K> action) {
+        int i = -1;
+        for (K item : collection) {
+            i++;
+            action.run(i, item);
         }
     }
 
@@ -1238,6 +1091,16 @@ public class Funcs {
         return mapped;
     }
 
+    public static <K, V> List<V> map(K[] collection, IndexedMapper<K, V> mapper) {
+        int i = -1;
+        List<V> mapped = new ArrayList<>();
+        for (K item : collection) {
+            i++;
+            mapped.add((mapper.map(i, item)));
+        }
+        return mapped;
+    }
+
     public static <T> List<T> filter(T[] collection, Filterer<T> filterer) {
         List<T> filtered = new ArrayList<>();
         for (T item : collection) {
@@ -1248,9 +1111,29 @@ public class Funcs {
         return filtered;
     }
 
+    public static <T> List<T> filter(T[] collection, IndexedFilterer<T> filterer) {
+        int i = -1;
+        List<T> filtered = new ArrayList<>();
+        for (T item : collection) {
+            i++;
+            if (filterer.filter(i, item)) {
+                filtered.add(item);
+            }
+        }
+        return filtered;
+    }
+
     public static <T> void forEach(T[] collection, Action<T> action) {
         for (T item : collection) {
             action.run(item);
+        }
+    }
+
+    public static <T> void forEach(T[] collection, IndexedAction<T> action) {
+        int i = -1;
+        for (T item : collection) {
+            i++;
+            action.run(i, item);
         }
     }
 
@@ -1292,47 +1175,12 @@ public class Funcs {
         return findIn(collection, key);
     }
 
-    public interface Action<T> {
-        void run(T data);
+    public static <T> List<T> asList(Collection<T> collection) {
+        return new ArrayList<>(collection);
     }
 
-    public interface MapAction<K, V> {
-        void run(K key, V value);
-    }
-
-    public interface Mapper<K, V> {
-        V map(K item);
-    }
-
-    public interface Filterer<K> {
-        boolean filter(K item);
-    }
-
-    private static class CannotPrintObjectException extends Exception {
-        public CannotPrintObjectException() {
-            super("\nCannotPrintObjectException :: Object may be null or a user defined class." +
-                    "(Tip : Try converting object to String... )\\n");
-        }
-    }
-
-    private static class CannotConvertToObjectException extends Exception {
-        public CannotConvertToObjectException() {
-            super("\nCannotConvertToObjectException :: Object value may conflict\n");
-        }
-    }
-
-    private static class CannotSetTimeValueException extends Exception {
-        CannotSetTimeValueException() {
-            super("Cannot Set A value to Time Object :: Cheack that HOURS > 24, " +
-                    "MINUTES > 60, SECONDS > 60 , MILISECONDS > 1000");
-        }
-    }
-
-    private static class CannotSetPrinterAlignmentException extends Exception {
-        CannotSetPrinterAlignmentException(String value) {
-            super("Cannot Set Alignment using " + value + " :: Cheack that the value is " +
-                    "NORMAL(N), CENTER(C), LEFT(L), or RIGTH(R)");
-        }
+    public static <T> List<T> asList(T[] collection) {
+        return Arrays.asList(collection);
     }
 
     public static class Printer {
@@ -1340,38 +1188,38 @@ public class Funcs {
          * This class makes using printStream very easy
          * When Creating new Object instance
          *
-         * @param String  startwith, seperation and endwith and Integer ConsoleLength
+         * @param String  startWith, separator and endwith and Integer ConsoleLength
          * eg. Printer pprint = new Printer() for default settings
          * and  Printer pprint = new Printer("", ", ", ".\n")
          * after creating and instance you can set
-         * startwith using the dot operator read(...),
-         * or set set seperator with sep(...) and end(...) to change endwith
+         * startWith using the dot operator read(...),
+         * or set set separator with sep(...) and end(...) to change endWith
          **/
-        private Integer consoleLenght = 150;
+        private Integer consoleLength = 150;
         private String printFormat = "";
-        private String seperator = " ";
-        private String startwith = "";
-        private String endwith = "";
+        private String separator = " ";
+        private String startWith = "";
+        private String endWith = "";
 
         Printer() {
         }
 
         Printer(String start, String sep, String end) {
-            startwith = start;
-            seperator = sep;
-            endwith = end;
+            startWith = start;
+            separator = sep;
+            endWith = end;
         }
 
         private String align(Object obj) {
             switch (printFormat) {
                 case "normal":
-                    return Funcs.alignNormal(obj, consoleLenght);
+                    return Funcs.alignNormal(obj.toString(), consoleLength);
                 case "center":
-                    return Funcs.alignCenter(obj, consoleLenght);
+                    return Funcs.alignCenter(obj.toString(), consoleLength);
                 case "left":
-                    return Funcs.alignLeft(obj, consoleLenght);
+                    return Funcs.alignLeft(obj.toString(), consoleLength);
                 case "right":
-                    return Funcs.alignRight(obj, consoleLenght);
+                    return Funcs.alignRight(obj.toString(), consoleLength);
                 default:
                     return obj.toString();
             }
@@ -1379,22 +1227,22 @@ public class Funcs {
 
         //##### class variable setter #####
         public Printer sep(String using) {
-            this.seperator = using;
+            this.separator = using;
             return this;
         }
 
         public Printer start(String using) {
-            this.startwith = using;
+            this.startWith = using;
             return this;
         }
 
         public Printer end(String using) {
-            this.endwith = using;
+            this.endWith = using;
             return this;
         }
 
         public Printer setConsoleLength(Integer value) {
-            this.consoleLenght = value;
+            this.consoleLength = value;
             return this;
         }
 
@@ -1423,111 +1271,25 @@ public class Funcs {
             return this;
         }
 
-
-        public void print(String[] objects) {
-            print((Object[]) objects);
-        }
-
-        public void print(Integer[] objects) {
-            print((Object[]) objects);
-        }
-
-        public void print(Float[] objects) {
-            print((Object[]) objects);
-        }
-
-        public void print(Double[] objects) {
-            print((Object[]) objects);
-        }
-
-        public void print(Long[] objects) {
-            print((Object[]) objects);
-        }
-
-        public void print(Character[] objects) {
-            print((Object[]) objects);
-        }
-
         //### Main Print Functions ###
 
-        public void print(Object object) {
-            String line = startwith + object + endwith;
+        public <T> void print(T object) {
+            String line = startWith + object + endWith;
             System.out.print(align(line));
         }
 
-        public void print(double[] objects) {
-            try {
-                if (len(objects) > 0) {
-                    for (int i : range(len(objects))) {
-                        String line = startwith + toRound(objects[i]) + ((i == len(objects) - 1) ? "" : seperator);
-                        System.out.print(align(line));
-                    }
-                    System.out.print(endwith);
-                } else {
-                    print("\n");
+        public <T> void print(T... objects) {
+            if (len(objects) > 0) {
+                for (int i : range(len(objects))) {
+                    String line = startWith + objects[i] + ((i == len(objects) - 1) ? "" : separator);
+                    System.out.print(align(line));
                 }
-            } catch (Exception e) {
-                try {
-                    throw new CannotPrintObjectException();
-                } catch (CannotPrintObjectException e1) {
-                    e1.printStackTrace();
-                }
+                System.out.print(endWith);
+            } else {
+                print("\n");
             }
         }
 
-        public void print(Object... objects) {
-            try {
-                if (len(objects) > 0) {
-                    for (int i : range(len(objects))) {
-                        String line = startwith + objects[i] + ((i == len(objects) - 1) ? "" : seperator);
-                        System.out.print(align(line));
-                    }
-                    System.out.print(endwith);
-                } else {
-                    print("\n");
-                }
-            } catch (Exception e) {
-                try {
-                    throw new CannotPrintObjectException();
-                } catch (CannotPrintObjectException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-
-
-    }
-
-    public static class Test {
-        static int size;
-
-        //static initializer
-        static {
-            size = 0;
-        }
-
-        //calss with no constructor calling
-        private Test() {
-        }
-
-        public static void test() {
-        }
-
-        public static void exit() {
-        }
-
-    }
-
-    public static class toList<T> {
-        List<T> DATA;
-
-        public toList(Collection<T> data) {
-            DATA = new ArrayList<>(data);
-        }
-
-        public List<T> getDATA() {
-            return DATA;
-        }
     }
 
     public static abstract class CountDownTimer {
@@ -1591,11 +1353,9 @@ public class Funcs {
                 } else if (TICK_TIME < 1 && TICK_TIME >= TOTAL_TIME) {
                     throw new Exception("Invalid Total Time : totalTime must be > 0 and <= totalTime");
                 } else {
-                    if (STATE.equals("created")) {
-                        STATE = "started";
-                        onStart();
-                        TIMER.scheduleAtFixedRate(getStarterTask(), 0, 1);
-                    }
+                    STATE = "started";
+                    onStart();
+                    TIMER.scheduleAtFixedRate(getStarterTask(), 0, 1);
                 }
             }
         }
@@ -1644,83 +1404,6 @@ public class Funcs {
 
     }
 
-    public static class SortedNumArray {
-
-        private List<Double> DATA = new ArrayList<>();
-
-        SortedNumArray(double... numbers) {
-            for (double i : numbers) {
-                DATA.add(i);
-            }
-        }
-
-        SortedNumArray(int[] numbers) {
-            for (double i : numbers) {
-                DATA.add(i);
-            }
-        }
-
-        SortedNumArray(float[] numbers) {
-            for (double i : numbers) {
-                DATA.add(i);
-            }
-        }
-
-        public SortedNumArray(Double[] numbers) {
-            DATA.addAll(Arrays.asList(numbers));
-        }
-
-        SortedNumArray(Float[] numbers) {
-            for (double i : numbers) {
-                DATA.add(i);
-            }
-        }
-
-        SortedNumArray(Integer[] numbers) {
-            for (double i : numbers) {
-                DATA.add(i);
-            }
-        }
-
-        private static Double[] swapSort(Double[] array) {
-            if (len(array) > 1) {
-                for (int i : range(len(array)))
-                    for (int j : range(1, len(array) - i))
-                        if (array[j - 1] > array[j])
-                            swap(array, j - 1, j);
-            }
-            return array;
-        }
-
-        private static Double[] swap(Double[] obj, int index1, int index2) {
-            double temp = obj[index1];
-            obj[index1] = obj[index2];
-            obj[index2] = temp;
-            return obj;
-        }
-
-        private Double[] sort() {
-            return swapSort(Funcs.toDouble(DATA.toArray()));
-        }
-
-        public Object[] getSorted() {
-            return sort();
-        }
-
-        public Double[] toDouble() {
-            return sort();
-        }
-
-        public Integer[] toInteger() {
-            return Funcs.toInteger(sort());
-        }
-
-        public Float[] toFloat() {
-            return Funcs.toFloat(sort());
-        }
-
-    }
-
     public static class QuickSort {
 
         private static int[] a;
@@ -1748,7 +1431,7 @@ public class Funcs {
         }
 
         public static void printArray(Object[] array) {
-            println();
+            Funcs.println();
             for (int i = 0; i < len(array); i++) {
                 System.out.print(array[i] + " ");
                 if ((i + 1) % 20 == 0)

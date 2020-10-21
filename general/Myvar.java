@@ -1,8 +1,12 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general;
 
+import android.os.Build;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.annotation.RequiresApi;
 
 import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.repeatString;
 
@@ -93,7 +97,7 @@ public class Myvar implements Cloneable {
     }
 
     public String toString() {
-        return Funcs.toStrings(this.obj);
+        return Funcs.toString(this.obj);
     }
 
     public Float toFloat() {
@@ -121,26 +125,26 @@ public class Myvar implements Cloneable {
     }
 
     public String[] toArrString() {
-        return Funcs.toStrings(this.arrobj);
+        return Funcs.toString(this.arrobj);
     }
 
-    public Float[] toArrFloat() {
+    public float[] toArrFloat() {
         return Funcs.toFloat(this.arrobj);
     }
 
-    public Character[] toArrCharacter() {
+    public char[] toArrCharacter() {
         return Funcs.toCharacter(this.arrobj);
     }
 
-    public Integer[] toArrInteger() {
+    public int[] toArrInteger() {
         return Funcs.toInteger(this.arrobj);
     }
 
-    public Double[] toArrDouble() {
+    public double[] toArrDouble() {
         return Funcs.toDouble(this.arrobj);
     }
 
-    public Boolean[] toArrBoolean() {
+    public boolean[] toArrBoolean() {
         return Funcs.toBoolean(this.arrobj);
     }
 
@@ -163,7 +167,7 @@ public class Myvar implements Cloneable {
     }
 
     public Myvar split(Object obj) {
-        return this.setValue(Funcs.split(this.obj, obj));
+        return this.setValue(Funcs.split(this.obj.toString(), obj));
     }
 
     public int hashCode() {
@@ -425,7 +429,7 @@ public class Myvar implements Cloneable {
     }
 
     public Object[] randsample(int sample_size) {
-        return Funcs.randsample(arrobj, sample_size);
+        return Funcs.randsample(arrobj, sample_size).toArray();
     }
 
     public Myvar setConsoleLength(Integer value) {
@@ -600,6 +604,7 @@ public class Myvar implements Cloneable {
 
     //##### Variable Management #####
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Myvar assign(String varname, Object obj) {
         if (!existVar(varname)) {
             varcontainer.putIfAbsent(varname, obj);
@@ -642,16 +647,19 @@ public class Myvar implements Cloneable {
         return string_arr + "\n";
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Myvar listVars() {
         varcontainer.forEach((s, o) -> Myvar.this.print("\nvaraible :\t", s, "\nvalue    :\t", o, "\n"));
         return this;//empty variable from variable map
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Myvar listArrs() {
         arrcontainer.forEach((s, o) -> Myvar.this.print("variable : ", s, " list", Myvar.this.listItems(o)));
         return this;//empty variable from variable map
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Myvar listArrs(final int varOnRow) {
         arrcontainer.forEach((s, o) -> Myvar.this.print("variable : ", s, " list", Myvar.this.listItems(o, varOnRow)));
         return this;//empty variable from variable map
@@ -665,6 +673,7 @@ public class Myvar implements Cloneable {
         return arrcontainer;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Myvar increamentVar(String varname) {
         if (existVar(varname)) {
             Object new_ = Funcs.toDouble(getVar(varname)) + 1;
@@ -673,6 +682,7 @@ public class Myvar implements Cloneable {
         return this;//++ variable from variable map
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Myvar increamentVar(String varname, int by) {
         if (existVar(varname)) {
             Object new_ = Funcs.toDouble(getVar(varname)) + by;
@@ -681,6 +691,7 @@ public class Myvar implements Cloneable {
         return this;//++by variable from variable map
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Myvar decrementVar(String varname) {
         if (existVar(varname)) {
             Object new_ = Funcs.toDouble(getVar(varname)) - 1;
@@ -689,6 +700,7 @@ public class Myvar implements Cloneable {
         return this;//-- variable from variable map
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Myvar decrementVar(String varname, int by) {
         if (existVar(varname)) {
             Object new_ = Funcs.toDouble(getVar(varname)) - by;
@@ -702,6 +714,7 @@ public class Myvar implements Cloneable {
         return arrcontainer.containsKey(varname);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Myvar assign(String varname, Object[] obj) {
         if (!existVar(varname)) {
             arrcontainer.putIfAbsent(varname, obj);
