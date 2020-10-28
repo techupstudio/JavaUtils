@@ -14,7 +14,7 @@ public class Queue<T> {
     }
 
     public T dequeue() {
-        return items.peekBack();
+        return items.popFront();
     }
 
     public T peek() {
