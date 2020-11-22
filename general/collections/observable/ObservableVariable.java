@@ -1,8 +1,10 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable;
 
 
+import com.techupstudio.otc_chingy.mychurch.core.utils.caching.MemoryFileCache;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.Variable;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable.interfaces.BiDirectionalBindMethod;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable.interfaces.OnSetValueListener;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable.interfaces.OnValueChangedListener;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable.interfaces.OnValueGetListener;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable.interfaces.OnValueSetListener;
@@ -12,12 +14,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class ObservableVariable<V> extends Variable<V> {
 
     protected Map<ObservableVariable<?>, Binder<?, ?>> mBinderMap;
     private List<OnValueSetListener<V>> onValueSetListeners;
+    private List<OnSetValueListener<V>> onSetValueListeners;
     private List<OnValueGetListener<V>> onValueGetListeners;
     private List<OnValueChangedListener<V>> onValueChangedListeners;
 
@@ -44,6 +48,7 @@ public class ObservableVariable<V> extends Variable<V> {
     private void init() {
         mBinderMap = new HashMap<>();
         onValueSetListeners = new ArrayList<>();
+        onSetValueListeners = new ArrayList<>();
         onValueGetListeners = new ArrayList<>();
         onValueChangedListeners = new ArrayList<>();
     }
@@ -66,9 +71,24 @@ public class ObservableVariable<V> extends Variable<V> {
     @Override
     public void setValue(V value) {
         V oldValue = get();
-        runOnValueSetListeners(value);
+        runOnSetValueListeners(value);
         set(value);
-        runOnValueChangedListeners(value, oldValue);
+        runOnValueSetListeners(value);
+        if (!equals(oldValue, value))
+            runOnValueChangedListeners(value, oldValue);
+    }
+
+    private <X, Y> boolean equals(X o1, Y o2){
+        if (o1 == o2) return true;
+        if ((o1 == null || o2 == null) || o1.getClass() != o2.getClass()) return false;
+        return o1.equals(o2);
+    }
+
+    private void runOnSetValueListeners(V value) {
+        for (OnSetValueListener<V> onSetValueListener : onSetValueListeners) {
+            if (onSetValueListener != null)
+                onSetValueListener.onSet(value);
+        }
     }
 
     private void runOnValueSetListeners(V value) {
@@ -97,6 +117,10 @@ public class ObservableVariable<V> extends Variable<V> {
         return onValueSetListeners;
     }
 
+    public List<OnSetValueListener<V>> getOnSetValueListeners() {
+        return onSetValueListeners;
+    }
+
     public List<OnValueGetListener<V>> getOnValueGetListeners() {
         return onValueGetListeners;
     }
@@ -109,6 +133,10 @@ public class ObservableVariable<V> extends Variable<V> {
         this.onValueSetListeners.add(onValueSetListener);
     }
 
+    public void addOnSetValueListener(OnSetValueListener<V> onSetValueListener) {
+        this.onSetValueListeners.add(onSetValueListener);
+    }
+
     public void addOnValueGetListener(OnValueGetListener<V> onValueGetListener) {
         this.onValueGetListeners.add(onValueGetListener);
     }
@@ -119,6 +147,10 @@ public class ObservableVariable<V> extends Variable<V> {
 
     public void removeOnValueSetListener(OnValueSetListener<V> onValueSetListener) {
         this.onValueSetListeners.remove(onValueSetListener);
+    }
+
+    public void removeOnSetValueListener(OnSetValueListener<V> onSetValueListener) {
+        this.onSetValueListeners.remove(onSetValueListener);
     }
 
     public void removeOnValueGetListener(OnValueGetListener<V> onValueGetListener) {

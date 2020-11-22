@@ -1,7 +1,9 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.io;
 
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.testing.Preconditions;
 
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -11,6 +13,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,30 +22,62 @@ import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.prin
 
 public class FileManager {
 
-    public FileManager() {
+    public static final int DEFAULT_BUFFER_SIZE = 1024;
+
+    private FileManager() {
     }
 
-    public static boolean createDirectory(File parent, String childName) {
+    public static boolean makeFile(File parent, String fileName) {
+        return makeFile(new File(parent, fileName));
+    }
+
+    public static boolean makeDirs(File parent, String childName) {
         File temp = new File(parent, childName);
-        if (!temp.exists())
-            return temp.mkdirs();
-        return true;
+        return temp.exists() || temp.mkdirs();
     }
 
-    public static File getDirectory(File parent, String childName) {
-        return new File(parent, childName);
-    }
-
-    public static boolean createFile(File parent, String fileName) {
-        File temp = new File(parent, fileName);
-        if (!temp.exists()) {
-            try {
-                return temp.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+    public static boolean makeDirs(File file) {
+        if (!file.exists()) {
+            if (isFile(file)) {
+                file = file.getParentFile();
             }
+            return file != null && file.mkdirs();
         }
         return true;
+    }
+
+    public static boolean makeFile(File file) {
+        try {
+            return file.exists() || ((file.getParentFile() == null
+                            || file.getParentFile().exists()
+                            || file.getParentFile().mkdirs()) && file.createNewFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean makeFileOrFolder(File file) {
+        if (file == null)
+            return false;
+
+        if (!file.exists()) {
+            if (isFile(file)) {
+                return makeFile(file);
+            } else {
+                return makeDirs(file);
+            }
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean isFile(File file) {
+        return file != null && ((file.exists() && file.isFile()) || !getExtension(file.getName()).isEmpty());
+    }
+
+    public static boolean isDirectory(File file) {
+        return file != null && ((file.exists() && file.isDirectory()) || getExtension(file.getName()).isEmpty());
     }
 
     public static File getFile(File parent, String fileName) {
@@ -50,6 +86,18 @@ public class FileManager {
             return temp;
         }
         return null;
+    }
+
+    public static File requireFile(File parent, String childName) {
+        return new File(parent, childName);
+    }
+
+    public static File requireOrCreateFile(File parent, String childName) {
+        File file = requireFile(parent, childName);
+        if (makeFileOrFolder(file)) {
+            return file;
+        }
+        throw new Error("could not get or create the file!.");
     }
 
     public static void listDir(File file) {
@@ -65,21 +113,9 @@ public class FileManager {
         }
     }
 
-    public static boolean makeDir(String path) {
-        File file = new File(path);
-
-        if (!file.exists()) {
-            if (file.isFile()) {
-                file = file.getParentFile();
-            }
-            return file != null && file.mkdirs();
-        }
-        return true;
-    }
-
     public static void write(File file, String line) {
 
-        FileWriter WRITER = null;
+        FileWriter WRITER;
 
         if (file.canWrite()) {
             try {
@@ -95,7 +131,7 @@ public class FileManager {
 
     public static void writeAppend(File file, String lines) {
 
-        FileWriter WRITER = null;
+        FileWriter WRITER;
 
         if (file.canWrite()) {
             try {
@@ -221,73 +257,157 @@ public class FileManager {
         return retStr.toString();
     }
 
-    public static void copy(File file, File newLocation) {
-        copy(file, newLocation, "");
-    }
 
-    public static void copy(File file, File newLocation, String newName) {
-        if (file.exists()) {
-            if (file.isFile()) {
-                copyFile(file, newLocation, newName);
+    public static boolean copy(File sourceFile, File destinationFile) {
+        Preconditions.checkArgument(sourceFile != null, "Source file can't be null!");
+        Preconditions.checkArgument(destinationFile != null, "Destination file can't be null!");
+        if (sourceFile.exists()) {
+            if (sourceFile.isFile()) {
+                if (destinationFile.isFile()) {
+                    Preconditions.checkArgument(destinationFile.getParentFile() != null, "Destination file must have a parent!");
+                    return copyFile(sourceFile, destinationFile.getParentFile(), destinationFile.getName());
+                } else {
+                    return copyFile(sourceFile, destinationFile, null);
+                }
             } else {
-                copyDirectory(file, newLocation, newName);
+                Preconditions.checkArgument(destinationFile.isDirectory(), "Destination file must be a directory!");
+                return copyDirectory(sourceFile, destinationFile, destinationFile.getName());
             }
         }
+        return false;
     }
 
-    private static void copyFile(File file, File newLocation, String newName) {
-        try {
-            if (file.isFile()) {
-                if (newLocation.exists() && newLocation.isDirectory()) {
-                    File copiedFile = getCopiedFile(file, newLocation, newName);
-                    copiedFile.createNewFile();
+    public static boolean copy(File sourceFile, File destinationDirectory, String name) {
+        Preconditions.checkArgument(destinationDirectory != null, "Destination directory can't be null!");
+        Preconditions.checkArgument(destinationDirectory.isDirectory(), "Destination file must be a directory!");
+        return copy(sourceFile, new File(destinationDirectory, name));
+    }
 
-                    try {
-                        FileInputStream inputStream = new FileInputStream(file);
-                        FileOutputStream fileOutputStream = new FileOutputStream(copiedFile);
-                        int len;
-                        byte[] buffer = new byte[1024];
-                        while ((len = inputStream.read(buffer)) > 0) {
-                            fileOutputStream.write(buffer, 0, len);
-                        }
-                        inputStream.close();
-                        fileOutputStream.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+    public static boolean cut(File sourceFile, File destinationFile) {
+        return copy(sourceFile, destinationFile) && sourceFile.delete();
+    }
+
+    public static boolean cut(File sourceFile, File destinationDirectory, String name) {
+        Preconditions.checkArgument(destinationDirectory != null, "Destination directory can't be null!");
+        Preconditions.checkArgument(destinationDirectory.isDirectory(), "Destination file must be a directory!");
+        return cut(sourceFile, new File(destinationDirectory, name));
+    }
+
+    public static boolean save(byte[] bytes, File destinationFile, int bufferSize) {
+        try {
+            return save(bytes, new FileOutputStream(destinationFile), bufferSize);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean save(byte[] bytes, File file) {
+        return save(bytes, file, DEFAULT_BUFFER_SIZE);
+    }
+
+    public static boolean save(byte[] bytes, OutputStream outputStream, int bufferSize) {
+        Preconditions.checkArgument(bytes != null, "Bytes can't be a null!");
+        Preconditions.checkArgument(outputStream != null, "Output stream can't be a null!");
+        return save(new ByteArrayInputStream(bytes), outputStream, bufferSize);
+    }
+
+    public static boolean save(byte[] bytes, OutputStream outputStream) {
+        return save(bytes, outputStream, DEFAULT_BUFFER_SIZE);
+    }
+
+    public static boolean save(File sourceFile, File destinationFile, int bufferSize) {
+        Preconditions.checkArgument(sourceFile != null, "Source file can't be null");
+        Preconditions.checkArgument(sourceFile.isFile(), "Source file can't be a directory");
+        Preconditions.checkArgument(destinationFile != null, "Destination file can't be null");
+        Preconditions.checkArgument(destinationFile.isFile(), "Destination file can't be a directory");
+        Preconditions.checkArgument(sourceFile.exists(), "Source file must exist!");
+        try {
+            return save(new FileInputStream(sourceFile), new FileOutputStream(destinationFile), bufferSize);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean save(File sourceFile, File destinationFile) {
+        return save(sourceFile, destinationFile, DEFAULT_BUFFER_SIZE);
+    }
+
+    public static boolean save(InputStream inputStream, OutputStream outputStream, int bufferSize) {
+        Preconditions.checkArgument(inputStream != null, "Input stream can't be null!");
+        Preconditions.checkArgument(outputStream != null, "Output stream can't be a null!");
+        Preconditions.checkArgument(bufferSize > 0, "buffer size must be a positive integer!.");
+        try {
+            int len;
+            byte[] buffer = new byte[bufferSize];
+            while ((len = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, len);
+            }
+            inputStream.close();
+            outputStream.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean save(InputStream inputStream, OutputStream outputStream) {
+        return save(inputStream, outputStream, DEFAULT_BUFFER_SIZE);
+    }
+
+    private static boolean copyFile(File sourceFile, File destinationDirectory, String name) {
+        Preconditions.checkArgument(sourceFile != null, "Source file can't be null");
+        Preconditions.checkArgument(sourceFile.isFile(), "Source file can't be a directory");
+        Preconditions.checkArgument(destinationDirectory != null, "Destination directory can't be null");
+        Preconditions.checkArgument(destinationDirectory.isDirectory(), "Destination directory can't be a file");
+        try {
+            if (destinationDirectory.exists() || destinationDirectory.mkdirs()) {
+                File copiedFile = makeCopiedFile(sourceFile, destinationDirectory, name);
+                if (copiedFile.exists() || copiedFile.createNewFile()) {
+                    FileInputStream inputStream = new FileInputStream(sourceFile);
+                    FileOutputStream outputStream = new FileOutputStream(copiedFile);
+                    return save(inputStream, outputStream);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    private static void copyDirectory(File file, File newLocation, String newName) {
+    private static boolean copyDirectory(File sourceDirectory, File destinationDirectory, String name) {
+        Preconditions.checkArgument(sourceDirectory != null, "Source directory can't be null");
+        Preconditions.checkArgument(sourceDirectory.isDirectory(), "Source directory can't be a file");
+        Preconditions.checkArgument(destinationDirectory != null, "Destination directory can't be null");
+        Preconditions.checkArgument(destinationDirectory.isDirectory(), "Destination directory can't be a file");
         try {
-            if (file.isDirectory()) {
+            if (sourceDirectory.isDirectory()) {
 
-                if (newLocation.exists() && newLocation.isDirectory()) {
+                if (destinationDirectory.exists() || destinationDirectory.mkdir()) {
 
-                    File copiedDirectory = getCopiedFile(file, newLocation, newName);
+                    File copiedDirectory = makeCopiedFile(sourceDirectory, destinationDirectory, name);
 
-                    if (!copiedDirectory.exists()) {
-                        copiedDirectory.mkdirs();
-                    }
-                    File[] fileList = file.listFiles();
-                    if (fileList != null) {
-                        for (File subfile : fileList) {
-                            if (subfile.isFile()) {
-                                copyFile(subfile, copiedDirectory, "");
-                            } else {
-                                copyDirectory(subfile, copiedDirectory, "");
+                    if (copiedDirectory.exists() || copiedDirectory.mkdirs()) {
+                        File[] fileList = sourceDirectory.listFiles();
+                        if (fileList != null) {
+                            for (File file : fileList) {
+                                if (file.isFile()) {
+                                    copyFile(file, copiedDirectory, null);
+                                } else {
+                                    copyDirectory(file, copiedDirectory, null);
+                                }
                             }
                         }
                     }
+                    return true;
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public static String renameToCopiedFile(String name) {
@@ -297,8 +417,7 @@ public class FileManager {
             return name + "_copy";
         }
         String nameOnly = name.substring(0, name.lastIndexOf("."));
-        String newName = nameOnly + "_copy" + name.substring(name.lastIndexOf("."));
-        return newName;
+        return nameOnly + "_copy" + name.substring(name.lastIndexOf("."));
     }
 
     public static boolean renameFile(File file, String name) {
@@ -311,7 +430,9 @@ public class FileManager {
     }
 
     public static String getExtension(String name) {
-        if (!name.contains(".")) {
+        if (name == null) {
+            return null;
+        } else if (!name.contains(".")) {
             return "";
         } else if (name.lastIndexOf(".") == 0) {
             return "";
@@ -319,42 +440,34 @@ public class FileManager {
         return name.substring(name.lastIndexOf("."));
     }
 
-    private static File getCopiedFile(File file, File newLocation, String newName) {
+    private static File makeCopiedFile(File sourceFile, File destinationFile, String name) {
 
-        File copiedFile;
+        File copiedFile = destinationFile;
 
-        if (newName.trim().isEmpty()) {
-            if (getDirectory(newLocation, file.getName()).exists()) {
-                copiedFile = getDirectory(newLocation, renameToCopiedFile(file.getName()));
-                while (copiedFile.exists()) {
-                    copiedFile = getDirectory(newLocation, renameToCopiedFile(copiedFile.getName()));
+        if (copiedFile.isDirectory()) {
+            if (name == null || name.trim().isEmpty()) {
+                if (requireFile(destinationFile, sourceFile.getName()).exists()) {
+                    copiedFile = requireFile(destinationFile, renameToCopiedFile(sourceFile.getName()));
+                    while (copiedFile.exists()) {
+                        copiedFile = requireFile(destinationFile, renameToCopiedFile(copiedFile.getName()));
+                    }
+                } else {
+                    copiedFile = requireFile(destinationFile, sourceFile.getName());
                 }
             } else {
-                copiedFile = getDirectory(newLocation, file.getName());
-            }
-        } else {
 
-            if (!getExtension(newName).equals(getExtension(file.getName()))) {
-                newName += getExtension(file.getName());
-            }
+                if (!getExtension(name).equals(getExtension(sourceFile.getName()))) {
+                    name += getExtension(sourceFile.getName());
+                }
 
-            if (getDirectory(newLocation, newName).exists()) {
-                copiedFile = getDirectory(newLocation, renameToCopiedFile(file.getName()));
-            } else {
-                copiedFile = getDirectory(newLocation, newName);
+                if (requireFile(destinationFile, name).exists()) {
+                    copiedFile = requireFile(destinationFile, renameToCopiedFile(sourceFile.getName()));
+                } else {
+                    copiedFile = requireFile(destinationFile, name);
+                }
             }
         }
         return copiedFile;
-    }
-
-    public static void cut(File file, File newLocation) {
-        copy(file, newLocation);
-        file.delete();
-    }
-
-    public static void cut(File file, File newLocation, String newName) {
-        copy(file, newLocation, newName);
-        file.delete();
     }
 
     public static String getEnviron(String name) {
@@ -387,7 +500,7 @@ public class FileManager {
     }
 
     private static long sizeOfFile(File file, int pow) {
-        return (long) (file.length() / (Math.pow(1024, pow)));
+        return (long) (file.length() / (Math.pow(DEFAULT_BUFFER_SIZE, pow)));
     }
 
     public static long sizeInBytes(File file) {
@@ -409,4 +522,5 @@ public class FileManager {
     public static long sizeInTeraBytes(File file) {
         return sizeOfFile(file, 4);
     }
+
 }

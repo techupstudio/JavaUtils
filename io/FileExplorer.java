@@ -1,5 +1,7 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.io;
 
+import android.os.Build;
+
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.Stack;
 
 import java.io.File;
@@ -12,6 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.annotation.RequiresApi;
+
 //TODO : make files to copy or cut a list
 
 public class FileExplorer {
@@ -23,6 +27,7 @@ public class FileExplorer {
     private Stack<File> BACKWARD_STACK;
     private List<File> TEMP_FILES_LIST;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public FileExplorer() {
         CURRENT_FILE = new File(Paths.get("").toAbsolutePath().toString());
         initializeFields();
@@ -33,6 +38,7 @@ public class FileExplorer {
         initializeFields();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public FileExplorer(String directoryPath) {
         if (directoryPath.equals("")) {
             CURRENT_FILE = new File(Paths.get("").toAbsolutePath().toString());
@@ -85,12 +91,12 @@ public class FileExplorer {
     }
 
     public FileExplorer createNewFolder(String childName) {
-        FileManager.createDirectory(CURRENT_FILE, childName);
+        FileManager.makeDirs(CURRENT_FILE, childName);
         return this;
     }
 
     public FileExplorer createNewFile(String fileName) {
-        FileManager.createFile(CURRENT_FILE, fileName);
+        FileManager.makeFile(CURRENT_FILE, fileName);
         return this;
     }
 
@@ -117,6 +123,16 @@ public class FileExplorer {
         return this;
     }
 
+    public FileExplorer copyPaste(File file) {
+        FileManager.copy(file, getFile(file.getName()));
+        return this;
+    }
+
+    public FileExplorer copyPaste(File file, String name) {
+        FileManager.copy(file, getFile(name));
+        return this;
+    }
+
     public FileExplorer copyCurrentFile() {
         TEMP_FILES_LIST.clear();
         TEMP_FILES_LIST.add(getCurrentFile());
@@ -130,6 +146,16 @@ public class FileExplorer {
             TEMP_FILES_LIST.add(getFile(name));
         }
         setTransferStateCut();
+        return this;
+    }
+
+    public FileExplorer cutPaste(File file) {
+        FileManager.cut(file, getFile(file.getName()));
+        return this;
+    }
+
+    public FileExplorer cutPaste(File file, String name) {
+        FileManager.cut(file, getFile(name));
         return this;
     }
 
@@ -159,7 +185,7 @@ public class FileExplorer {
         if (getCurrentFile().isDirectory()) {
             if (getTransferState().equals("COPY")) {
                 for (File file : TEMP_FILES_LIST) {
-                    FileManager.copy(file, getCurrentFile(), newName);
+                    FileManager.copy(file, new File(getCurrentFile(), newName));
                 }
             } else if (getTransferState().equals("CUT")) {
                 for (File file : TEMP_FILES_LIST) {
@@ -199,7 +225,7 @@ public class FileExplorer {
         if (directory.isDirectory()) {
             if (getTransferState().equals("COPY")) {
                 for (File file : TEMP_FILES_LIST) {
-                    FileManager.copy(file, directory, newName);
+                    FileManager.copy(file, new File(directory, newName));
                 }
             } else if (getTransferState().equals("CUT")) {
                 for (File file : TEMP_FILES_LIST) {
@@ -260,23 +286,15 @@ public class FileExplorer {
                 return new FileExplorer(getFile(folderName));
             }
             throw new FileNotDirectoryException();
-
         }
         throw new FileNotFoundException();
     }
 
-    public FileExplorer openNonNullFolder(String folderName) throws FileNotDirectoryException {
-        if (getFile(folderName).exists()) {
-            if (getFile(folderName).isDirectory()) {
-                return new FileExplorer(getFile(folderName));
-            }
-            throw new FileNotDirectoryException();
-        } else {
-            if (getFile(folderName).mkdirs()) {
-                return openNonNullFolder(folderName);
-            }
+    public FileExplorer openOrCreateFolder(String folderName) {
+        if (FileManager.makeFileOrFolder(getFile(folderName))) {
+            return new FileExplorer(getFile(folderName));
         }
-        return null;
+        throw new Error("could not create folder: " + getFile(folderName).getAbsolutePath());
     }
 
     public FileExplorer exploreFile(String fileName) throws FileNotFoundException {
@@ -285,6 +303,19 @@ public class FileExplorer {
             CURRENT_FILE = getFile(fileName);
         } else {
             throw new FileNotFoundException();
+        }
+        return this;
+    }
+
+    public FileExplorer exploreOrCreateFile(String fileName) {
+        if (getFile(fileName).exists()) {
+            BACKWARD_STACK.push(getCurrentFile());
+            CURRENT_FILE = getFile(fileName);
+        } else {
+            if (FileManager.makeFileOrFolder(getFile(fileName))) {
+                return exploreOrCreateFile(fileName);
+            }
+            throw new Error("could not create file: " + getFile(fileName).getAbsolutePath());
         }
         return this;
     }
@@ -370,7 +401,6 @@ public class FileExplorer {
 
     public void forEachFileOrFolder(FileExplorer.FileProcess fileProcess) {
         Objects.requireNonNull(fileProcess);
-
         for (File file : getFileItems()) {
             fileProcess.process(file);
         }
@@ -378,19 +408,16 @@ public class FileExplorer {
 
     public void forEachFileInFolderAndSubFolders(final FileProcess fileProcess) {
         Objects.requireNonNull(fileProcess);
-
-        forEachSubFolder(file -> new FileExplorer(file).forEachFile(file1 -> fileProcess.process(file1)));
-
+        forEachSubFolder(file -> new FileExplorer(file).forEachFile(fileProcess));
     }
 
     public void forEachSubFolder(final FileProcess fileProcess) {
         Objects.requireNonNull(fileProcess);
-
         forEachFolder(new FileProcess() {
             private void action(File file) {
                 if (file != null) {
                     fileProcess.process(file);
-                    new FileExplorer(file).forEachFolder(file1 -> action(file1));
+                    new FileExplorer(file).forEachFolder(this::action);
                 }
             }
 
@@ -403,7 +430,6 @@ public class FileExplorer {
 
     public void forEachFile(final FileProcess fileProcess) {
         Objects.requireNonNull(fileProcess);
-
         forEachFileOrFolder(file -> {
             if (file.isFile()) {
                 fileProcess.process(file);
@@ -433,7 +459,7 @@ public class FileExplorer {
     }
 
     public void put(File file, String newName) {
-        FileManager.copy(file, CURRENT_FILE, newName);
+        put(new File(CURRENT_FILE, newName));
     }
 
     public void forEachFileOrFolderLike(final String pattern, final FileProcess fileProcess) {

@@ -23,6 +23,7 @@ public class Funcs {
 
     private static Printer printer = new Printer();
     private static Printer printerln = new Printer("", " ", "\n");
+
     private Funcs() {
     }
 
@@ -1030,6 +1031,15 @@ public class Funcs {
         return mapped;
     }
 
+    public static <T extends Map<K, V>, K, V, X, Y> Map<X, Y> map(T map, Mapper<Map.Entry<K, V>, Map.Entry<X, Y>> mapper) {
+        Map<X, Y> mapped = new HashMap<>();
+        for (Map.Entry<K, V> item : map.entrySet()) {
+            Map.Entry<X, Y> entry = mapper.map(item);
+            mapped.put(entry.getKey(), entry.getValue());
+        }
+        return mapped;
+    }
+
     public static <T extends Collection<K>, K> List<K> filter(T collection, Filterer<K> filterer) {
         List<K> filtered = new ArrayList<>();
         for (K item : collection) {
@@ -1050,6 +1060,16 @@ public class Funcs {
             }
         }
         return filtered;
+    }
+
+    public static <T extends Map<K, V>, K, V> Map<K, V> filter(T map, Filterer<Map.Entry<K, V>> filterer) {
+        Map<K, V> mapped = new HashMap<>();
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (filterer.filter(entry)) {
+                mapped.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return mapped;
     }
 
     public static <T extends Collection<K>, K> void forEach(T collection, Action<K> action) {
@@ -1081,6 +1101,15 @@ public class Funcs {
             }
         }
         return -1;
+    }
+
+    public static  <T extends Map<K, V>, K, V> K search(T map, Filterer<V> filterer) {
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (filterer.filter(entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     public static <K, V> List<V> map(K[] collection, Mapper<K, V> mapper) {
