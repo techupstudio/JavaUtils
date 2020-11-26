@@ -49,8 +49,8 @@ public class FileManager {
     public static boolean makeFile(File file) {
         try {
             return file.exists() || ((file.getParentFile() == null
-                            || file.getParentFile().exists()
-                            || file.getParentFile().mkdirs()) && file.createNewFile());
+                    || file.getParentFile().exists()
+                    || file.getParentFile().mkdirs()) && file.createNewFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -432,12 +432,12 @@ public class FileManager {
     public static String getExtension(String name) {
         if (name == null) {
             return null;
-        } else if (!name.contains(".")) {
-            return "";
-        } else if (name.lastIndexOf(".") == 0) {
+        } else if (!(name = name.trim()).contains(".")
+                || name.lastIndexOf(".") == 0
+                || name.lastIndexOf(".") == name.length() - 1) {
             return "";
         }
-        return name.substring(name.lastIndexOf("."));
+        return name.substring(name.lastIndexOf(".") + 1);
     }
 
     private static File makeCopiedFile(File sourceFile, File destinationFile, String name) {

@@ -1,7 +1,6 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable;
 
 
-import com.techupstudio.otc_chingy.mychurch.core.utils.caching.MemoryFileCache;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.Variable;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable.interfaces.BiDirectionalBindMethod;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable.interfaces.OnSetValueListener;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 public class ObservableVariable<V> extends Variable<V> {
@@ -78,7 +76,7 @@ public class ObservableVariable<V> extends Variable<V> {
             runOnValueChangedListeners(value, oldValue);
     }
 
-    private <X, Y> boolean equals(X o1, Y o2){
+    private <X, Y> boolean equals(X o1, Y o2) {
         if (o1 == o2) return true;
         if ((o1 == null || o2 == null) || o1.getClass() != o2.getClass()) return false;
         return o1.equals(o2);

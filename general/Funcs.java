@@ -1103,7 +1103,7 @@ public class Funcs {
         return -1;
     }
 
-    public static  <T extends Map<K, V>, K, V> K search(T map, Filterer<V> filterer) {
+    public static <T extends Map<K, V>, K, V> K search(T map, Filterer<V> filterer) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
             if (filterer.filter(entry.getValue())) {
                 return entry.getKey();

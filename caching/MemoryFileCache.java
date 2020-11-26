@@ -13,7 +13,64 @@ import androidx.annotation.NonNull;
 public class MemoryFileCache extends FileCache {
     private MemoryCache<String, FileCacheItem> memoryCache;
 
-    public static class FileCacheItem extends CacheItem{
+    public MemoryFileCache(@NonNull File cacheDirectory) {
+        super(cacheDirectory);
+        this.memoryCache = new MemoryCache<>();
+    }
+
+    public MemoryCache<String, FileCacheItem> getMemoryCache() {
+        return memoryCache;
+    }
+
+    ;
+
+    @Override
+    public boolean put(String key, File item) {
+        if (item != null && key != null
+                && memoryCache.containsKey(key)
+                && memoryCache.get(key) != null
+                && memoryCache.get(key).getFile() == item) {
+            return true;
+        }
+        memoryCache.put(key, new FileCacheItem(item));
+        return super.put(key, item);
+    }
+
+    @Override
+    public File get(String key) {
+        if (memoryCache.containsKey(key))
+            return memoryCache.get(key).getFile();
+        File file = super.get(key);
+        if (file != null)
+            memoryCache.put(key, new FileCacheItem(file));
+        return file;
+    }
+
+    @Override
+    public boolean remove(String key) {
+        memoryCache.remove(key);
+        return super.remove(key);
+    }
+
+    @Override
+    public void clear() {
+        memoryCache.clear();
+        super.clear();
+    }
+
+    @Override
+    public boolean putAll(Map<? extends String, ? extends File> map) {
+        memoryCache.putAll(Funcs.map(map, (entry) -> new MemoryCacheEntry(entry.getKey(), new FileCacheItem(entry.getValue()))));
+        return super.putAll(map);
+    }
+
+    @Override
+    public boolean putIfAbsent(String key, File item) {
+        memoryCache.putIfAbsent(key, new FileCacheItem(item));
+        return super.putIfAbsent(key, item);
+    }
+
+    public static class FileCacheItem extends CacheItem {
         private File file;
 
         public FileCacheItem(File file) {
@@ -62,13 +119,13 @@ public class MemoryFileCache extends FileCache {
             return key;
         }
 
+        public void setKey(String key) {
+            this.key = key;
+        }
+
         @Override
         public FileCacheItem getValue() {
             return value;
-        }
-
-        public void setKey(String key) {
-            this.key = key;
         }
 
         @Override
@@ -91,60 +148,5 @@ public class MemoryFileCache extends FileCache {
         public int hashCode() {
             return Objects.hash(key, value);
         }
-    };
-
-    public MemoryFileCache(@NonNull File cacheDirectory) {
-        super(cacheDirectory);
-        this.memoryCache = new MemoryCache<>();
-    }
-
-    public MemoryCache<String, FileCacheItem> getMemoryCache() {
-        return memoryCache;
-    }
-
-    @Override
-    public boolean put(String key, File item) {
-        if (item != null && key != null
-                && memoryCache.containsKey(key)
-                && memoryCache.get(key) != null
-                && memoryCache.get(key).getFile() == item){
-            return true;
-        }
-        memoryCache.put(key, new FileCacheItem(item));
-        return super.put(key, item);
-    }
-
-    @Override
-    public File get(String key) {
-        if (memoryCache.containsKey(key))
-            return memoryCache.get(key).getFile();
-        File file = super.get(key);
-        if (file != null)
-            memoryCache.put(key, new FileCacheItem(file));
-        return file;
-    }
-
-    @Override
-    public boolean remove(String key) {
-        memoryCache.remove(key);
-        return super.remove(key);
-    }
-
-    @Override
-    public void clear() {
-        memoryCache.clear();
-        super.clear();
-    }
-
-    @Override
-    public boolean putAll(Map<? extends String, ? extends File> map) {
-        memoryCache.putAll(Funcs.map(map, (entry) -> new MemoryCacheEntry(entry.getKey(), new FileCacheItem(entry.getValue()))));
-        return super.putAll(map);
-    }
-
-    @Override
-    public boolean putIfAbsent(String key, File item) {
-        memoryCache.putIfAbsent(key, new FileCacheItem(item));
-        return super.putIfAbsent(key, item);
     }
 }
