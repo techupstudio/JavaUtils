@@ -21,12 +21,12 @@ public final class Preconditions {
     }
 
     @NonNull
-    public static <T> T checkNotNull(@Nullable T arg) {
-        return checkNotNull(arg, "Argument must not be null");
+    public static <T> T checkNonNull(@Nullable T arg) {
+        return checkNonNull(arg, "Argument must not be null");
     }
 
     @NonNull
-    public static <T> T checkNotNull(@Nullable T arg, @NonNull String message) {
+    public static <T> T checkNonNull(@Nullable T arg, @NonNull String message) {
         if (arg == null) {
             throw new NullPointerException(message);
         }

@@ -5,7 +5,7 @@ import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.obser
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable.interfaces.OnValueChangedListener;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable.interfaces.UniDirectionalBindMethod;
 
-import org.jetbrains.annotations.NotNull;
+import androidx.annotation.NonNull;
 
 public class Binder<T, R> {
     private ObservableVariable<T> requester;
@@ -169,7 +169,7 @@ public class Binder<T, R> {
             receiver.removeOnValueChangedListener(receiverBindListener);
     }
 
-    @NotNull
+    @NonNull
     @Override
     public String toString() {
         return "Binder<" + requester + ": " + receiver + ">(" + (requesterBindListener == null ? "uni" : "bi") + "directional)";

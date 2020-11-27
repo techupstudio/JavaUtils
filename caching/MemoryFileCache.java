@@ -22,14 +22,12 @@ public class MemoryFileCache extends FileCache {
         return memoryCache;
     }
 
-    ;
-
     @Override
     public boolean put(String key, File item) {
         if (item != null && key != null
                 && memoryCache.containsKey(key)
                 && memoryCache.get(key) != null
-                && memoryCache.get(key).getFile() == item) {
+                && memoryCache.get(key).getItem() == item) {
             return true;
         }
         memoryCache.put(key, new FileCacheItem(item));
@@ -39,7 +37,7 @@ public class MemoryFileCache extends FileCache {
     @Override
     public File get(String key) {
         if (memoryCache.containsKey(key))
-            return memoryCache.get(key).getFile();
+            return memoryCache.get(key).getItem();
         File file = super.get(key);
         if (file != null)
             memoryCache.put(key, new FileCacheItem(file));
@@ -70,24 +68,15 @@ public class MemoryFileCache extends FileCache {
         return super.putIfAbsent(key, item);
     }
 
-    public static class FileCacheItem extends CacheItem {
-        private File file;
+    public static class FileCacheItem extends CacheItem<File> {
 
-        public FileCacheItem(File file) {
-            this.file = file;
-        }
-
-        public File getFile() {
-            return file;
-        }
-
-        public void setFile(File file) {
-            this.file = file;
+        public FileCacheItem(File item) {
+            super(item);
         }
 
         @Override
         public long getByteSize() {
-            return FileManager.sizeInBytes(file);
+            return FileManager.sizeInBytes(getItem());
         }
 
         @Override
@@ -95,12 +84,12 @@ public class MemoryFileCache extends FileCache {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             FileCacheItem that = (FileCacheItem) o;
-            return Objects.equals(file, that.file);
+            return Objects.equals(getItem(), that.getItem());
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(file);
+            return Objects.hash(getItem());
         }
     }
 

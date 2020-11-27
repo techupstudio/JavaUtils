@@ -6,7 +6,7 @@ import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Enumer
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Enumerator;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedAction;
 
-import org.jetbrains.annotations.NotNull;
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -224,7 +224,7 @@ public class Items<T> extends ArrayList<T> implements Enumerable<T> {
         return new Enumeration<T>(this);
     }
 
-    @NotNull
+    @NonNull
     public Items<T> clone() {
         return new Items<T>(new ArrayList<>(this));
     }

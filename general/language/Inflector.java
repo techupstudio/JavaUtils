@@ -27,7 +27,7 @@ package com.techupstudio.otc_chingy.mychurch.core.utils.general.language;
 
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Processor;
 
-import org.jetbrains.annotations.NotNull;
+import androidx.annotation.NonNull;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -695,7 +695,7 @@ public class Inflector {
             return false;
         }
 
-        @NotNull
+        @NonNull
         @Override
         public String toString() {
             return expression + ", " + replacement;
