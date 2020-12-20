@@ -1,8 +1,8 @@
-package com.techupstudio.otc_chingy.mychurch.core.utils.caching;
+package com.techupstudio.otc_chingy.mychurch.core.utils.caching.disk;
 
-import com.techupstudio.otc_chingy.mychurch.core.utils.caching.memory.CacheItem;
+import com.techupstudio.otc_chingy.mychurch.core.utils.caching.memory.MemoryCache;
+import com.techupstudio.otc_chingy.mychurch.core.utils.caching.memory.item.FileCacheItem;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs;
-import com.techupstudio.otc_chingy.mychurch.core.utils.io.FileManager;
 
 import java.io.File;
 import java.util.Map;
@@ -10,10 +10,10 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 
-public class MemoryFileCache extends FileCache {
+public class DiskMemoryFileCache extends DiskFileCache {
     private MemoryCache<String, FileCacheItem> memoryCache;
 
-    public MemoryFileCache(@NonNull File cacheDirectory) {
+    public DiskMemoryFileCache(@NonNull File cacheDirectory) {
         super(cacheDirectory);
         this.memoryCache = new MemoryCache<>();
     }
@@ -66,31 +66,6 @@ public class MemoryFileCache extends FileCache {
     public boolean putIfAbsent(String key, File item) {
         memoryCache.putIfAbsent(key, new FileCacheItem(item));
         return super.putIfAbsent(key, item);
-    }
-
-    public static class FileCacheItem extends CacheItem<File> {
-
-        public FileCacheItem(File item) {
-            super(item);
-        }
-
-        @Override
-        public long getByteSize() {
-            return FileManager.sizeInBytes(getItem());
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            FileCacheItem that = (FileCacheItem) o;
-            return Objects.equals(getItem(), that.getItem());
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(getItem());
-        }
     }
 
     public static class MemoryCacheEntry implements Map.Entry<String, FileCacheItem> {

@@ -1,4 +1,4 @@
-package com.techupstudio.otc_chingy.mychurch.core.utils.caching;
+package com.techupstudio.otc_chingy.mychurch.core.utils.caching.disk;
 
 import com.techupstudio.otc_chingy.mychurch.core.utils.caching.core.AbstractFileCache;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.testing.Preconditions;
@@ -11,12 +11,12 @@ import java.util.Set;
 
 import androidx.annotation.NonNull;
 
-public class FileCache extends AbstractFileCache<String> {
+public class DiskFileCache extends AbstractFileCache<String> {
 
     @NonNull
     private File cacheDirectory;
 
-    public FileCache(@NonNull File cacheDirectory) {
+    public DiskFileCache(@NonNull File cacheDirectory) {
         this.cacheDirectory = cacheDirectory;
         if (!cacheDirectory.exists()) {
             if (!cacheDirectory.mkdirs()) throw new Error("could not create cache directory!.");

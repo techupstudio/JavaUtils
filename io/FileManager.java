@@ -318,10 +318,10 @@ public class FileManager {
 
     public static boolean save(File sourceFile, File destinationFile, int bufferSize) {
         Preconditions.checkArgument(sourceFile != null, "Source file can't be null");
+        Preconditions.checkArgument(sourceFile.exists(), "Source file must exist!");
         Preconditions.checkArgument(sourceFile.isFile(), "Source file can't be a directory");
         Preconditions.checkArgument(destinationFile != null, "Destination file can't be null");
         Preconditions.checkArgument(destinationFile.isFile(), "Destination file can't be a directory");
-        Preconditions.checkArgument(sourceFile.exists(), "Source file must exist!");
         try {
             return save(new FileInputStream(sourceFile), new FileOutputStream(destinationFile), bufferSize);
         } catch (FileNotFoundException e) {

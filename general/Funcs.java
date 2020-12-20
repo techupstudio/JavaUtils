@@ -5,7 +5,9 @@ import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Filter
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedAction;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedFilterer;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedMapper;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Joiner;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.MapAction;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.MapFilterer;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Mapper;
 
 import java.util.ArrayList;
@@ -595,7 +597,7 @@ public class Funcs {
         Integer[] indexed = new Integer[len(obj)];
         for (int i : range(len(ret_arr))) {
             int index = randint(len(obj) - 1);
-            while (findIn(indexed, index) != -1) {
+            while (indexOf(indexed, index) != -1) {
                 index = randint(len(obj) - 1);
             }
             ret_arr.add(i, obj[index]);
@@ -1013,7 +1015,7 @@ public class Funcs {
     //##### General Functions #####
     //##### General Functions #####
 
-    public static <T extends Collection<K>, K, V> List<V> map(T collection, Mapper<K, V> mapper) {
+    public static <T extends Iterable<K>, K, V> List<V> map(T collection, Mapper<K, V> mapper) {
         List<V> mapped = new ArrayList<>();
         for (K item : collection) {
             mapped.add((mapper.map(item)));
@@ -1021,7 +1023,7 @@ public class Funcs {
         return mapped;
     }
 
-    public static <T extends Collection<K>, K, V> List<V> map(T collection, IndexedMapper<K, V> mapper) {
+    public static <T extends Iterable<K>, K, V> List<V> map(T collection, IndexedMapper<K, V> mapper) {
         int i = -1;
         List<V> mapped = new ArrayList<>();
         for (K item : collection) {
@@ -1040,7 +1042,7 @@ public class Funcs {
         return mapped;
     }
 
-    public static <T extends Collection<K>, K> List<K> filter(T collection, Filterer<K> filterer) {
+    public static <T extends Iterable<K>, K> List<K> filter(T collection, Filterer<K> filterer) {
         List<K> filtered = new ArrayList<>();
         for (K item : collection) {
             if (filterer.filter(item)) {
@@ -1050,7 +1052,7 @@ public class Funcs {
         return filtered;
     }
 
-    public static <T extends Collection<K>, K> List<K> filter(T collection, IndexedFilterer<K> filterer) {
+    public static <T extends Iterable<K>, K> List<K> filter(T collection, IndexedFilterer<K> filterer) {
         int i = -1;
         List<K> filtered = new ArrayList<>();
         for (K item : collection) {
@@ -1072,13 +1074,13 @@ public class Funcs {
         return mapped;
     }
 
-    public static <T extends Collection<K>, K> void forEach(T collection, Action<K> action) {
+    public static <T extends Iterable<K>, K> void forEach(T collection, Action<K> action) {
         for (K item : collection) {
             action.run(item);
         }
     }
 
-    public static <T extends Collection<K>, K> void forEach(T collection, IndexedAction<K> action) {
+    public static <T extends Iterable<K>, K> void forEach(T collection, IndexedAction<K> action) {
         int i = -1;
         for (K item : collection) {
             i++;
@@ -1092,7 +1094,7 @@ public class Funcs {
         }
     }
 
-    public static <T extends Collection<V>, V> int search(T collection, Filterer<V> filterer) {
+    public static <T extends Iterable<V>, V> int search(T collection, Filterer<V> filterer) {
         int i = -1;
         for (V item : collection) {
             i++;
@@ -1106,6 +1108,15 @@ public class Funcs {
     public static <T extends Map<K, V>, K, V> K search(T map, Filterer<V> filterer) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
             if (filterer.filter(entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    public static <T extends Map<K, V>, K, V> K search(T map, MapFilterer<K, V> filterer) {
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (filterer.filter(entry.getKey(), entry.getValue())) {
                 return entry.getKey();
             }
         }
@@ -1177,11 +1188,11 @@ public class Funcs {
         return -1;
     }
 
-    public static <T extends CharSequence> int findIn(T[] collection, T key, boolean matchCase) {
-        return findIn(Arrays.asList(collection), key, matchCase);
+    public static <T extends CharSequence> int indexOf(T[] collection, T key, boolean matchCase) {
+        return indexOf(Arrays.asList(collection), key, matchCase);
     }
 
-    public static <T extends CharSequence> int findIn(Collection<T> collection, T key, boolean matchCase) {
+    public static <T extends Iterable<V>, V extends CharSequence> int indexOf(T collection, V key, boolean matchCase) {
         if (matchCase) {
             return search(collection, (o) -> o.toString().equals(key.toString()));
         } else {
@@ -1189,7 +1200,7 @@ public class Funcs {
         }
     }
 
-    public static <T> int findIn(Collection<T> collection, T key) {
+    public static <T> int indexOf(Iterable<T> collection, T key) {
         int i = -1;
         for (T obj : collection) {
             i++;
@@ -1200,12 +1211,41 @@ public class Funcs {
         return -1;
     }
 
-    public static <T> int findIn(T[] collection, T key) {
-        return findIn(collection, key);
+    public static <T> int indexOf(T[] collection, T key) {
+        return indexOf(collection, key);
     }
 
-    public static <T> List<T> asList(Collection<T> collection) {
-        return new ArrayList<>(collection);
+    public static <T extends Iterable<V>, V, R> R join(T values, Joiner<V, R> joiner) {
+        R result = null;
+        for (V item : values) {
+            result = joiner.join(result, item);
+        }
+        return result;
+    }
+
+    public static <T, R> R join(T[] values, Joiner<T, R> joiner) {
+        R result = null;
+        for (T item : values) {
+            result = joiner.join(result, item);
+        }
+        return result;
+    }
+
+    public static <T extends Iterable<V>, V extends Number> double sum(T values) {
+        return join(values, (r, o) -> o.doubleValue() + o.doubleValue());
+    }
+
+    public static <V extends Number> double sum(V[] values) {
+        return join(values, (r, o) -> o.doubleValue() + o.doubleValue());
+    }
+
+    public static <T extends Iterable<V>, V> List<V> asList(T collection) {
+        return join(collection, (result, item) -> {
+            if (result == null)
+                result = new ArrayList<>();
+            result.add(item);
+            return result;
+        });
     }
 
     public static <T> List<T> asList(T[] collection) {

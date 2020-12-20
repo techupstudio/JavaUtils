@@ -1,4 +1,4 @@
-package com.techupstudio.otc_chingy.mychurch.core.utils.caching.memory;
+package com.techupstudio.otc_chingy.mychurch.core.utils.caching.memory.item;
 
 public abstract class CacheItem<T> {
     T item;
