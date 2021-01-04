@@ -29,6 +29,12 @@ public class Funcs {
     private Funcs() {
     }
 
+    //######    Printer    ######
+    //######    Printer    ######
+    //######    Printer    ######
+    //######    Printer    ######
+    //######    Printer    ######
+
     public static Scanner Scan() {
         return new Scanner(System.in);
     }
@@ -38,12 +44,6 @@ public class Funcs {
     public static <T> void print(T... objects) {
         printer.print(objects);
     }
-
-    //######    Printer    ######
-    //######    Printer    ######
-    //######    Printer    ######
-    //######    Printer    ######
-    //######    Printer    ######
 
     public static <T> void println(T... objects) {
         printerln.print(objects);
@@ -56,6 +56,18 @@ public class Funcs {
     public static <T> void println(Object object) {
         printerln.print(object);
     }
+
+    //##### End of Printers #####
+    //##### End of Printers #####
+    //##### End of Printers #####
+    //##### End of Printers #####
+    //##### End of Printers #####
+
+    //######  Input Functions  ######
+    //######  Input Functions  ######
+    //######  Input Functions  ######
+    //######  Input Functions  ######
+    //######  Input Functions  ######
 
     public static Integer inputInt(String show) {
         switch (show) {
@@ -77,12 +89,6 @@ public class Funcs {
         value = input.nextInt();
         return value;
     }
-
-    //##### End of Printers #####
-    //##### End of Printers #####
-    //##### End of Printers #####
-    //##### End of Printers #####
-    //##### End of Printers #####
 
     public static String inputStr(String show) {
         switch (show) {
@@ -195,17 +201,24 @@ public class Funcs {
         return value;
     }
 
-    //######  Input Functions  ######
-    //######  Input Functions  ######
-    //######  Input Functions  ######
-    //######  Input Functions  ######
-    //######  Input Functions  ######
+    //##### End of Input Functions #####
+    //##### End of Input Functions #####
+    //##### End of Input Functions #####
+    //##### End of Input Functions #####
+    //##### End of Input Functions #####
 
-    public static <T> Object dressNumber(T obj) {
-        if (obj.toString().contains(".0")) {
-            return toInteger(obj);
+
+    //#### Object Convertor Functions #####
+    //#### Object Convertor Functions #####
+    //#### Object Convertor Functions #####
+    //#### Object Convertor Functions #####
+    //#### Object Convertor Functions #####
+
+    public static <T> Object dressNumber(T number) {
+        if (number.toString().contains(".0")) {
+            return toInteger(number);
         }
-        return obj;
+        return number;
     }
 
     public static <T> String toString(T obj) {
@@ -224,38 +237,30 @@ public class Funcs {
             return 0;
         } else if (obj instanceof String) {
             return Integer.valueOf(obj.toString());
+        } else if (obj instanceof Number) {
+            return ((Number) obj).intValue();
         } else {
             return toRound(toDouble(obj));
         }
     }
 
     public static <T> Double toDouble(T obj) {
+        if (obj instanceof Number)
+            return ((Number) obj).doubleValue();
         return Double.valueOf(obj.toString());
     }
 
     public static Float toFloat(Object obj) {
+        if (obj instanceof Number)
+            return ((Number) obj).floatValue();
         return Float.valueOf(obj.toString());
     }
 
     public static <T> Boolean toBoolean(T obj) {
-        if (obj instanceof Integer) {
-            return !obj.toString().equals("0");
-        }
+        if (obj instanceof Number)
+            return obj.equals(0);
         return Boolean.valueOf(obj.toString());
     }
-
-    //##### End of Input Functions #####
-    //##### End of Input Functions #####
-    //##### End of Input Functions #####
-    //##### End of Input Functions #####
-    //##### End of Input Functions #####
-
-
-    //#### Object Convertor Functions #####
-    //#### Object Convertor Functions #####
-    //#### Object Convertor Functions #####
-    //#### Object Convertor Functions #####
-    //#### Object Convertor Functions #####
 
     public static <T> Integer toRound(T obj) {
         return (int) Math.round(toDouble(obj));
@@ -1239,6 +1244,46 @@ public class Funcs {
         return join(values, (r, o) -> o.doubleValue() + o.doubleValue());
     }
 
+    public static <T extends Iterable<V>, V extends Number> double max(T values) {
+        Number max = 0;
+        for (Number i : values) {
+            if (i.doubleValue() > max.doubleValue()) {
+                max = i;
+            }
+        }
+        return max.doubleValue();
+    }
+
+    public static <V extends Number> double max(V[] values) {
+        Number max = 0;
+        for (Number i : values) {
+            if (i.doubleValue() > max.doubleValue()) {
+                max = i;
+            }
+        }
+        return max.doubleValue();
+    }
+
+    public static <T extends Iterable<V>, V extends Number> double min(T values) {
+        Number max = 0;
+        for (Number i : values) {
+            if (i.doubleValue() < max.doubleValue()) {
+                max = i;
+            }
+        }
+        return max.doubleValue();
+    }
+
+    public static <V extends Number> double min(V[] values) {
+        Number max = 0;
+        for (Number i : values) {
+            if (i.doubleValue() < max.doubleValue()) {
+                max = i;
+            }
+        }
+        return max.doubleValue();
+    }
+
     public static <T extends Iterable<V>, V> List<V> asList(T collection) {
         return join(collection, (result, item) -> {
             if (result == null)
@@ -1446,13 +1491,11 @@ public class Funcs {
         }
 
         public void resume() {
-
             if (STATE.equals("paused")) {
                 STATE = "resume";
                 TIMER = new Timer();
                 TIMER.scheduleAtFixedRate(getStarterTask(), 0, 1);
             }
-
         }
 
         public int getTimeElapsed() {
