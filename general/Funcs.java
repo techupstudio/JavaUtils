@@ -1079,6 +1079,26 @@ public class Funcs {
         return mapped;
     }
 
+    public static void forRange(int start, int end, int step, Action<Integer> action) {
+        if (start < end){
+            for (int i=start;i<end;i+=step) {
+                action.run(i);
+            }
+        } else {
+            for (int i=start;i>end;i-=step) {
+                action.run(i);
+            }
+        }
+    }
+
+    public static void forRange(int start, int end, Action<Integer> action) {
+        forRange(start, end, 1, action);
+    }
+
+    public static void forRange(int end, Action<Integer> action) {
+        forRange(0, end, 1, action);
+    }
+
     public static <T extends Iterable<K>, K> void forEach(T collection, Action<K> action) {
         for (K item : collection) {
             action.run(item);
