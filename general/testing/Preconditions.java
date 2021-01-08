@@ -42,11 +42,101 @@ public final class Preconditions {
     }
 
     @NonNull
-    public static <T extends Collection<Y>, Y> T checkNotEmpty(@NonNull T collection) {
-        if (collection.isEmpty()) {
+    public static <T extends Collection<Y>, Y> T checkNotEmpty(@NonNull T objects) {
+        if (objects.isEmpty()) {
             throw new IllegalArgumentException("Must not be empty.");
         }
+        return objects;
+    }
+
+    @NonNull
+    public static <T> T[] checkNotEmpty(@NonNull T[] objects) {
+        if (objects.length == 0) {
+            throw new IllegalArgumentException("Must not be empty.");
+        }
+        return objects;
+    }
+
+    /**
+     * Validates that the value is true
+     * @param val object to test
+     */
+    public static void checkTrue(boolean val) {
+        if (!val)
+            throw new IllegalArgumentException("Must be true");
+    }
+
+    /**
+     * Validates that the value is true
+     * @param val object to test
+     * @param msg message to output if validation fails
+     */
+    public static void checkTrue(boolean val, String msg) {
+        if (!val)
+            throw new IllegalArgumentException(msg);
+    }
+
+    /**
+     * Validates that the value is false
+     * @param val object to test
+     */
+    public static void checkFalse(boolean val) {
+        if (val)
+            throw new IllegalArgumentException("Must be false");
+    }
+
+    /**
+     * Validates that the value is false
+     * @param val object to test
+     * @param msg message to output if validation fails
+     */
+    public static void checkFalse(boolean val, String msg) {
+        if (val)
+            throw new IllegalArgumentException(msg);
+    }
+
+    /**
+     * Validates that the array contains no null elements
+     * @param objects the array to test
+     */
+    public static <T> T[] checkNoNullElements(@NonNull T[] objects) {
+        return checkNoNullElements(objects, "Array must not contain any null objects");
+    }
+
+    /**
+     * Validates that the array contains no null elements
+     * @param objects the array to test
+     * @param msg message to output if validation fails
+     */
+    public static <T> T[] checkNoNullElements(@NonNull T[] objects, String msg) {
+        for (Object obj : objects)
+            if (obj == null)
+                throw new IllegalArgumentException(msg);
+        return objects;
+    }
+
+
+    /**
+     * Validates that the array contains no null elements
+     * @param collection the list to test
+     */
+    public static <T extends Collection<?>> T checkNoNullElements(@NonNull T collection) {
+        return checkNoNullElements(collection, "Array must not contain any null objects");
+    }
+
+    /**
+     * Validates that the array contains no null elements
+     * @param collection the list to test
+     * @param msg message to output if validation fails
+     */
+    public static <T extends Collection<?>> T checkNoNullElements(@NonNull T collection, String msg) {
+        for (Object obj : collection)
+            if (obj == null)
+                throw new IllegalArgumentException(msg);
         return collection;
     }
+
+
+
 }
 
