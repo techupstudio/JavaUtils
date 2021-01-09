@@ -15,12 +15,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.println;
 
 public class FileManager {
+
+    private static final DecimalFormat format = new DecimalFormat("#.##");
 
     public static final int DEFAULT_BUFFER_SIZE = 1024;
 
@@ -499,28 +502,45 @@ public class FileManager {
         return null;
     }
 
-    private static long sizeOfFile(File file, int pow) {
-        return (long) (file.length() / (Math.pow(DEFAULT_BUFFER_SIZE, pow)));
+    private static long sizeOfFile(long length, int pow) {
+        return (long) (length / (Math.pow(DEFAULT_BUFFER_SIZE, pow)));
     }
 
     public static long sizeInBytes(File file) {
-        return sizeOfFile(file, 0);
+        return sizeOfFile(file.length(), 0);
     }
 
     public static long sizeInKiloBytes(File file) {
-        return sizeOfFile(file, 1);
+        return sizeOfFile(file.length(), 1);
     }
 
     public static long sizeInMegaBytes(File file) {
-        return sizeOfFile(file, 2);
+        return sizeOfFile(file.length(), 2);
     }
 
     public static long sizeInGigaBytes(File file) {
-        return sizeOfFile(file, 3);
+        return sizeOfFile(file.length(), 3);
     }
 
     public static long sizeInTeraBytes(File file) {
-        return sizeOfFile(file, 4);
+        return sizeOfFile(file.length(), 4);
+    }
+
+
+    public static String getFileSizeText(long length) {
+        if (length > Math.pow(DEFAULT_BUFFER_SIZE, 4)) {
+            return format.format(sizeOfFile(length, 4)) + " TB";
+        }
+        if (length > Math.pow(DEFAULT_BUFFER_SIZE, 3)) {
+            return format.format(sizeOfFile(length, 3)) + " GB";
+        }
+        if (length > Math.pow(DEFAULT_BUFFER_SIZE, 2)) {
+            return format.format(sizeOfFile(length, 2)) + " MB";
+        }
+        if (length > Math.pow(DEFAULT_BUFFER_SIZE, 1)) {
+            return format.format(sizeOfFile(length, 1)) + " KB";
+        }
+        return format.format(length) + " B";
     }
 
 }
