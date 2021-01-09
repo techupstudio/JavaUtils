@@ -51,7 +51,7 @@ public class StatsArray extends Items<Double> {
     }
 
     public Object[] getShuffle() {
-        return shuffle(toDouble(toArray()));
+        return shuffle(toArray());
     }
 
     public Object[] getSample(int end_index) {

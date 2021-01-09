@@ -59,6 +59,7 @@ public final class Preconditions {
 
     /**
      * Validates that the value is true
+     *
      * @param val object to test
      */
     public static void checkTrue(boolean val) {
@@ -68,6 +69,7 @@ public final class Preconditions {
 
     /**
      * Validates that the value is true
+     *
      * @param val object to test
      * @param msg message to output if validation fails
      */
@@ -78,6 +80,7 @@ public final class Preconditions {
 
     /**
      * Validates that the value is false
+     *
      * @param val object to test
      */
     public static void checkFalse(boolean val) {
@@ -87,6 +90,7 @@ public final class Preconditions {
 
     /**
      * Validates that the value is false
+     *
      * @param val object to test
      * @param msg message to output if validation fails
      */
@@ -97,6 +101,7 @@ public final class Preconditions {
 
     /**
      * Validates that the array contains no null elements
+     *
      * @param objects the array to test
      */
     public static <T> T[] checkNoNullElements(@NonNull T[] objects) {
@@ -105,8 +110,9 @@ public final class Preconditions {
 
     /**
      * Validates that the array contains no null elements
+     *
      * @param objects the array to test
-     * @param msg message to output if validation fails
+     * @param msg     message to output if validation fails
      */
     public static <T> T[] checkNoNullElements(@NonNull T[] objects, String msg) {
         for (Object obj : objects)
@@ -118,6 +124,7 @@ public final class Preconditions {
 
     /**
      * Validates that the array contains no null elements
+     *
      * @param collection the list to test
      */
     public static <T extends Collection<?>> T checkNoNullElements(@NonNull T collection) {
@@ -126,8 +133,9 @@ public final class Preconditions {
 
     /**
      * Validates that the array contains no null elements
+     *
      * @param collection the list to test
-     * @param msg message to output if validation fails
+     * @param msg        message to output if validation fails
      */
     public static <T extends Collection<?>> T checkNoNullElements(@NonNull T collection, String msg) {
         for (Object obj : collection)
@@ -135,7 +143,6 @@ public final class Preconditions {
                 throw new IllegalArgumentException(msg);
         return collection;
     }
-
 
 
 }

@@ -9,10 +9,12 @@ import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Joiner
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.MapAction;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.MapFilterer;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Mapper;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.testing.Preconditions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +25,15 @@ import java.util.TimerTask;
 
 public class Funcs {
 
-    private static Printer printer = new Printer();
-    private static Printer printerln = new Printer("", " ", "\n");
+    private static Random r;
+    private static Printer printer;
+    private static Printer printerln;
+
+    static {
+        r = new Random();
+        printer = new Printer();
+        printerln = new Printer("", " ", "\n");
+    }
 
     private Funcs() {
     }
@@ -475,13 +484,11 @@ public class Funcs {
     }
 
     public static int randint() {
-        int random1 = randint((int) (random() * 100) + 1, (int) (random() * 1000) + 1);
-        int random2 = randint((int) (random() * 100) + 1, (int) (random() * 10000) + 1);
-        return randint((int) (random() * random1) + 1, (int) (random() * random2) + 1);
+        return r.nextInt();
     }
 
     public static int randint(int max) {
-        return randint(0, max);
+        return r.nextInt(max);
     }
 
     public static int randint(int min, int max) {
@@ -489,76 +496,57 @@ public class Funcs {
     }
 
     public static Integer[] range(int max) {
-        if (max < 0) {
-            return new Integer[]{};
-        }
-        Integer[] ret_range = new Integer[max];
-        for (int i = 0; i < max; i++) {
-            ret_range[i] = i;
-        }
-        return ret_range;
+        List<Integer> numbers = new ArrayList<>();
+        forRange(max, true, numbers::add);
+        return numbers.toArray(new Integer[0]);
     }
 
     public static Integer[] range(int min, int max) {
-        if (min < 0 || max < 0) {
-            return new Integer[]{};
-        }
-        int size = max - min;
-        Integer[] ret_range = new Integer[size];
-        for (int i = 0; i < size; i++) {
-            ret_range[i] = i + min;
-        }
-        return ret_range;
+        return range(min, max, false);
     }
 
     public static Integer[] range(int min, int max, int step) {
-        if (min < 0 || max < 0 || step < 0) {
-            return new Integer[]{};
-        }
-        List<Integer> ret_list = new ArrayList<>();
-        int i = 0;
-        while ((i + min + (i * (step - 1))) < max) {
-            ret_list.add(i + min + (i * (step - 1)));
-            i++;
-        }
+        return range(min, max, step, false);
+    }
 
-        Integer[] ret_range = new Integer[len(ret_list)];
-        return ret_list.toArray(ret_range);
+    public static Integer[] range(int min, int max, boolean canCountDown) {
+        List<Integer> numbers = new ArrayList<>();
+        forRange(min, max, canCountDown, numbers::add);
+        return numbers.toArray(new Integer[0]);
+    }
+
+    public static Integer[] range(int min, int max, int step, boolean canCountDown) {
+        List<Integer> numbers = new ArrayList<>();
+        forRange(min, max, step, canCountDown, numbers::add);
+        return numbers.toArray(new Integer[0]);
     }
 
     public static Integer[] randrange(int size) {
-        Integer[] ret_range = new Integer[size];
-        for (int i = 0; i < size; i++) {
-            ret_range[i] = randint();
-        }
-        return ret_range;
+        List<Integer> numbers = new ArrayList<>();
+        forRange(size, i -> numbers.add(randint()));
+        return numbers.toArray(new Integer[0]);
     }
 
     public static Integer[] randrange(int max, int size) {
-        Integer[] ret_range = new Integer[size];
-        for (int i = 0; i < size; i++) {
-            ret_range[i] = randint(max);
-        }
-        return ret_range;
+        List<Integer> numbers = new ArrayList<>();
+        forRange(size, i -> numbers.add(randint(max)));
+        return numbers.toArray(new Integer[0]);
     }
 
     public static Integer[] randrange(int min, int max, int size) {
-        Integer[] ret_range = new Integer[size];
-        for (int i = 0; i < size; i++) {
-            ret_range[i] = randint(min, max);
-        }
-        return ret_range;
+        List<Integer> numbers = new ArrayList<>();
+        forRange(size, i -> numbers.add(randint(min, max)));
+        return numbers.toArray(new Integer[0]);
     }
 
     public static <T> List<T> randsample(T[] list, int sample_size) {
         int size = len(list);
         if (sample_size < size) {
-            Random random = new Random();
             List<T> ret_sample = new ArrayList<>();
             List<Integer> indexes = Arrays.asList(range(size));
+            Collections.shuffle(indexes);
             for (int i = 0; i < sample_size; i++) {
-                int index = random.nextInt(indexes.size());
-                ret_sample.add(list[indexes.remove(index)]);
+                ret_sample.add(list[indexes.get(i)]);
             }
             return ret_sample;
         }
@@ -574,15 +562,11 @@ public class Funcs {
     }
 
     public static <T> List<T> randsample(Collection<T> list, int sample_size) {
-        int size = list.size();
-        if (sample_size < size) {
-            Random random = new Random();
+        if (sample_size < list.size()) {
             List<T> items = new ArrayList<>(list);
             List<T> ret_sample = new ArrayList<>();
-            List<Integer> indexes = Arrays.asList(range(size));
             for (int i = 0; i < sample_size; i++) {
-                int index = random.nextInt(indexes.size());
-                ret_sample.add(items.get(indexes.remove(index)));
+                ret_sample.add(items.remove(randint(items.size())));
             }
             return ret_sample;
         }
@@ -597,17 +581,9 @@ public class Funcs {
         return ret_sample;
     }
 
-    public static <T> T[] shuffle(T... obj) {
-        List<T> ret_arr = new ArrayList<T>();
-        Integer[] indexed = new Integer[len(obj)];
-        for (int i : range(len(ret_arr))) {
-            int index = randint(len(obj) - 1);
-            while (indexOf(indexed, index) != -1) {
-                index = randint(len(obj) - 1);
-            }
-            ret_arr.add(i, obj[index]);
-            indexed[i] = index;
-        }
+    public static <T> T[] shuffle(T[] obj) {
+        List<T> ret_arr = Arrays.asList(obj);
+        Collections.shuffle(ret_arr);
         return ret_arr.toArray(obj);
     }
 
@@ -1079,24 +1055,65 @@ public class Funcs {
         return mapped;
     }
 
-    public static void forRange(int start, int end, int step, Action<Integer> action) {
-        if (start < end){
-            for (int i=start;i<end;i+=step) {
+    public static void forRange(int start, boolean startInclusive, int end, boolean endInclusive, int step, boolean canCountDount, Action<Integer> action) {
+
+        Preconditions.checkTrue(step > 0, "step size must be a positive integer");
+
+        if (action == null) return;
+
+        int maxStep = Math.abs(Math.max(start, end) - Math.min(start, end));
+
+        if (start < end) {
+            if (step <= maxStep) {
+                if (!startInclusive)
+                    start += step;
+                if (endInclusive)
+                    end += step;
+            } else if (!startInclusive) {
+                return;
+            }
+
+            for (int i = start; i < end; i += step) {
                 action.run(i);
             }
-        } else {
-            for (int i=start;i>end;i-=step) {
+        } else if (canCountDount) {
+            if (step <= maxStep) {
+                if (!startInclusive)
+                    start -= step;
+                if (endInclusive)
+                    end -= step;
+            } else if (!startInclusive) {
+                return;
+            }
+
+            for (int i = start; i > end; i -= step) {
                 action.run(i);
             }
         }
     }
 
+    public static void forRange(int start, int end, int step, boolean canCountDown, Action<Integer> action) {
+        forRange(start, true, end, false, step, canCountDown, action);
+    }
+
+    public static void forRange(int start, int end, int step, Action<Integer> action) {
+        forRange(start, true, end, false, step, false, action);
+    }
+
+    public static void forRange(int start, int end, boolean canCountDown, Action<Integer> action) {
+        forRange(start, end, 1, canCountDown, action);
+    }
+
     public static void forRange(int start, int end, Action<Integer> action) {
-        forRange(start, end, 1, action);
+        forRange(start, end, false, action);
+    }
+
+    public static void forRange(int end, boolean canCountDown, Action<Integer> action) {
+        forRange(0, end, canCountDown, action);
     }
 
     public static void forRange(int end, Action<Integer> action) {
-        forRange(0, end, 1, action);
+        forRange(end, false, action);
     }
 
     public static <T extends Iterable<K>, K> void forEach(T collection, Action<K> action) {
