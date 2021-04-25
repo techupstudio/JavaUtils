@@ -23,9 +23,8 @@ import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.prin
 
 public class FileManager {
 
-    private static final DecimalFormat format = new DecimalFormat("#.##");
-
     public static final int DEFAULT_BUFFER_SIZE = 1024;
+    private static final DecimalFormat format = new DecimalFormat("#.##");
 
     private FileManager() {
     }
