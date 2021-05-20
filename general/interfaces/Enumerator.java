@@ -2,11 +2,11 @@ package com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces;
 
 import android.os.Build;
 
-import java.util.Iterator;
-import java.util.function.Consumer;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+
+import java.util.Iterator;
+import java.util.function.Consumer;
 
 public abstract class Enumerator<T> implements Iterable<T> {
 

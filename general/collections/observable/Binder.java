@@ -1,11 +1,11 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable;
 
 
+import androidx.annotation.NonNull;
+
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable.interfaces.BiDirectionalBindMethod;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable.interfaces.OnValueChangedListener;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable.interfaces.UniDirectionalBindMethod;
-
-import androidx.annotation.NonNull;
 
 public class Binder<T, R> {
     private ObservableVariable<T> requester;

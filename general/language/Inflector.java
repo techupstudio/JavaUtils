@@ -25,6 +25,8 @@ package com.techupstudio.otc_chingy.mychurch.core.utils.general.language;
  */
 
 
+import androidx.annotation.NonNull;
+
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Processor;
 
 import java.util.HashSet;
@@ -32,8 +34,6 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import androidx.annotation.NonNull;
 
 /**
  * Transforms words to singular, plural, humanized (human readable), underscore, camel case, or ordinal form. This is inspired by

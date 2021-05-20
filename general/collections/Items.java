@@ -1,5 +1,7 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
+import androidx.annotation.NonNull;
+
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Action;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Enumerable;
@@ -13,8 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
-import androidx.annotation.NonNull;
 
 import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
 

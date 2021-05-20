@@ -3,14 +3,14 @@ package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
 import android.os.Build;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Action;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 public class QueueList<T> extends Queue<T> implements Iterable<T> {
 

@@ -2,14 +2,14 @@ package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
 import android.os.Build;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Action;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedAction;
 
 import java.util.Iterator;
 import java.util.function.Consumer;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
 import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
