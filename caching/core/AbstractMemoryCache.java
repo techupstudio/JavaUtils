@@ -13,7 +13,7 @@ public abstract class AbstractMemoryCache<K, V> extends AbstractCache<K, V> {
     private static final String TAG = "MemoryCache";
 
     //Last argument true for LRU ordering
-    private Map<K, V> cache = Collections.synchronizedMap(
+    private final Map<K, V> cache = Collections.synchronizedMap(
             new LinkedHashMap<K, V>(10, 1.5f, true)
     );
 

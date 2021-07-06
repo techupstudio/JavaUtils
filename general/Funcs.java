@@ -25,9 +25,9 @@ import java.util.TimerTask;
 
 public class Funcs {
 
-    private static Random r;
-    private static Printer printer;
-    private static Printer printerln;
+    private static final Random r;
+    private static final Printer printer;
+    private static final Printer printerln;
 
     static {
         r = new Random();
@@ -1626,7 +1626,7 @@ public class Funcs {
 
     public static class MergeSort {
 
-        private Integer[] ARRAY;
+        private final Integer[] ARRAY;
 
         MergeSort(Integer[] array) {
             ARRAY = array;

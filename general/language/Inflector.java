@@ -51,8 +51,8 @@ public class Inflector {
      * {@link #getUncountables()}.
      */
     private final Set<String> uncountables = new HashSet<String>();
-    private LinkedList<Rule> plurals = new LinkedList<Rule>();
-    private LinkedList<Rule> singulars = new LinkedList<Rule>();
+    private final LinkedList<Rule> plurals = new LinkedList<Rule>();
+    private final LinkedList<Rule> singulars = new LinkedList<Rule>();
 
     public Inflector() {
         initialize();

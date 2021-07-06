@@ -8,8 +8,8 @@ import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.obser
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.observable.interfaces.UniDirectionalBindMethod;
 
 public class Binder<T, R> {
-    private ObservableVariable<T> requester;
-    private ObservableVariable<R> receiver;
+    private final ObservableVariable<T> requester;
+    private final ObservableVariable<R> receiver;
     private OnValueChangedListener<T> requesterBindListener;
     private OnValueChangedListener<R> receiverBindListener;
 

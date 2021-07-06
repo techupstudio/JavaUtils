@@ -25,7 +25,7 @@ public class APIAccessTask {
     private HttpURLConnection urlConnection;
     private List<KeyValuePair<String, String>> headerData, paramData;
     private JSONObject postData;
-    private String method;
+    private final String method;
     private int responseCode = HttpURLConnection.HTTP_OK;
     private String responseMessage;
     private OnRequestCompleteListener delegate;
@@ -200,9 +200,9 @@ public class APIAccessTask {
     }
 
     public static class APIResponseObject {
-        private int responseCode;
-        private String response;
-        private String responseMessage;
+        private final int responseCode;
+        private final String response;
+        private final String responseMessage;
 
         APIResponseObject(int responseCode, String responseMessage, String response) {
             this.responseMessage = responseMessage;

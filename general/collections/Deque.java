@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 public class Deque<T> implements Iterable<T> {
 
-    private Items<T> items;
+    private final Items<T> items;
 
     public Deque() {
         items = new Items<>();

@@ -6,8 +6,9 @@ public class Edge<T> {
 
     private Double weight;
     private boolean directed;
-    private T startpoint, endpoint;
-    private HashMap<Object, Object> properties;
+    private final T startpoint;
+    private final T endpoint;
+    private final HashMap<Object, Object> properties;
 
     public Edge(Vertice<T> startpoint, Vertice<T> endpoint) {
         this.startpoint = startpoint.getValue();

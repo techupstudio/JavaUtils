@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 public class Vertice<T> {
 
-    private T object;
-    private HashMap<Object, Object> properties;
+    private final T object;
+    private final HashMap<Object, Object> properties;
 
     public Vertice(T value) {
         this.object = value;

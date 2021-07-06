@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class ListGraph<T> extends Graph<T> {
 
-    private Map<T, VerticeEdge> adjList;
+    private final Map<T, VerticeEdge> adjList;
 
     public ListGraph() {
         super();
@@ -281,7 +281,7 @@ public class ListGraph<T> extends Graph<T> {
 
     public class VerticeEdge {
 
-        private KeyValuePair<Vertice<T>, List<Edge<T>>> data;
+        private final KeyValuePair<Vertice<T>, List<Edge<T>>> data;
 
         public VerticeEdge(Vertice<T> key, List<Edge<T>> value) {
             data = new KeyValuePair<>(key, value);

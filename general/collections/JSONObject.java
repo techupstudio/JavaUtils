@@ -18,7 +18,7 @@ import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toIn
 
 public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
 
-    private Dictionary<Object, Object> DATA = new Dictionary<>();
+    private final Dictionary<Object, Object> DATA = new Dictionary<>();
 
     private boolean isJsonString = false;
 

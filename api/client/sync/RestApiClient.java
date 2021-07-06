@@ -386,9 +386,9 @@ public class RestApiClient {
     }
 
     public static class APIResponseObject {
-        private int responseCode;
-        private String response;
-        private String responseMessage;
+        private final int responseCode;
+        private final String response;
+        private final String responseMessage;
 
         APIResponseObject(int responseCode, String responseMessage, String response) {
             this.responseMessage = responseMessage;

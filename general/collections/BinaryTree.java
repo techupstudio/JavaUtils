@@ -11,7 +11,7 @@ public class BinaryTree<T> {
 
     private Node<T> HEAD;
 
-    private List<Node<T>> nodeList = new ArrayList<>();
+    private final List<Node<T>> nodeList = new ArrayList<>();
 
     private Comparator<T> comparator;
 

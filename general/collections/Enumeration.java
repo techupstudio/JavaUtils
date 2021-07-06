@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Enumeration<T> extends Enumerator<T> {
 
-    private int type;
+    private final int type;
 
     private List<T> tList;
     private LinkedList<T> tLinkedList;

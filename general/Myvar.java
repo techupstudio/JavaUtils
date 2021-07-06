@@ -23,9 +23,9 @@ public class Myvar implements Cloneable {
     private boolean wlooperStatus = false;
     private int looper = 0;
     private String isRun = "";
-    private Map<String, Object> varcontainer = new HashMap<>();
-    private Map<String, Object[]> arrcontainer = new HashMap<>();
-    private Funcs.Printer MyPrinter = new Funcs.Printer();
+    private final Map<String, Object> varcontainer = new HashMap<>();
+    private final Map<String, Object[]> arrcontainer = new HashMap<>();
+    private final Funcs.Printer MyPrinter = new Funcs.Printer();
 
     public Myvar() {
     }

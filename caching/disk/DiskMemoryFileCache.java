@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class DiskMemoryFileCache extends DiskFileCache {
-    private MemoryCache<String, FileCacheItem> memoryCache;
+    private final MemoryCache<String, FileCacheItem> memoryCache;
 
     public DiskMemoryFileCache(@NonNull File cacheDirectory) {
         super(cacheDirectory);
