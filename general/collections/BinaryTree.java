@@ -9,10 +9,8 @@ import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toDo
 
 public class BinaryTree<T> {
 
-    private Node<T> HEAD;
-
     private final List<Node<T>> nodeList = new ArrayList<>();
-
+    private Node<T> HEAD;
     private Comparator<T> comparator;
 
     public BinaryTree(Comparator<T> comparator) {

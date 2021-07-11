@@ -4,11 +4,11 @@ import java.util.HashMap;
 
 public class Edge<T> {
 
-    private Double weight;
-    private boolean directed;
     private final T startpoint;
     private final T endpoint;
     private final HashMap<Object, Object> properties;
+    private Double weight;
+    private boolean directed;
 
     public Edge(Vertice<T> startpoint, Vertice<T> endpoint) {
         this.startpoint = startpoint.getValue();

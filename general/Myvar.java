@@ -17,15 +17,15 @@ import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.repe
 
 public class Myvar implements Cloneable {
 
+    private final Map<String, Object> varcontainer = new HashMap<>();
+    private final Map<String, Object[]> arrcontainer = new HashMap<>();
+    private final Funcs.Printer MyPrinter = new Funcs.Printer();
     private Object obj;
     private Object[] arrobj;
     private boolean BoolStatus = false;
     private boolean wlooperStatus = false;
     private int looper = 0;
     private String isRun = "";
-    private final Map<String, Object> varcontainer = new HashMap<>();
-    private final Map<String, Object[]> arrcontainer = new HashMap<>();
-    private final Funcs.Printer MyPrinter = new Funcs.Printer();
 
     public Myvar() {
     }

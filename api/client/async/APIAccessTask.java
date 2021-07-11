@@ -21,11 +21,11 @@ import java.util.List;
 //extends async_task<String,Void,APIResponseObject>
 
 public class APIAccessTask {
+    private final String method;
     private String requestUrl;
     private HttpURLConnection urlConnection;
     private List<KeyValuePair<String, String>> headerData, paramData;
     private JSONObject postData;
-    private final String method;
     private int responseCode = HttpURLConnection.HTTP_OK;
     private String responseMessage;
     private OnRequestCompleteListener delegate;
