@@ -275,6 +275,8 @@ public class Funcs {
         return (int) Math.round(toDouble(obj));
     }
 
+    @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> int[] toInteger(T... obj) {
         int[] retArr = new int[len(obj)];
         for (int i = 0; i < len(obj); i++) {
@@ -283,6 +285,8 @@ public class Funcs {
         return retArr;
     }
 
+    @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> int[] toRound(T... obj) {
         int[] retArr = new int[len(obj)];
         for (int i = 0; i < len(obj); i++) {
@@ -291,6 +295,8 @@ public class Funcs {
         return retArr;
     }
 
+    @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> double[] toDouble(T... obj) {
         double[] retArr = new double[len(obj)];
         for (int i = 0; i < len(obj); i++) {
@@ -299,6 +305,8 @@ public class Funcs {
         return retArr;
     }
 
+    @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> float[] toFloat(T... obj) {
         float[] retArr = new float[len(obj)];
         for (int i = 0; i < len(obj); i++) {
@@ -307,6 +315,8 @@ public class Funcs {
         return retArr;
     }
 
+    @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> boolean[] toBoolean(T... obj) {
         boolean[] retArr = new boolean[len(obj)];
         for (int i = 0; i < len(obj); i++) {
@@ -315,6 +325,8 @@ public class Funcs {
         return retArr;
     }
 
+    @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> char[] toCharacter(T... obj) {
         char[] retArr = new char[len(obj)];
         for (int i = 0; i < len(obj); i++) {
@@ -323,6 +335,8 @@ public class Funcs {
         return retArr;
     }
 
+    @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> String[] toString(T... obj) {
         String[] retArr = new String[len(obj)];
         for (int i = 0; i < len(obj); i++) {
@@ -463,7 +477,8 @@ public class Funcs {
         return dressNumber(lcm);
     }
 
-    public static Object getHCF(Double[] numbers) {
+    @SuppressWarnings("varargs")
+    public static Object getHCF(Double ...numbers) {
         double hcf = toDouble(getHCF(numbers[0], numbers[1]));
         for (int i : range(2, numbers.length)) {
             hcf = toDouble(getHCF(hcf, numbers[i]));
@@ -471,7 +486,8 @@ public class Funcs {
         return dressNumber(hcf);
     }
 
-    public static Object getLCM(Double[] numbers) {
+    @SuppressWarnings("varargs")
+    public static Object getLCM(Double ...numbers) {
         double lcm = toDouble(getHCF(numbers[0], numbers[1]));
         for (int i : range(2, numbers.length)) {
             lcm = toDouble(getLCM(lcm, numbers[i]));
@@ -581,13 +597,16 @@ public class Funcs {
         return ret_sample;
     }
 
-    public static <T> T[] shuffle(T[] obj) {
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    public static <T> T[] shuffle(T ...obj) {
         List<T> ret_arr = Arrays.asList(obj);
         Collections.shuffle(ret_arr);
         return ret_arr.toArray(obj);
     }
 
-    public static Integer[] swapSort(Integer[] array) {
+    @SuppressWarnings("varargs")
+    public static Integer[] swapSort(Integer ...array) {
         if (len(array) > 1) {
             for (int i : range(len(array)))
                 for (int j : range(1, len(array) - i))
@@ -597,7 +616,9 @@ public class Funcs {
         return array;
     }
 
-    public static Integer[] pushSort(Integer[] obj) {
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    public static Integer[] pushSort(Integer ...obj) {
         if (len(obj) > 1) {
             for (int i : range(len(obj))) {
                 for (int j : range(1, len(obj))) {
@@ -953,15 +974,17 @@ public class Funcs {
         return reversed_line.toString();
     }
 
-    public static Object[] reverse(Object[] objs) {
-        Object[] reversed_obj = new Object[len(objs)];
-        for (int i = len(objs); i > 0; i--) {
-            reversed_obj[len(objs) - i] = objs[i - 1];
+    @SuppressWarnings("varargs")
+    public static Object[] reverse(Object ...objects) {
+        Object[] reversed_obj = new Object[len(objects)];
+        for (int i = len(objects); i > 0; i--) {
+            reversed_obj[len(objects) - i] = objects[i - 1];
         }
         return reversed_obj;
     }
 
-    public static Integer[] reverse(Integer[] list) {
+    @SuppressWarnings("varargs")
+    public static Integer[] reverse(Integer ...list) {
         Integer[] result = new Integer[len(list)];
         for (int i = 0, j = result.length - 1; i < len(list); i++, j--) {
             result[j] = list[i];
@@ -1277,7 +1300,9 @@ public class Funcs {
         return join(values, (r, o) -> o.doubleValue() + o.doubleValue());
     }
 
-    public static <V extends Number> double sum(V[] values) {
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    public static <V extends Number> double sum(V ...values) {
         return join(values, (r, o) -> o.doubleValue() + o.doubleValue());
     }
 
@@ -1291,7 +1316,9 @@ public class Funcs {
         return max.doubleValue();
     }
 
-    public static <V extends Number> double max(V[] values) {
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    public static <V extends Number> double max(V ...values) {
         Number max = 0;
         for (Number i : values) {
             if (i.doubleValue() > max.doubleValue()) {
@@ -1311,7 +1338,9 @@ public class Funcs {
         return max.doubleValue();
     }
 
-    public static <V extends Number> double min(V[] values) {
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    public static <V extends Number> double min(V ...values) {
         Number max = 0;
         for (Number i : values) {
             if (i.doubleValue() < max.doubleValue()) {
@@ -1330,8 +1359,27 @@ public class Funcs {
         });
     }
 
-    public static <T> List<T> asList(T[] collection) {
-        return Arrays.asList(collection);
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    public static <T> List<T> asList(T ...items) {
+        return Arrays.asList(items);
+    }
+
+    public static <K, V> Map<K, V> asMap(K key, V value, Object ...keyValueSequence) {
+        if (keyValueSequence.length % 2 != 0)
+            throw new Error("Error: parameter keyValueSequence must be a sequence of key, value items.");
+        Map<K, V> result = new HashMap<>();
+        result.put(key, value);
+        K tempKey = null;
+        for (Object i : keyValueSequence){
+            if (tempKey == null) {
+                tempKey = (K) i;
+            } else {
+                result.put(tempKey, (V) i);
+                tempKey = null;
+            }
+        }
+        return result;
     }
 
     public static class Printer {
