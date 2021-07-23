@@ -1,11 +1,13 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general;
 
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.Variable;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Action;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Filterer;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedAction;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedFilterer;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedMapper;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Joiner;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedJoiner;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.MapAction;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.MapFilterer;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Mapper;
@@ -1148,8 +1150,7 @@ public class Funcs {
     public static <T extends Iterable<K>, K> void forEach(T collection, IndexedAction<K> action) {
         int i = -1;
         for (K item : collection) {
-            i++;
-            action.run(i, item);
+            action.run(++i, item);
         }
     }
 
@@ -1296,14 +1297,26 @@ public class Funcs {
         return result;
     }
 
+    public static <T extends Iterable<V>, V, R> R join(T values, IndexedJoiner<V, R> joiner) {
+        Variable<R> result = new Variable<>();
+        forEach(values, (i, item) -> result.setValue(joiner.join(result.getValue(), item, i)));
+        return result.getValue();
+    }
+
+    public static <T, R> R join(T[] values, IndexedJoiner<T, R> joiner) {
+        Variable<R> result = new Variable<>();
+        forEach(values, (i, item) -> result.setValue(joiner.join(result.getValue(), item, i)));
+        return result.getValue();
+    }
+
     public static <T extends Iterable<V>, V extends Number> double sum(T values) {
-        return join(values, (r, o) -> o.doubleValue() + o.doubleValue());
+        return join(values, (r, o) -> o.doubleValue() + (r == null ? 0 : r));
     }
 
     @SafeVarargs
     @SuppressWarnings("varargs")
     public static <V extends Number> double sum(V ...values) {
-        return join(values, (r, o) -> o.doubleValue() + o.doubleValue());
+        return join(values, (r, o) -> o.doubleValue() + (r == null ? 0 : r));
     }
 
     public static <T extends Iterable<V>, V extends Number> double max(T values) {
@@ -1352,8 +1365,7 @@ public class Funcs {
 
     public static <T extends Iterable<V>, V> List<V> asList(T collection) {
         return join(collection, (result, item) -> {
-            if (result == null)
-                result = new ArrayList<>();
+            if (result == null) result = new ArrayList<>();
             result.add(item);
             return result;
         });
