@@ -5,9 +5,9 @@ import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Action
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Filterer;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedAction;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedFilterer;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedJoiner;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedMapper;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Joiner;
-import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.IndexedJoiner;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.MapAction;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.MapFilterer;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Mapper;
@@ -480,7 +480,7 @@ public class Funcs {
     }
 
     @SuppressWarnings("varargs")
-    public static Object getHCF(Double ...numbers) {
+    public static Object getHCF(Double... numbers) {
         double hcf = toDouble(getHCF(numbers[0], numbers[1]));
         for (int i : range(2, numbers.length)) {
             hcf = toDouble(getHCF(hcf, numbers[i]));
@@ -489,7 +489,7 @@ public class Funcs {
     }
 
     @SuppressWarnings("varargs")
-    public static Object getLCM(Double ...numbers) {
+    public static Object getLCM(Double... numbers) {
         double lcm = toDouble(getHCF(numbers[0], numbers[1]));
         for (int i : range(2, numbers.length)) {
             lcm = toDouble(getLCM(lcm, numbers[i]));
@@ -601,14 +601,14 @@ public class Funcs {
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <T> T[] shuffle(T ...obj) {
+    public static <T> T[] shuffle(T... obj) {
         List<T> ret_arr = Arrays.asList(obj);
         Collections.shuffle(ret_arr);
         return ret_arr.toArray(obj);
     }
 
     @SuppressWarnings("varargs")
-    public static Integer[] swapSort(Integer ...array) {
+    public static Integer[] swapSort(Integer... array) {
         if (len(array) > 1) {
             for (int i : range(len(array)))
                 for (int j : range(1, len(array) - i))
@@ -620,7 +620,7 @@ public class Funcs {
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static Integer[] pushSort(Integer ...obj) {
+    public static Integer[] pushSort(Integer... obj) {
         if (len(obj) > 1) {
             for (int i : range(len(obj))) {
                 for (int j : range(1, len(obj))) {
@@ -977,7 +977,7 @@ public class Funcs {
     }
 
     @SuppressWarnings("varargs")
-    public static Object[] reverse(Object ...objects) {
+    public static Object[] reverse(Object... objects) {
         Object[] reversed_obj = new Object[len(objects)];
         for (int i = len(objects); i > 0; i--) {
             reversed_obj[len(objects) - i] = objects[i - 1];
@@ -986,7 +986,7 @@ public class Funcs {
     }
 
     @SuppressWarnings("varargs")
-    public static Integer[] reverse(Integer ...list) {
+    public static Integer[] reverse(Integer... list) {
         Integer[] result = new Integer[len(list)];
         for (int i = 0, j = result.length - 1; i < len(list); i++, j--) {
             result[j] = list[i];
@@ -1315,7 +1315,7 @@ public class Funcs {
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <V extends Number> double sum(V ...values) {
+    public static <V extends Number> double sum(V... values) {
         return join(values, (r, o) -> o.doubleValue() + (r == null ? 0 : r));
     }
 
@@ -1331,7 +1331,7 @@ public class Funcs {
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <V extends Number> double max(V ...values) {
+    public static <V extends Number> double max(V... values) {
         Number max = 0;
         for (Number i : values) {
             if (i.doubleValue() > max.doubleValue()) {
@@ -1353,7 +1353,7 @@ public class Funcs {
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <V extends Number> double min(V ...values) {
+    public static <V extends Number> double min(V... values) {
         Number max = 0;
         for (Number i : values) {
             if (i.doubleValue() < max.doubleValue()) {
@@ -1373,17 +1373,17 @@ public class Funcs {
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <T> List<T> asList(T ...items) {
+    public static <T> List<T> asList(T... items) {
         return Arrays.asList(items);
     }
 
-    public static <K, V> Map<K, V> asMap(K key, V value, Object ...keyValueSequence) {
+    public static <K, V> Map<K, V> asMap(K key, V value, Object... keyValueSequence) {
         if (keyValueSequence.length % 2 != 0)
             throw new Error("Error: parameter keyValueSequence must be a sequence of key, value items.");
         Map<K, V> result = new HashMap<>();
         result.put(key, value);
         K tempKey = null;
-        for (Object i : keyValueSequence){
+        for (Object i : keyValueSequence) {
             if (tempKey == null) {
                 tempKey = (K) i;
             } else {
