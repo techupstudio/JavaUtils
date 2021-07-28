@@ -1,5 +1,6 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general;
 
+import com.techupstudio.otc_chingy.mychurch.core.utilities.Utility;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.Variable;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Action;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Filterer;
@@ -1284,7 +1285,7 @@ public class Funcs {
     public static <T extends Iterable<V>, V, R> R join(T values, Joiner<V, R> joiner) {
         R result = null;
         for (V item : values) {
-            result = joiner.join(result, item);
+            result = joiner.join(item, result);
         }
         return result;
     }
@@ -1292,79 +1293,79 @@ public class Funcs {
     public static <T, R> R join(T[] values, Joiner<T, R> joiner) {
         R result = null;
         for (T item : values) {
-            result = joiner.join(result, item);
+            result = joiner.join(item, result);
         }
         return result;
     }
 
     public static <T extends Iterable<V>, V, R> R join(T values, IndexedJoiner<V, R> joiner) {
         Variable<R> result = new Variable<>();
-        forEach(values, (i, item) -> result.setValue(joiner.join(result.getValue(), item, i)));
+        forEach(values, (i, item) -> result.setValue(joiner.join(item, i, result.getValue())));
         return result.getValue();
     }
 
     public static <T, R> R join(T[] values, IndexedJoiner<T, R> joiner) {
         Variable<R> result = new Variable<>();
-        forEach(values, (i, item) -> result.setValue(joiner.join(result.getValue(), item, i)));
+        forEach(values, (i, item) -> result.setValue(joiner.join(item, i, result.getValue())));
         return result.getValue();
     }
 
-    public static <T extends Iterable<V>, V extends Number> double sum(T values) {
-        return join(values, (r, o) -> o.doubleValue() + (r == null ? 0 : r));
+    public static <T extends Iterable<V>, V extends Number> Number sum(T values) {
+        return join(values, (i, r) -> i.doubleValue() + (r == null ? 0 : r).doubleValue());
     }
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <V extends Number> double sum(V... values) {
-        return join(values, (r, o) -> o.doubleValue() + (r == null ? 0 : r));
+    public static <V extends Number> Number sum(V... values) {
+        return join(values, (i, r) -> i.doubleValue() + (r == null ? 0 : r).doubleValue());
     }
 
-    public static <T extends Iterable<V>, V extends Number> double max(T values) {
+    public static <T extends Iterable<V>, V extends Number> Number max(T values) {
         Number max = 0;
         for (Number i : values) {
             if (i.doubleValue() > max.doubleValue()) {
                 max = i;
             }
         }
-        return max.doubleValue();
+        return max;
     }
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <V extends Number> double max(V... values) {
+    public static <V extends Number> Number max(V... values) {
         Number max = 0;
         for (Number i : values) {
             if (i.doubleValue() > max.doubleValue()) {
                 max = i;
             }
         }
-        return max.doubleValue();
+        return max;
     }
 
-    public static <T extends Iterable<V>, V extends Number> double min(T values) {
+    public static <T extends Iterable<V>, V extends Number> Number min(T values) {
         Number max = 0;
         for (Number i : values) {
             if (i.doubleValue() < max.doubleValue()) {
                 max = i;
             }
         }
-        return max.doubleValue();
+        return max;
     }
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <V extends Number> double min(V... values) {
+    public static <V extends Number> Number min(V... values) {
         Number max = 0;
         for (Number i : values) {
             if (i.doubleValue() < max.doubleValue()) {
                 max = i;
             }
         }
-        return max.doubleValue();
+        return max;
     }
 
     public static <T extends Iterable<V>, V> List<V> asList(T collection) {
-        return join(collection, (result, item) -> {
+        return join(collection, (item, result) -> {
             if (result == null) result = new ArrayList<>();
             result.add(item);
             return result;
