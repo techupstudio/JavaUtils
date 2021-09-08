@@ -2,12 +2,12 @@ package com.techupstudio.otc_chingy.mychurch.core.utils.api;
 
 //takes am address, and post data, and returns the html as a string
 
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.println;
+
 import com.techupstudio.otc_chingy.mychurch.core.utils.api.client.sync.RestApiClient;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.JSONObject;
 
 import java.net.HttpURLConnection;
-
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.println;
 
 public class Main {
 

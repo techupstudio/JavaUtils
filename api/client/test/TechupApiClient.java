@@ -1,9 +1,9 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.api.client.test;
 
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.println;
+
 import com.techupstudio.otc_chingy.mychurch.core.utils.api.client.sync.RestApiClient;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.JSONObject;
-
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.println;
 
 public class TechupApiClient {
 

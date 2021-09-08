@@ -1,5 +1,12 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toBoolean;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toCharacter;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toDouble;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toFloat;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toInteger;
+
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.MapAction;
 
@@ -8,13 +15,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toBoolean;
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toCharacter;
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toDouble;
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toFloat;
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toInteger;
 
 public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
 

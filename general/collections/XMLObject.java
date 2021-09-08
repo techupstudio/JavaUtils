@@ -1,9 +1,9 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
 
 public class XMLObject {
 

@@ -1,14 +1,14 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.shuffle;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toDouble;
+
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.shuffle;
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toDouble;
 
 public class StatsArray extends Items<Double> {
 

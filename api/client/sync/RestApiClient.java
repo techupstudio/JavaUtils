@@ -1,5 +1,8 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.api.client.sync;
 
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
+
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.JSONObject;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.KeyValuePair;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.XMLObject;
@@ -12,9 +15,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
 
 public class RestApiClient {
 

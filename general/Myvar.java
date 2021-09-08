@@ -1,5 +1,7 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general;
 
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.repeatString;
+
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -7,8 +9,6 @@ import androidx.annotation.RequiresApi;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.repeatString;
 
 //interface Command{
 //    void function ();

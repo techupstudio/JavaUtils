@@ -1,5 +1,7 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
+
 import android.os.Build;
 
 import androidx.annotation.NonNull;
@@ -12,8 +14,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
-
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
 
 
 public class StackList<T> extends Stack<T> implements Iterable<T> {

@@ -1,5 +1,7 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
+
 import androidx.annotation.NonNull;
 
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs;
@@ -15,8 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
 
 public class Items<T> extends ArrayList<T> implements Enumerable<T> {
 

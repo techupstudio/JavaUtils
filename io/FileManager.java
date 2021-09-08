@@ -1,5 +1,7 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.io;
 
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.println;
+
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs;
 import com.techupstudio.otc_chingy.mychurch.core.utils.general.testing.Preconditions;
 
@@ -18,8 +20,6 @@ import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.println;
 
 public class FileManager {
 

@@ -1,11 +1,11 @@
 package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
 import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.print;
 import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toDouble;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BinaryTree<T> {
 
