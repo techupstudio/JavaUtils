@@ -1394,6 +1394,43 @@ public class Funcs {
         return result;
     }
 
+    public static <T> T getItemAt(T[] collection, int index, boolean isAllowNegativeIndex) {
+        if (collection == null)
+            throw new NullPointerException("collection must not be null");
+        if (index < 0){
+            if (isAllowNegativeIndex){
+                return collection[collection.length - index];
+            } else {
+                throw new IndexOutOfBoundsException();
+            }
+        } else {
+            return collection[index];
+        }
+    }
+
+    public static <T> T getItemAt(Collection<T> collection, int index, boolean isAllowNegativeIndex) {
+        if (collection == null)
+            throw new NullPointerException("collection must not be null");
+
+        if (index < 0){
+            if (isAllowNegativeIndex){
+                return new ArrayList<T>(collection).get(collection.size() - (index));
+            } else {
+                throw new IndexOutOfBoundsException();
+            }
+        } else {
+            return asList(collection).get(index);
+        }
+    }
+
+    public static <T> T getItemAt(Collection<T> collection, int index) {
+        return getItemAt(collection, index, false);
+    }
+
+    public static <T> T getItemAt(T[] collection, int index) {
+        return getItemAt(collection, index, false);
+    }
+
     public static class Printer {
         /**
          * This class makes using printStream very easy
