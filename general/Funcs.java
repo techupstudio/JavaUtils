@@ -1397,8 +1397,8 @@ public class Funcs {
     public static <T> T getItemAt(T[] collection, int index, boolean isAllowNegativeIndex) {
         if (collection == null)
             throw new NullPointerException("collection must not be null");
-        if (index < 0){
-            if (isAllowNegativeIndex){
+        if (index < 0) {
+            if (isAllowNegativeIndex) {
                 return collection[collection.length - index];
             } else {
                 throw new IndexOutOfBoundsException();
@@ -1412,8 +1412,8 @@ public class Funcs {
         if (collection == null)
             throw new NullPointerException("collection must not be null");
 
-        if (index < 0){
-            if (isAllowNegativeIndex){
+        if (index < 0) {
+            if (isAllowNegativeIndex) {
                 return new ArrayList<T>(collection).get(collection.size() - (index));
             } else {
                 throw new IndexOutOfBoundsException();
