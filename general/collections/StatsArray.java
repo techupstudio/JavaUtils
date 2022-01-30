@@ -1,42 +1,33 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.shuffle;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toDouble;
+
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs;
+
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.SortedNumArray;
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.range;
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.shuffle;
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toDouble;
-
-public class StatsArray extends MasterList<Double> {
+public class StatsArray extends Items<Double> {
 
     public StatsArray() {
     }
 
-    StatsArray(double... numbers) {
-        assign(numbers);
+    public StatsArray(Double[] collection) {
+        super(collection);
     }
 
-    StatsArray(List<Double> numbers) {
-        assign(numbers);
-    }
-
-    StatsArray(MasterList<Double> numbers) {
-        assign(numbers);
-    }
-
-    public StatsArray(Double[] numbers) {
-        assign(numbers);
-    }
-
-    public void assign(double... numbers) {
-        super.clear();
-        for (Double i : numbers) {
-            append(i);
-        }
+    public StatsArray(Collection<Double> collection) {
+        super(collection);
     }
 
     private Double[] getSorted() {
-        return new SortedNumArray(toDouble(super.toArray())).toDouble();
+        List<Double> list = super.asList();
+        Collections.sort(list);
+        Double[] doubles = new Double[list.size()];
+        return list.toArray(doubles);
     }
 
     public Object[] getSortedArray() {
@@ -52,15 +43,15 @@ public class StatsArray extends MasterList<Double> {
     }
 
     public Object getLCM() {
-        return com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.getLCM(toDouble(super.asSet().toArray()));
+        return Funcs.getLCM(toDouble(super.asSet().toArray()));
     }
 
     public Object getHCF() {
-        return com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.getHCF(toDouble(super.asSet().toArray()));
+        return Funcs.getHCF(toDouble(super.asSet().toArray()));
     }
 
     public Object[] getShuffle() {
-        return shuffle(toDouble(toArray()));
+        return shuffle(toArray());
     }
 
     public Object[] getSample(int end_index) {
@@ -69,14 +60,6 @@ public class StatsArray extends MasterList<Double> {
 
     public Object[] getSample(int start_index, int end_index) {
         return super.sample(start_index, end_index).toArray();
-    }
-
-    public Object[] getRandomSample(int size) {
-        return super.randsample(size).toArray();
-    }
-
-    public Object[][] getRandomSample(int size, int groups) {
-        return com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.randsample(toDouble(toArray()), size, groups);
     }
 
 
@@ -146,7 +129,7 @@ public class StatsArray extends MasterList<Double> {
 
     public String getModeCount() {
         if (getMode() != null) {
-            return com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toStrings(count(com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toDouble(getMode())));
+            return Funcs.toString(count(toDouble(getMode())));
         }
         return null;
     }
@@ -169,7 +152,7 @@ public class StatsArray extends MasterList<Double> {
         return mVariance;// or getStandardDiv/size();
     }
 
-    public double getCoVariance(Double array[]) {
+    public double getCoVariance(Double[] array) {
         double sum = 0;
         if (size() == array.length) {
             StatsArray coArray = new StatsArray(array);
@@ -179,9 +162,4 @@ public class StatsArray extends MasterList<Double> {
         }
         return sum / (size() - 1);
     }
-
-    public Enumerator<Double> getEnumerator() {
-        return new Enumerator<>(this);
-    }
-
 }

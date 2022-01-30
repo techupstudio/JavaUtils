@@ -1,9 +1,9 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
+
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.format;
 
 public class XMLObject {
 
@@ -210,10 +210,7 @@ public class XMLObject {
     private String getPropertyString() {
         StringBuilder property = new StringBuilder();
 
-        Enumerator<KeyValuePair<Object, Object>> enumerator = PROPERTIES.getEnumerator();
-
-        while (enumerator.hasNext()) {
-            KeyValuePair x = enumerator.getNext();
+        for (KeyValuePair<Object, Object> x : PROPERTIES) {
             property.append(" ").append(x.getKey().toString()).append("=\"").append(x.getValue().toString()).append('"');
         }
         if (property.length() > 0) {
@@ -266,6 +263,6 @@ public class XMLObject {
         if (PARENTTAG != null) {
             return format("<<1><2>><3></<1>>", getParentTAG(), getPropertyString(), getChildrenString());
         }
-        return null;
+        return "</>";
     }
 }

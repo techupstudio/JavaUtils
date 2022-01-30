@@ -1,92 +1,101 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
+
+import android.os.Build;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Action;
+
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Spliterator;
-
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.range;
+import java.util.function.Consumer;
 
 
 public class StackList<T> extends Stack<T> implements Iterable<T> {
 
     public StackList() {
+        super();
     }
 
     public StackList(Stack<T> stack) {
+        super();
         for (int i : range(stack.size())) {
             push(stack.pop());
         }
     }
 
-    public StackList(List<T> list) {
-        for (int i : range(list.size())) {
-            push(list.get(i));
-        }
+    public StackList(Collection<T> list) {
+        super();
+        Funcs.forEach(list, o -> push(o));
     }
 
-    public T peekElementAt(int index) {
-        return super.list.pop(index);
+    public T peek(int index) {
+        return items.peek(index);
     }
 
     public T pop(int index) {
-        T temp = super.list.pop(index);
-        super.list.remove(index);
-        return temp;
+        return items.pop(index);
     }
 
     public void replace(int index, T object) {
-        super.list.update(index, object);
+        items.update(index, object);
     }
 
     public void remove(int index) {
-        super.list.remove(index);
+        items.remove(index);
     }
 
     public void remove(T object) {
-        super.list.remove(super.list.firstIndexOf(object));
+        items.remove(object);
     }
 
     public void insert(int index, T object) {
-        super.list.insert(index, object);
+        items.insert(index, object);
     }
 
     public boolean contains(T object) {
-        return super.list.contains(object);
+        return items.contains(object);
     }
 
     public int findFirstIndexOf(T object) {
-        return super.list.firstIndexOf(object);
+        return items.firstIndexOf(object);
     }
 
     public int findLastIndexOf(T object) {
-        return super.list.lastIndexOf(object);
+        return items.lastIndexOf(object);
     }
 
     public List<T> toList() {
-        return super.list.toList();
+        return items.asList();
     }
 
     public Stack<T> toStack() {
         return this;
     }
 
-    public Enumerator<T> getEnumerator() {
-        return new Enumerator<>(toList());
+    public void forEach(Action<T> action) {
+        items.forEach(action);
     }
 
+    @NonNull
     @Override
     public Iterator<T> iterator() {
-        return super.list.iterator();
+        return items.iterator();
     }
 
-    public void forEach(com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.Action<T> action) {
-        for (T data : super.list) {
-            action.operate(data);
-        }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void forEach(@NonNull Consumer<? super T> action) {
+        items.forEach(action);
     }
 
     @Override
-    public Spliterator<T> spliterator() {
-        return list.spliterator();
+    public String toString() {
+        return super.toString().replace("Stack", "StackList");
     }
 }

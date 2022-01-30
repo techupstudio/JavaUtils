@@ -1,4 +1,11 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
+
+import android.os.Build;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.MapAction;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class Dictionary<K, V> implements Iterable<KeyValuePair<K, V>> {
 
@@ -129,9 +137,9 @@ public class Dictionary<K, V> implements Iterable<KeyValuePair<K, V>> {
         DATA.clear();
     }
 
-    public void forEach(com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.MapAction<K, V> action) {
+    public void forEach(MapAction<K, V> action) {
         for (K key : keys()) {
-            action.operate(key, get(key));
+            action.run(key, get(key));
         }
     }
 
@@ -159,13 +167,15 @@ public class Dictionary<K, V> implements Iterable<KeyValuePair<K, V>> {
         return list;
     }
 
-    public Enumerator<KeyValuePair<K, V>> getEnumerator() {
-        return new Enumerator<>(getList());
-    }
-
+    @NonNull
     @Override
     public Iterator<KeyValuePair<K, V>> iterator() {
         return getList().iterator();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void forEach(@NonNull Consumer<? super KeyValuePair<K, V>> action) {
+        DATA.forEach((k, v) -> action.accept(new KeyValuePair<>(k, v)));
+    }
 }

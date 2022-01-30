@@ -1,9 +1,9 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
+
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
 
 import androidx.annotation.NonNull;
-
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.format;
 
 public class KeyValuePair<K, V> {
     private K KEY;

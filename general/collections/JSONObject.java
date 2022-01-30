@@ -1,4 +1,14 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
+
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toBoolean;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toCharacter;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toDouble;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toFloat;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.toInteger;
+
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.MapAction;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,18 +16,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.MapAction;
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.format;
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toBoolean;
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toCharacter;
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toDouble;
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toFloat;
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toInteger;
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.toStrings;
-
 public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
 
-    private Dictionary<Object, Object> DATA = new Dictionary<>();
+    private final Dictionary<Object, Object> DATA = new Dictionary<>();
 
     private boolean isJsonString = false;
 
@@ -30,14 +31,14 @@ public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
         isJsonString = !isJsonString;
     }
 
-    public JSONObject(Map mapData) {
-        for (Object key : mapData.keySet()) {
+    public <X, Y> JSONObject(Map<X, Y> mapData) {
+        for (X key : mapData.keySet()) {
             set(key, mapData.get(key));
         }
     }
 
-    public JSONObject(Dictionary<Object, Object> dictionaryData) {
-        List<KeyValuePair<Object, Object>> list = dictionaryData.getList();
+    public <X, Y> JSONObject(Dictionary<X, Y> dictionaryData) {
+        List<KeyValuePair<X, Y>> list = dictionaryData.getList();
         for (KeyValuePair o : list) {
             set(o.getKey(), o.getValue());
         }
@@ -163,11 +164,11 @@ public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
     }
 
     public String getString(Object key) {
-        return toStrings(get(key));
+        return Funcs.toString(get(key));
     }
 
     public String getStringOrDefault(Object key, Object defaultValue) {
-        return toStrings(getOrDefault(key, defaultValue));
+        return Funcs.toString(getOrDefault(key, defaultValue));
     }
 
     public Character getCharacter(Object key) {
@@ -218,7 +219,7 @@ public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
         return getArrayFromString(getString(key)).toArray();
     }
 
-    private List getArrayFromString(String stringToConvert) {
+    private List<String> getArrayFromString(String stringToConvert) {
         Dictionary<Character, Character> dictionary = new Dictionary<>();
         dictionary.set('{', '}');
         dictionary.set('(', ')');
@@ -318,7 +319,7 @@ public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
 
     public List<Object> keys() {
         List<Object> list = new ArrayList<>();
-        for (KeyValuePair pair : getAsList()) {
+        for (KeyValuePair<Object, Object> pair : getAsList()) {
             list.add(pair.getKey());
         }
         return list;
@@ -339,20 +340,16 @@ public class JSONObject implements Iterable<KeyValuePair<Object, Object>> {
 
     public void forEach(MapAction<Object, Object> action) {
         for (KeyValuePair<Object, Object> kv : DATA) {
-            action.operate(kv.getKey(), kv.getValue());
+            action.run(kv.getKey(), kv.getValue());
         }
-    }
-
-    public Enumerator<KeyValuePair<Object, Object>> getEnumeration() {
-        return new Enumerator<>(getAsList());
     }
 
     @Override
     public String toString() {
         StringBuilder data = new StringBuilder("{");
-        Enumerator<KeyValuePair<Object, Object>> list = DATA.getEnumerator();
+        Iterator<KeyValuePair<Object, Object>> list = DATA.iterator();
         while (list.hasNext()) {
-            KeyValuePair x = list.getNext();
+            KeyValuePair<Object, Object> x = list.next();
             data.append(format("\n\t<>: <>", x.getKey(), x.getValue()));
             if (list.hasNext()) {
                 data.append(",");

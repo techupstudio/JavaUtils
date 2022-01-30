@@ -1,13 +1,14 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections.graph;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.graph;
 
 import java.util.HashMap;
 
 public class Edge<T> {
 
+    private final T startpoint;
+    private final T endpoint;
+    private final HashMap<Object, Object> properties;
     private Double weight;
     private boolean directed;
-    private T startpoint, endpoint;
-    private HashMap<Object, Object> properties;
 
     public Edge(Vertice<T> startpoint, Vertice<T> endpoint) {
         this.startpoint = startpoint.getValue();

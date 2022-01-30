@@ -1,8 +1,11 @@
-package com.techupstudio.otc_chingy.mychurch.utils.api.client.sync;
+package com.techupstudio.otc_chingy.mychurch.core.utils.api.client.sync;
 
-import com.techupstudio.otc_chingy.mychurch.utils.general.collections.JSONObject;
-import com.techupstudio.otc_chingy.mychurch.utils.general.collections.KeyValuePair;
-import com.techupstudio.otc_chingy.mychurch.utils.general.collections.XMLObject;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.format;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.range;
+
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.JSONObject;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.KeyValuePair;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.XMLObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,13 +16,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.format;
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.range;
-
 public class RestApiClient {
 
-    private ArrayList<KeyValue> HEADERS;
-    private ArrayList<KeyValue> PARAMS;
+    private ArrayList<StringKeyValuePair> HEADERS;
+    private ArrayList<StringKeyValuePair> PARAMS;
     private ArrayList<String> RAW_DATA;
     private JSONObject RAW_JSON_DATA;
     private XMLObject RAW_XML_DATA;
@@ -87,19 +87,9 @@ public class RestApiClient {
     }
 
     private RestApiClient setOnExecuteRequestListener(final OnExecuteRequestListener listener) {
-        this.requestCompleteListener = new OnRequestCompleteListener() {
-            @Override
-            public void onComplete(APIResponseObject apiResponseObject) {
-                listener.onComplete(apiResponseObject);
-            }
-        };
+        this.requestCompleteListener = apiResponseObject -> listener.onComplete(apiResponseObject);
 
-        this.requestStartListener = new OnRequestStartListener() {
-            @Override
-            public void onStart() {
-                listener.onStart();
-            }
-        };
+        this.requestStartListener = () -> listener.onStart();
 
         return this;
     }
@@ -131,12 +121,12 @@ public class RestApiClient {
     }
 
     public RestApiClient addParam(String name, String value) {
-        PARAMS.add(new KeyValue(name.trim(), value.trim()));
+        PARAMS.add(new StringKeyValuePair(name.trim(), value.trim()));
         return this;
     }
 
     public RestApiClient addHeader(String name, String value) {
-        HEADERS.add(new KeyValue(name.trim(), value.trim()));
+        HEADERS.add(new StringKeyValuePair(name.trim(), value.trim()));
         return this;
     }
 
@@ -214,7 +204,7 @@ public class RestApiClient {
 
             combinedParams.append("?");
 
-            for (KeyValue p : PARAMS) {
+            for (StringKeyValuePair p : PARAMS) {
                 String paramString = p.getKey() + "=" + p.getValue();  //|| URLEncoder.encode(p.getValue(), "UTF-8");
                 if (combinedParams.length() > 1) {
                     combinedParams.append("&").append(paramString);
@@ -258,7 +248,7 @@ public class RestApiClient {
         connection.setDoOutput(true);
 
         if (!HEADERS.isEmpty()) {
-            for (KeyValue r : HEADERS) {
+            for (StringKeyValuePair r : HEADERS) {
                 connection.addRequestProperty(r.getKey(), r.getValue());
             }
         }
@@ -396,9 +386,9 @@ public class RestApiClient {
     }
 
     public static class APIResponseObject {
-        private int responseCode;
-        private String response;
-        private String responseMessage;
+        private final int responseCode;
+        private final String response;
+        private final String responseMessage;
 
         APIResponseObject(int responseCode, String responseMessage, String response) {
             this.responseMessage = responseMessage;
@@ -435,8 +425,8 @@ public class RestApiClient {
         }
     }
 
-    class KeyValue extends KeyValuePair<String, String> {
-        public KeyValue(String key, String value) {
+    static class StringKeyValuePair extends KeyValuePair<String, String> {
+        public StringKeyValuePair(String key, String value) {
             super(key, value);
         }
     }

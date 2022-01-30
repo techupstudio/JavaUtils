@@ -1,4 +1,4 @@
-package com.techupstudio.otc_chingy.mychurch.utils.async_task;
+package com.techupstudio.otc_chingy.mychurch.core.utils.async_task;
 
 public abstract class AsyncTask<Param, Result> {
 
@@ -16,12 +16,7 @@ public abstract class AsyncTask<Param, Result> {
 
         doBeforeTask();
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                doAfterTask(doInBackGround(args));
-            }
-        });
+        Thread thread = new Thread(() -> doAfterTask(doInBackGround(args)));
 
         thread.start();
 

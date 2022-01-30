@@ -1,13 +1,13 @@
-package com.techupstudio.otc_chingy.mychurch.utils.api;
+package com.techupstudio.otc_chingy.mychurch.core.utils.api;
 
 //takes am address, and post data, and returns the html as a string
 
-import com.techupstudio.otc_chingy.mychurch.utils.api.client.sync.RestApiClient;
-import com.techupstudio.otc_chingy.mychurch.utils.general.collections.JSONObject;
+import static com.techupstudio.otc_chingy.mychurch.core.utils.general.Funcs.println;
+
+import com.techupstudio.otc_chingy.mychurch.core.utils.api.client.sync.RestApiClient;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.JSONObject;
 
 import java.net.HttpURLConnection;
-
-import static com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.println;
 
 public class Main {
 
@@ -17,12 +17,7 @@ public class Main {
         String REMEMBERED_PASSWORD = "Adgjmptw111";
         final String[] ACCESSTOKEN = {""};
 
-        Thread runner = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("running");
-            }
-        });
+        Thread runner = new Thread(() -> System.out.println("running"));
 
         RestApiClient restApiClient = new RestApiClient("http://192.168.137.1:80/auth")
                 .addHeader(RestApiClient.HttpRequestHeaders.KEYS.ACCEPT, RestApiClient.HttpRequestHeaders.VALUES.JSON)
@@ -48,15 +43,12 @@ public class Main {
 
         restApiClient = new RestApiClient("http://192.168.137.1:80/login")
                 .addHeader(RestApiClient.HttpRequestHeaders.KEYS.AUTHORIZATION, "JWT " + ACCESSTOKEN[0])
-                .setOnRequestCompleteListener(new RestApiClient.OnRequestCompleteListener() {
-                    @Override
-                    public void onComplete(RestApiClient.APIResponseObject result) {
-                        System.out.println(result);
-                        try {
-                            System.out.println(result.getResponseAsJson().getString("username"));
-                        } catch (JSONObject.JSONException e) {
-                            e.printStackTrace();
-                        }
+                .setOnRequestCompleteListener(result -> {
+                    System.out.println(result);
+                    try {
+                        System.out.println(result.getResponseAsJson().getString("username"));
+                    } catch (JSONObject.JSONException e) {
+                        e.printStackTrace();
                     }
                 });
 

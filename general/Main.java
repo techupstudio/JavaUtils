@@ -1,7 +1,7 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general;
 
 
-import com.techupstudio.otc_chingy.mychurch.utils.general.collections.Stack;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.Stack;
 
 public class Main {
 
@@ -521,11 +521,11 @@ public class Main {
 //        println("\n\n");
 
 
-//        MasterList<Integer> n = new MasterList<>();
+//        Items<Integer> n = new Items<>();
 //
 //        Integer[] a = range(10);
 //
-//        MasterList<Integer> m = new MasterList();
+//        Items<Integer> m = new Items();
 //        m.append(5);m.append(5);
 //        List<Integer> o = new ArrayList();
 //        o.put(67);o.put(36);
@@ -601,7 +601,7 @@ public class Main {
 //        m.append(14);
 //        println(m);
 //
-//        MasterList<Integer> y = new MasterList<>(randrange(10));
+//        Items<Integer> y = new Items<>(randrange(10));
 //
 //        println(n.asSet());
 //        println(n.count(5));
@@ -817,8 +817,8 @@ public class Main {
     public static class StackForPostFitExpression extends Stack {
 
         public String pop() {
-            String top = super.list.popfirst().toString();
-            super.list.remove(0);
+            String top = super.items.peekFront().toString();
+            super.items.remove(0);
 
             if (top.equals("+") || top.equals("-") || top.equals("*") || top.equals("/") || top.equals("//") || top.equals("%") || top.equals("^")) {
                 return pop() + top + pop();

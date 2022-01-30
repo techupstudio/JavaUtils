@@ -1,79 +1,64 @@
-package com.techupstudio.otc_chingy.mychurch.utils.general.collections;
+package com.techupstudio.otc_chingy.mychurch.core.utils.general.collections;
 
-import com.techupstudio.otc_chingy.mychurch.utils.general.collections.exceptions.EmptyObjectException;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.interfaces.Action;
 
 import java.util.Iterator;
 
 public class Deque<T> implements Iterable<T> {
 
-    private LinkedList<T> DATA = new LinkedList<>();
+    private final Items<T> items;
 
-    Deque() {
+    public Deque() {
+        items = new Items<>();
     }
 
     public void enqueueEnd(T object) {
-        DATA.append(object);
+        items.appendBack(object);
     }
 
     public void enqueueStart(T object) {
-        DATA.insert(0, object);
+        items.appendFront(object);
     }
 
     public T dequeueEnd() {
-        T temp = peekBack();
-        DATA.remove(size() - 1);
-        return temp;
+        return peekBack();
     }
 
     public T dequeueStart() {
-        T temp = peekFront();
-        DATA.remove(0);
-        return temp;
+        return peekFront();
     }
 
     public T peekFront() {
-        if (isEmpty()) {
-            try {
-                throw new EmptyObjectException("Deque");
-            } catch (EmptyObjectException e) {
-                e.printStackTrace();
-            }
-        }
-        return DATA.get(0);
+        return items.peekFront();
     }
 
     public T peekBack() {
-        if (isEmpty()) {
-            try {
-                throw new EmptyObjectException("Deque");
-            } catch (EmptyObjectException e) {
-                e.printStackTrace();
-            }
-        }
-        return DATA.get(size() - 1);
+        return items.peekBack();
     }
 
     public boolean isEmpty() {
-        return DATA.isEmpty();
+        return items.isEmpty();
     }
 
     public int size() {
-        return DATA.size();
-    }
-
-    public String toString() {
-        return DATA.toString().replace("LinkedList", "Deque");
+        return items.size();
     }
 
     @Override
     public Iterator<T> iterator() {
-        return DATA.iterator();
+        return items.iterator();
     }
 
-    public void forEach(com.techupstudio.otc_chingy.mychurch.utils.general.Funcs.Action<T> action) {
-        Enumerator<T> enumerator = DATA.getEnumerator();
-        while (enumerator.hasNext()) {
-            action.operate(enumerator.getNext());
-        }
+    public void forEach(Action<T> action) {
+        items.forEach(action);
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Deque{");
+        sb.append("items=").append(items);
+        sb.append('}');
+        return sb.toString();
+    }
+
 }

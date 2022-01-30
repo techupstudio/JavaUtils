@@ -1,7 +1,7 @@
-package com.techupstudio.otc_chingy.mychurch.utils.api.client.async;
+package com.techupstudio.otc_chingy.mychurch.core.utils.api.client.async;
 
-import com.techupstudio.otc_chingy.mychurch.utils.general.collections.JSONObject;
-import com.techupstudio.otc_chingy.mychurch.utils.general.collections.KeyValuePair;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.JSONObject;
+import com.techupstudio.otc_chingy.mychurch.core.utils.general.collections.KeyValuePair;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +21,11 @@ import java.util.List;
 //extends async_task<String,Void,APIResponseObject>
 
 public class APIAccessTask {
+    private final String method;
     private String requestUrl;
     private HttpURLConnection urlConnection;
     private List<KeyValuePair<String, String>> headerData, paramData;
     private JSONObject postData;
-    private String method;
     private int responseCode = HttpURLConnection.HTTP_OK;
     private String responseMessage;
     private OnRequestCompleteListener delegate;
@@ -103,7 +104,7 @@ public class APIAccessTask {
 
             if (!(method.equals("GET")) && !postData.isEmpty()) {
                 OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
                 writer.write(postData.toString());
                 writer.flush();
                 writer.close();
@@ -199,9 +200,9 @@ public class APIAccessTask {
     }
 
     public static class APIResponseObject {
-        private int responseCode;
-        private String response;
-        private String responseMessage;
+        private final int responseCode;
+        private final String response;
+        private final String responseMessage;
 
         APIResponseObject(int responseCode, String responseMessage, String response) {
             this.responseMessage = responseMessage;
