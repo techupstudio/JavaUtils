@@ -18,7 +18,7 @@ public class Stack<T> {
     }
 
     public T peekTop() {
-        return items.peekFront();
+        return items.peekBack();
     }
 
     public int size() {
